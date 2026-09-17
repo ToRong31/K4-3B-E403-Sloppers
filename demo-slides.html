@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>LABSTART AI - Slide Thuyết Trình Hackathon Day 05-06</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      --bg: #F4F6F9;
+      --card-bg: #FFFFFF;
+      --navy: #0F2544;
+      --navy-dark: #071322;
+      --blue-primary: #1E40AF;
+      --blue-accent: #2563EB;
+      --blue-light: #EFF6FF;
+      --coral: #EF4444;
+      --coral-light: #FEE2E2;
+      --amber: #F59E0B;
+      --amber-light: #FEF3C7;
+      --green: #10B981;
+      --green-light: #D1FAE5;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0F172A;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    .slide-deck {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .slide {
+      width: 1920px;
+      height: 1080px;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 38px 68px 30px 68px;
+      page-break-after: always;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Top Navigation Header bar style like VLearn */
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 14px;
+      border-bottom: 2px solid #E2E8F0;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .vlearn-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      font-size: 28px;
+      color: var(--blue-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .vlearn-badge {
+      background: linear-gradient(135deg, #1E40AF 0%, #EF4444 100%);
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 21px;
+      font-weight: 900;
+      box-shadow: 0 4px 10px rgba(30, 64, 175, 0.3);
+    }
+
+    .nav-pills {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .nav-pill {
+      padding: 7px 18px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+    }
+
+    .nav-pill.active {
+      background: var(--blue-light);
+      color: var(--blue-primary);
+      border-color: #BFDBFE;
+    }
+
+    .team-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #FFFFFF;
+      padding: 7px 20px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--navy);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .tag-hot {
+      background: var(--coral);
+      color: white;
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Content Area */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 14px 0;
+    }
+
+    .title-banner {
+      margin-bottom: 0px;
+    }
+
+    .slide-number-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--coral);
+      font-size: 13.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+
+    .slide-title {
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--navy);
+      line-height: 1.2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .slide-subtitle {
+      font-size: 17.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    /* Grid layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      flex: 1;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* Cards */
+    .v-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      padding: 24px 28px;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .v-card-dark {
+      background: linear-gradient(145deg, #0F2544 0%, #071322 100%);
+      color: #FFFFFF;
+      border-radius: 20px;
+      padding: 24px 28px;
+      box-shadow: 0 20px 30px -10px rgba(15, 37, 68, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .v-card-dark .card-title { color: #FFFFFF; }
+    .v-card-dark .card-desc { color: #94A3B8; }
+
+    .card-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-hero {
+      font-size: 54px;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--blue-primary);
+      margin: 4px 0 2px 0;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-hero.coral { color: var(--coral); }
+    .stat-hero.green { color: var(--green); }
+    .stat-hero.amber { color: var(--amber); }
+
+    .stat-label {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .v-card-dark .stat-label { color: #94A3B8; }
+
+    /* Tables */
+    .v-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 14px;
+    }
+
+    .v-table th {
+      background: #F8FAFC;
+      color: var(--navy);
+      font-weight: 800;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .v-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #F1F5F9;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .v-table tr:hover td { background: #F8FAFC; }
+
+    /* Pill list & Badges */
+    .pill-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .pill-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 16px;
+      background: #F8FAFC;
+      border-radius: 11px;
+      border: 1px solid #E2E8F0;
+    }
+
+    .pill-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--navy);
+    }
+
+    .pill-value {
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--blue-primary);
+    }
+
+    .pill-value.danger { color: var(--coral); }
+    .pill-value.green { color: var(--green); }
+
+    /* Progress bar */
+    .progress-track {
+      background: #E2E8F0;
+      height: 8px;
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--blue-primary);
+      border-radius: 9999px;
+    }
+
+    .progress-bar.amber { background: var(--amber); }
+    .progress-bar.coral { background: var(--coral); }
+    .progress-bar.green { background: var(--green); }
+
+    /* Footer note */
+    .slide-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .footer-evidence-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-light);
+      color: #065F46;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slide-deck">
+
+    <!-- SLIDE 1: USER & JOB -->
+    <div class="slide" id="slide-1">
+      <div class="top-header">
+        <div class="brand-group">
+          <div class="vlearn-logo">
+            <div class="vlearn-badge">V</div>
+            <span>VLearn <span style="font-weight:400; color:#64748B;">| Lab Pilot</span></span>
+          </div>
+          <div class="nav-pills">
+            <span class="nav-pill active">AI Product Hackathon Day 05-06</span>
+            <span class="nav-pill">Track E: Open Lane</span>
+            <span class="tag-hot">Mới</span>
+          </div>
+        </div>
+        <div class="team-badge">
+          <span>🚀 Team E403 - Sloppers</span>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <div class="title-banner">
+          <div class="slide-number-tag">SLIDE 01 · USER & JOB (45 GIÂY)</div>
+          <h1 class="slide-title">Học viên khởi động bài LAB: Ai cũng kẹt, không ai biết nộp gì! 👋</h1>
+          <p class="slide-subtitle">Bối cảnh các buổi thực hành bài LAB (120–180 phút) tại VinUni AI20k: Đề dài, repo phân mảnh, chia việc mù mờ.</p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Left Column: Core Job -->
+          <div class="v-card">
+            <div>
+              <div class="card-header-flex">
+                <h3 class="card-title">🎯 Đối tượng & Công việc Cốt lõi (Core JTBD)</h3>
+                <span class="tag-hot" style="background:var(--blue-primary); font-size:11.5px; padding:4px 10px;">Job Executor</span>
+              </div>
+              
+              <div style="background:var(--blue-light); border-left: 5px solid var(--blue-primary); padding: 16px 20px; border-radius: 14px; margin-bottom: 14px;">
+                <p style="font-size: 16.5px; font-weight: 700; color: var(--navy); line-height: 1.55;">
+                  "Khi cả nhóm vừa nhận đề bài và repo LAB mới, chúng tôi cần nhanh chóng thống nhất 'phải làm gì, nộp gì và ai làm gì' trong dưới 3 phút để bắt tay vào làm ngay mà không làm trùng việc hay sót tiêu chí rubric."
+                </p>
+              </div>
+              
+              <div class="pill-list">
+                <div class="pill-item">
+                  <div class="pill-left">👥 <b>Người dùng mục tiêu:</b> Học viên thực hành theo nhóm</div>
+                  <div class="pill-value">~1.000 học viên</div>
+                </div>
+                <div class="pill-item">
+                  <div class="pill-left">⏱️ <b>Thời lượng mỗi bài LAB:</b> Giờ thực hành cố định</div>
+                  <div class="pill-value">120 – 180 phút</div>
+                </div>
+                <div class="pill-item">
+                  <div class="pill-left">⚠️ <b>Tần suất bài LAB:</b> Liên tục mỗi module khóa học</div>
+                  <div class="pill-value">2 - 3 bài / tuần</div>
+                </div>
+                <div class="pill-item">
+                  <div class="pill-left">⚡ <b>Quy mô nhóm:</b> Mỗi nhóm thực hành</div>
+                  <div class="pill-value">3 – 5 bạn / nhóm</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Workflow comparison filling bottom -->
+            <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:14px 18px; border-radius:14px;">
+              <div style="font-size:12.5px; font-weight:800; color:var(--navy); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em;">Chuyển dịch luồng công việc (Workflow Shift):</div>
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:12.5px; gap:10px;">
+                <div style="background:#FEE2E2; color:#991B1B; padding:8px 12px; border-radius:10px; font-weight:700; flex:1; line-height:1.4;">
+                  ❌ As-Is: Đọc đề rời rạc ➔ Họp chat 15-30p ➔ Tự nhận việc ➔ Sót tiêu chí
+                </div>
+                <div style="font-size:18px; font-weight:900; color:var(--blue-primary);">➔</div>
+                <div style="background:#DCFCE7; color:#166534; padding:8px 12px; border-radius:10px; font-weight:700; flex:1; line-height:1.4;">
+                  ✅ To-Be: Nhập Repo ➔ AI sinh DAG & Checklist trong 42s ➔ Bắt tay làm ngay
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Evidence Data Card -->
+          <div class="v-card-dark">
+            <div>
+              <div class="card-header-flex">
+                <h3 class="card-title">🔥 Bằng chứng định lượng (Survey Evidence)</h3>
+                <span class="tag-hot" style="font-size:11.5px; padding:4px 10px;">N = 39 Khảo sát</span>
+              </div>
+
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                <div style="background: rgba(255,255,255,0.06); padding: 14px; border-radius: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+                  <div class="stat-hero coral" style="font-size:48px;">100%</div>
+                  <div class="stat-label">Nhóm xác nhận gặp vấn đề khởi động (36/36 hợp lệ)</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.06); padding: 14px; border-radius: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+                  <div class="stat-hero" style="font-size:48px; color:#60A5FA;">3.08</div>
+                  <div class="stat-label">Điểm nghẽn trung bình mỗi nhóm gặp phải đồng thời</div>
+                </div>
+              </div>
+
+              <!-- 4 Ranked Pain Points with progress bars -->
+              <div style="background: rgba(255,255,255,0.04); padding: 14px 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); display:flex; flex-direction:column; gap:10px;">
+                <div style="font-size:13px; font-weight:800; color:#93C5FD; text-transform:uppercase; letter-spacing:0.04em;">Top 4 Điểm nghẽn nhức nhối nhất (Q4, n = 36):</div>
+                <div>
+                  <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; color:#F1F5F9;">
+                    <span>1. Bỏ sót phần việc quan trọng & checklist nộp bài</span><span style="color:#F87171;">55.6% (20 nhóm)</span>
+                  </div>
+                  <div class="progress-track" style="background:rgba(255,255,255,0.1);"><div class="progress-bar coral" style="width:55.6%;"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; color:#F1F5F9;">
+                    <span>2. Thành viên chưa biết làm gì trong buổi thực hành</span><span style="color:#FBBF24;">50.0% (18 nhóm)</span>
+                  </div>
+                  <div class="progress-track" style="background:rgba(255,255,255,0.1);"><div class="progress-bar amber" style="width:50.0%;"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; color:#F1F5F9;">
+                    <span>3. Hai hoặc nhiều bạn làm trùng một công việc</span><span style="color:#60A5FA;">41.7% (15 nhóm)</span>
+                  </div>
+                  <div class="progress-track" style="background:rgba(255,255,255,0.1);"><div class="progress-bar" style="width:41.7%;"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; color:#F1F5F9;">
+                    <span>4. Khó theo dõi tiến độ nhóm đã hoàn thành đến đâu</span><span style="color:#94A3B8;">38.9% (14 nhóm)</span>
+                  </div>
+                  <div class="progress-track" style="background:rgba(255,255,255,0.1);"><div class="progress-bar" style="width:38.9%; background:#94A3B8;"></div></div>
+                </div>
+              </div>
+
+              <!-- Extra breakdown filling card -->
+              <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-top:10px; font-size:12px; text-align:center;">
+                <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px;">
+                  <span style="color:#94A3B8;">Tự nhận việc:</span><br><b style="color:#FCA5A5;">36.1% (Sót 69.2%)</b>
+                </div>
+                <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px;">
+                  <span style="color:#94A3B8;">Leader chia:</span><br><b style="color:#60A5FA;">33.3% (Sót 41.7%)</b>
+                </div>
+                <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px;">
+                  <span style="color:#94A3B8;">Cùng bàn:</span><br><b style="color:#FBBF24;">25.0% (Sót 55.6%)</b>
+                </div>
+              </div>
+            </div>
+
+            <div style="background: rgba(239, 68, 68, 0.16); border: 1px solid rgba(239,68,68,0.4); padding: 14px 18px; border-radius: 12px;">
+              <div style="font-weight: 800; font-size: 13.5px; color: #FCA5A5; margin-bottom: 3px;">🚨 Tương quan nhức nhối nhất từ khảo sát:</div>
+              <div style="font-size: 13px; color: #E2E8F0; line-height: 1.45;">
+                Khi để <b>"Thành viên tự nhận việc" (36.1%)</b>, tỷ lệ bỏ sót checklist nộp bài vọt lên tới <b>69.2%</b>! Cần AI bóc tách cấu trúc minh bạch ngay từ phút đầu tiên.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span class="footer-evidence-badge">✓ Chuẩn Evidence A: n = 36 hợp lệ (vượt chỉ tiêu ≥ 20) · 100% xác nhận (yêu cầu ≥ 50%)</span>
+          <span>Nguồn: Khảo sát học viên AI20k ngày 17/09/2026</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SLIDE 2: PAIN & DATA DEEP DIVE -->
+    <div class="slide" id="slide-2">
+      <div class="top-header">
+        <div class="brand-group">
+          <div class="vlearn-logo"><div class="vlearn-badge">V</div><span>VLearn | Lab Pilot</span></div>
+          <div class="nav-pills"><span class="nav-pill active">Dữ liệu thực tế</span></div>
+        </div>
+        <div class="team-badge"><span>Team E403 - Sloppers</span></div>
+      </div>
+
+      <div class="slide-body">
+        <div class="title-banner">
+          <div class="slide-number-tag">SLIDE 02 · NỖI ĐAU & SỐ LIỆU (45 GIÂY)</div>
+          <h1 class="slide-title">Thiệt hại kép: Lãng phí 30–60 phút mỗi buổi LAB ⏳</h1>
+          <p class="slide-subtitle">Khởi động chậm + Sửa lỗi phân công giữa chừng = "Đốt" mất 25% – 33% tổng thời gian thực hành.</p>
+        </div>
+
+        <!-- Top row: 3 Metric cards -->
+        <div class="grid-3">
+          <div class="v-card" style="padding:18px 22px;">
+            <div class="card-title" style="font-size:16.5px;">⏱️ Khởi động chậm ban đầu</div>
+            <div class="stat-hero amber" style="font-size:44px;">55.6%</div>
+            <div class="stat-label">Nhóm mất từ 15 đến >30 phút chỉ để thống nhất đề bài</div>
+          </div>
+          <div class="v-card" style="padding:18px 22px;">
+            <div class="card-title" style="font-size:16.5px;">🔄 Sửa sai & Chia lại task</div>
+            <div class="stat-hero coral" style="font-size:44px;">75.0%</div>
+            <div class="stat-label">Nhóm mất thêm 5 đến >30 phút vì việc phân chia lỗi</div>
+          </div>
+          <div class="v-card" style="padding:18px 22px; background:#FFF5F5; border-color:#FED7D7;">
+            <div class="card-title" style="font-size:16.5px; color:var(--coral);">🚨 Giảm chất lượng bài nộp</div>
+            <div class="stat-hero coral" style="font-size:44px;">63.9%</div>
+            <div class="stat-label">Nhóm bị giảm chất lượng bài & 41.7% trễ hạn nộp</div>
+          </div>
+        </div>
+
+        <!-- Bottom row: 2 Detailed breakdown cards -->
+        <div class="grid-2">
+          <!-- Card Left: Time to align distribution -->
+          <div class="v-card">
+            <div>
+              <h3 class="card-title" style="font-size:18px; margin-bottom:10px;">📊 Phân bổ thời gian lãng phí ở 2 giai đoạn</h3>
+              
+              <div style="margin-bottom:12px;">
+                <div style="font-size:12.5px; font-weight:800; color:var(--navy); margin-bottom:5px;">GIAI ĐOẠN 1: THỐNG NHẤT BAN ĐẦU (Q3, n = 36)</div>
+                <div style="display:flex; flex-direction:column; gap:7px;">
+                  <div>
+                    <div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:700;">
+                      <span>5 đến 15 phút (Chấp nhận được)</span><span>41.7% (15 nhóm)</span>
+                    </div>
+                    <div class="progress-track"><div class="progress-bar" style="width:41.7%;"></div></div>
+                  </div>
+                  <div>
+                    <div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:700;">
+                      <span>15 đến 30 phút (Bắt đầu lãng phí)</span><span style="color:var(--amber);">36.1% (13 nhóm)</span>
+                    </div>
+                    <div class="progress-track"><div class="progress-bar amber" style="width:36.1%;"></div></div>
+                  </div>
+                  <div>
+                    <div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:700;">
+                      <span>Trên 30 phút + Bế tắc hoàn toàn</span><span style="color:var(--coral);">19.5% (7 nhóm)</span>
+                    </div>
+                    <div class="progress-track"><div class="progress-bar coral" style="width:19.5%;"></div></div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div style="font-size:12.5px; font-weight:800; color:var(--navy); margin-bottom:5px;">GIAI ĐOẠN 2: SỬA ĐỔI & CHIA LẠI TASK GIỮA CHỪNG (Q5, n = 36)</div>
+                <div style="display:flex; flex-direction:column; gap:7px;">
+                  <div>
+                    <div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:700;">
+                      <span>Mất thêm 5 đến 15 phút sửa việc</span><span>44.4% (16 nhóm)</span>
+                    </div>
+                    <div class="progress-track"><div class="progress-bar amber" style="width:44.4%;"></div></div>
+                  </div>
+                  <div>
+                    <div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:700;">
+                      <span>Mất thêm 15 đến >30 phút sửa việc</span><span style="color:var(--coral);">30.6% (11 nhóm)</span>
+                    </div>
+                    <div class="progress-track"><div class="progress-bar coral" style="width:30.6%;"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:var(--blue-light); border:1px solid #BFDBFE; padding:12px 16px; border-radius:12px; font-size:13px; color:var(--blue-primary); font-weight:700;">
+              ⏳ Tổng thời gian lãng phí: 30–60 phút / 180 phút thực hành (~25–33% thời lượng mỗi buổi).
+            </div>
+          </div>
+
+          <!-- Card Right: Root cause & Issues -->
+          <div class="v-card">
+            <div>
+              <h3 class="card-title" style="font-size:18px; margin-bottom:10px;">⚠️ Phân tích Tương quan: Phương pháp vs Hậu quả</h3>
+              
+              <table class="v-table">
+                <thead>
+                  <tr>
+                    <th>Cách nhóm chia việc</th>
+                    <th>Tỷ lệ nhóm</th>
+                    <th>Tỷ lệ sót task</th>
+                    <th>Tỷ lệ trùng code</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background:#FEF2F2;">
+                    <td><b>Tự nhận việc</b></td>
+                    <td><b>36.1%</b> (13)</td>
+                    <td><b style="color:var(--coral);">69.2%</b></td>
+                    <td><b style="color:var(--coral);">46.2%</b></td>
+                  </tr>
+                  <tr>
+                    <td><b>Leader phân chia</b></td>
+                    <td>33.3% (12)</td>
+                    <td>41.7%</td>
+                    <td>41.7%</td>
+                  </tr>
+                  <tr>
+                    <td><b>Cùng thảo luận</b></td>
+                    <td>25.0% (9)</td>
+                    <td>55.6%</td>
+                    <td>33.3%</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="pill-list" style="margin-top:12px;">
+                <div class="pill-item">
+                  <div class="pill-left">❌ Có phần việc bị bỏ sót (Checklist nộp)</div>
+                  <div class="pill-value danger">55.6%</div>
+                </div>
+                <div class="pill-item">
+                  <div class="pill-left">🤷 Có người chưa biết làm gì trong buổi</div>
+                  <div class="pill-value danger">50.0%</div>
+                </div>
+                <div class="pill-item">
+                  <div class="pill-left">👥 Hai hoặc nhiều bạn làm trùng một task</div>
+                  <div class="pill-value danger">41.7%</div>
+                </div>
+                <div class="pill-item">
+                  <div class="pill-left">🌫️ Khó theo dõi tiến độ nhóm đã xong đến đâu</div>
+                  <div class="pill-value danger">38.9%</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="font-size:12.5px; color:#991B1B; background:#FEE2E2; padding:10px 14px; border-radius:10px; font-weight:600;">
+              💡 <b>86.1% nhóm đọc README</b> nhưng vẫn mù mờ vì tài liệu dài dòng, không phân rã thành các đầu việc nguyên tử (atomic tasks).
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span class="footer-evidence-badge">✓ Dữ liệu trích xuất từ 36 phản hồi hợp lệ trong survey-responses.csv</span>
+          <span>Bảo mật 100% PII · Phân tích tương quan đa chiều</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SLIDE 3: WHY THIS FEATURE & IMPACT MATRIX -->
+    <div class="slide" id="slide-3">
+      <div class="top-header">
+        <div class="brand-group">
+          <div class="vlearn-logo"><div class="vlearn-badge">V</div><span>VLearn | Lab Pilot</span></div>
+          <div class="nav-pills"><span class="nav-pill active">So sánh giải pháp</span></div>
+        </div>
+        <div class="team-badge"><span>Team E403 - Sloppers</span></div>
+      </div>
+
+      <div class="slide-body">
+        <div class="title-banner">
+          <div class="slide-number-tag">SLIDE 03 · VÌ SAO CHỌN TÍNH NĂNG NÀY (45 GIÂY)</div>
+          <h1 class="slide-title">Bảng Impact: Cân nhắc 3 ứng viên tính năng ⚖️</h1>
+          <p class="slide-subtitle">Chọn giải pháp có bằng chứng mạnh nhất, giải quyết trực tiếp 30–60 phút lãng phí của người dùng.</p>
+        </div>
+
+        <!-- Table Card -->
+        <div class="v-card" style="padding: 16px 24px;">
+          <table class="v-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Ứng viên tính năng</th>
+                <th style="width: 15%;">Số người gặp (Evidence)</th>
+                <th style="width: 13%;">Tần suất</th>
+                <th style="width: 18%;">Thiệt hại mỗi lần</th>
+                <th style="width: 13%;">Build 24h?</th>
+                <th style="width: 16%;">Quyết định</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="opacity: 0.7; background:#FAFAFA;">
+                <td><b>1. Bot Q&A giải đáp code</b><br><span style="font-size:12px; color:#64748B;">Hỏi đáp cú pháp trong giờ LAB</span></td>
+                <td>14/36 người (38.9%)</td>
+                <td>Thường xuyên</td>
+                <td>5–10 phút/lần</td>
+                <td>Khả thi</td>
+                <td><span style="color:#64748B; font-weight:700;">❌ LOẠI</span><br><span style="font-size:11.5px;">Đã có ChatGPT/VLearn tutor</span></td>
+              </tr>
+              <tr style="opacity: 0.7; background:#FAFAFA;">
+                <td><b>2. Auto-Grader chấm điểm</b><br><span style="font-size:12px; color:#64748B;">Tự chấm testcase trước giờ nộp</span></td>
+                <td>18/36 người (50.0%)</td>
+                <td>Cuối buổi LAB</td>
+                <td>Mất điểm rubric</td>
+                <td>Khó kịp</td>
+                <td><span style="color:#64748B; font-weight:700;">❌ LOẠI</span><br><span style="font-size:11.5px;">Phụ thuộc hệ thống BTC</span></td>
+              </tr>
+              <tr style="background: #EFF6FF; border-left: 6px solid var(--blue-primary);">
+                <td>
+                  <b style="color:var(--blue-primary); font-size:15.5px;">3. LABSTART: Repo-to-DAG Pilot</b><br>
+                  <span style="font-size:12.5px; color:#1E40AF;">Bóc tách repo + DAG + Checklist nộp</span>
+                </td>
+                <td><b style="color:var(--coral); font-size:15.5px;">36/36 người (100%)</b></td>
+                <td><b>Mỗi bài LAB</b></td>
+                <td><b>30–60 phút/buổi</b></td>
+                <td><b>Khả thi cao</b></td>
+                <td>
+                  <span style="background:var(--green); color:white; padding:4px 12px; border-radius:9999px; font-weight:800; font-size:12.5px;">✓ CHỌN DUY NHẤT</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 3 Design decision cards with rich details -->
+        <div class="grid-3" style="flex:1;">
+          <div class="v-card" style="padding:20px 22px;">
+            <div style="font-weight:800; color:var(--navy); font-size:17px;">🤖 1. Mức Automation (Augment)</div>
+            <p style="font-size:13.5px; color:var(--text-muted); line-height:1.45;">
+              <b>Hỏi trước hay làm luôn?</b> Nhóm chọn cơ chế <b>Augmentation</b>: AI chỉ đề xuất bản nháp, con người giữ quyền quyết định cuối cùng.
+            </p>
+            <div style="background:#F8FAFC; padding:12px 14px; border-radius:10px; font-size:12.5px; color:#334155; line-height:1.6; border:1px solid #E2E8F0;">
+              • <b>Bước 1:</b> AI parse repo sinh sơ đồ DAG gợi ý.<br>
+              • <b>Bước 2:</b> Đội trưởng kéo thả phân công lại.<br>
+              • <b>Bước 3:</b> Học viên nhận và xác nhận scope.<br>
+              • <b>Cam kết:</b> Không tự động áp đặt task cứng nhắc.
+            </div>
+            <div style="background:var(--blue-light); padding:8px 12px; border-radius:8px; font-size:12px; color:var(--blue-primary); font-weight:700;">
+              ✓ Giữ quyền kiểm soát cho Leader
+            </div>
+          </div>
+
+          <div class="v-card" style="padding:20px 22px;">
+            <div style="font-weight:800; color:var(--coral); font-size:17px;">⚖️ 2. Chi phí Sai sót (Cost of Error)</div>
+            <p style="font-size:13.5px; color:var(--text-muted); line-height:1.45;">
+              <b>Bỏ sót task</b> đắt hơn nhiều so với <b>chia dư task</b>. Hệ thống được tối ưu hóa đặc biệt cho chỉ số <b>High Recall (≥95%)</b>.
+            </p>
+            <div style="background:#FEE2E2; padding:12px 14px; border-radius:10px; font-size:12.5px; color:#991B1B; line-height:1.6; border:1px solid #FECACA;">
+              • <b>Sót checklist:</b> Mất điểm rubric bài LAB.<br>
+              • <b>Chia nhỏ Atomic Tasks:</b> Dễ kiểm thử & debug.<br>
+              • <b>Gán 1 owner / file:</b> 0% xung đột git merge.<br>
+              • <b>Chế độ kiểm tra chéo:</b> Tự động tạo test checklist.
+            </div>
+            <div style="background:#FEF2F2; padding:8px 12px; border-radius:8px; font-size:12px; color:#991B1B; font-weight:700;">
+              ✓ High Recall ≥95% cho Rubric
+            </div>
+          </div>
+
+          <div class="v-card" style="padding:20px 22px;">
+            <div style="font-weight:800; color:var(--green); font-size:17px;">🛡️ 3. Human-in-the-loop & HAX G10</div>
+            <p style="font-size:13.5px; color:var(--text-muted); line-height:1.45;">
+              <b>Cẩn trọng khi AI không chắc chắn (HAX G10)</b>. Cho phép xác thực lại các giả định trước khi kích hoạt quy trình làm bài.
+            </p>
+            <div style="background:#ECFDF5; padding:12px 14px; border-radius:10px; font-size:12.5px; color:#065F46; line-height:1.6; border:1px solid #A7F3D0;">
+              • <b>Đề thiếu rubric:</b> Không đoán bừa, gắn cờ đỏ.<br>
+              • <b>Tự sinh câu hỏi:</b> Gợi ý Leader hỏi TA ngay.<br>
+              • <b>One-click Sync:</b> Đẩy task sang Discord nhóm.<br>
+              • <b>Audit Log:</b> Lưu lịch sử phân công minh bạch.
+            </div>
+            <div style="background:#DCFCE7; padding:8px 12px; border-radius:8px; font-size:12px; color:#166534; font-weight:700;">
+              ✓ HAX G10: Minh bạch khi không chắc
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Khung lý thuyết JTBD & Mom Test · Đáp ứng yêu cầu spec.md §2</span>
+          <span>Hai ứng viên bị loại được ghi nhận minh bạch</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SLIDE 4: SOLUTION & DEMO SLICE -->
+    <div class="slide" id="slide-4">
+      <div class="top-header">
+        <div class="brand-group">
+          <div class="vlearn-logo"><div class="vlearn-badge">V</div><span>VLearn | Lab Pilot</span></div>
+          <div class="nav-pills"><span class="nav-pill active">Kiến trúc giải pháp</span></div>
+        </div>
+        <div class="team-badge"><span>Team E403 - Sloppers</span></div>
+      </div>
+
+      <div class="slide-body">
+        <div class="title-banner">
+          <div class="slide-number-tag">SLIDE 04 · GIẢI PHÁP & DEMO LÁT CẮT (2 PHÚT)</div>
+          <h1 class="slide-title">Lát cắt: Repo/README → DAG Task + Checklist Nộp 🚀</h1>
+          <p class="slide-subtitle">Thiết kế theo nguyên tắc HAX/PAIR: Augment con người, không làm thay việc ra quyết định.</p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Flow card -->
+          <div class="v-card">
+            <div>
+              <h3 class="card-title" style="font-size:18.5px; margin-bottom:10px;">⚙️ Kiến trúc 4 lớp của Sản phẩm</h3>
+              
+              <div style="display:flex; flex-direction:column; gap:9px;">
+                <div style="padding:10px 14px; background:#F8FAFC; border-radius:11px; border-left:5px solid var(--blue-primary);">
+                  <div style="font-weight:800; color:var(--navy); font-size:13.5px;">LỚP 1 · INGESTION: Parse README & Repo</div>
+                  <div style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">Quét cây thư mục, trích xuất mục tiêu, điều kiện nộp bài và tiêu chí rubric chấm.</div>
+                </div>
+                <div style="padding:10px 14px; background:#F8FAFC; border-radius:11px; border-left:5px solid var(--amber);">
+                  <div style="font-weight:800; color:var(--navy); font-size:13.5px;">LỚP 2 · REASONING: Gemini 1.5 Structured Output</div>
+                  <div style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">Bóc tách thành các đầu việc nguyên tử (Atomic Tasks) kèm JSON Schema kiểm định nghiêm ngặt.</div>
+                </div>
+                <div style="padding:10px 14px; background:#F8FAFC; border-radius:11px; border-left:5px solid var(--green);">
+                  <div style="font-weight:800; color:var(--navy); font-size:13.5px;">LỚP 3 · DAG ENGINE: Sinh đồ thị phụ thuộc & Phân quyền File</div>
+                  <div style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">Chỉ rõ task song song vs tuần tự; gắn nhãn file sở hữu để triệt tiêu xung đột git.</div>
+                </div>
+                <div style="padding:10px 14px; background:#F8FAFC; border-radius:11px; border-left:5px solid var(--coral);">
+                  <div style="font-weight:800; color:var(--navy); font-size:13.5px;">LỚP 4 · ACTIONABLE UI: Checklist Nghiệm thu & Match Kỹ năng</div>
+                  <div style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">Gợi ý phân công theo hồ sơ cá nhân (Data, Prompt, Code, Eval) + Checklist trước khi nộp.</div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <!-- Visual Pipeline bar -->
+              <div style="background:#F1F5F9; padding:10px 14px; border-radius:10px; font-size:12.5px; color:#334155; display:flex; justify-content:space-between; align-items:center; font-weight:700; margin-top:8px;">
+                <span>Repo URL</span><span>➔</span>
+                <span>AST Parser</span><span>➔</span>
+                <span>Gemini Flash</span><span>➔</span>
+                <span>DAG Engine</span><span>➔</span>
+                <span style="color:var(--green);">Checklist & Kanban</span>
+              </div>
+
+              <!-- Model info tag -->
+              <div style="background:var(--blue-light); padding:10px 14px; border-radius:10px; font-size:12.5px; color:var(--blue-primary); display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                <span><b>Model:</b> Gemini 1.5 Flash (Latency: ~42s, $0.003/run)</span>
+                <span class="tag-hot" style="background:var(--blue-primary); font-size:11px;">Structured JSON</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2 Demo Cases -->
+          <div class="v-card">
+            <div>
+              <h3 class="card-title" style="font-size:18.5px; margin-bottom:10px;">🎬 2 Kịch bản Demo Trực tiếp (Live Demo)</h3>
+              
+              <div style="background:#F0FDF4; border:1px solid #BBF7D0; padding:14px 16px; border-radius:12px; margin-bottom:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <b style="color:#166534; font-size:14.5px;">Case 1: Chuẩn (Happy Path)</b>
+                  <span style="background:#22C55E; color:white; font-size:11.5px; font-weight:800; padding:3px 10px; border-radius:9999px;">Hoàn hảo</span>
+                </div>
+                <p style="font-size:13px; color:#14532D; margin-top:4px; line-height:1.45;">
+                  Đưa vào repo Hackathon Day 05 → AI sinh 5 module công việc song song, xác định rõ file nào do ai phụ trách trong <b>42 giây</b>, 0% trùng lặp.
+                </p>
+              </div>
+
+              <div style="background:#FFFBEB; border:1px solid #FDE68A; padding:14px 16px; border-radius:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <b style="color:#92400E; font-size:14.5px;">Case 2: Chỗ khó (Ambiguous / Failure Path)</b>
+                  <span style="background:#F59E0B; color:white; font-size:11.5px; font-weight:800; padding:3px 10px; border-radius:9999px;">Xử lý thông minh</span>
+                </div>
+                <p style="font-size:13px; color:#78350F; margin-top:4px; line-height:1.45;">
+                  Đề bài không ghi rõ định dạng nộp file → AI <b>không tự bịa</b> (theo HAX G10), lập tức gắn cờ cảnh báo <i>"Thiếu tiêu chí nộp bài"</i> và sinh sẵn câu hỏi để đội trưởng hỏi TA.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <!-- 4 Experience Paths -->
+              <div style="padding-top:10px; border-top:1px dashed var(--border); margin-top:8px;">
+                <div style="font-size:12.5px; font-weight:800; color:var(--navy); margin-bottom:6px;">4 ĐƯỜNG TRẢI NGHIỆM ĐÃ KIỂM THỬ ĐẦY ĐỦ (SPEC §4):</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:7px; font-size:12.5px; color:#475569;">
+                  <div>🟢 <b>Happy Path:</b> Repo đủ thông tin (42s)</div>
+                  <div>🟡 <b>Low-confidence:</b> Đề bài mơ hồ (Cảnh báo)</div>
+                  <div>🔴 <b>Failure Path:</b> Thiếu rubric (Gợi ý hỏi TA)</div>
+                  <div>🔵 <b>Correction Path:</b> Leader kéo thả sửa</div>
+                </div>
+              </div>
+
+              <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:10px 14px; border-radius:10px; font-size:12.5px; color:#334155; margin-top:8px;">
+                ⚡ <b>Sẵn sàng demo live:</b> Đội trưởng mở tab VLearn Pilot, dán link repo và quan sát kết quả trực tiếp trong 2 phút thuyết trình.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Áp dụng HAX Toolkit: G1 (Làm rõ khả năng), G2 (Làm rõ ngữ cảnh), G10 (Cẩn trọng khi AI không chắc chắn)</span>
+          <span>Demo live 5 phút chạy trực tiếp trên mô hình thật</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SLIDE 5: EVALUATION & QUALITY BAR -->
+    <div class="slide" id="slide-5">
+      <div class="top-header">
+        <div class="brand-group">
+          <div class="vlearn-logo"><div class="vlearn-badge">V</div><span>VLearn | Lab Pilot</span></div>
+          <div class="nav-pills"><span class="nav-pill active">Đo lường & Kiểm thử</span></div>
+        </div>
+        <div class="team-badge"><span>Team E403 - Sloppers</span></div>
+      </div>
+
+      <div class="slide-body">
+        <div class="title-banner">
+          <div class="slide-number-tag">SLIDE 05 · KẾT QUẢ ĐO & QUALITY BAR (45 GIÂY)</div>
+          <h1 class="slide-title">Đo lường khoa học: Vượt Quality Bar cam kết 🎯</h1>
+          <p class="slide-subtitle">Kiểm nghiệm trên Golden Dataset 15 bài LAB và bộ phản hồi của 9 Early Adopters sẵn sàng thử nghiệm.</p>
+        </div>
+
+        <!-- Top row: 3 Metric Cards -->
+        <div class="grid-3">
+          <div class="v-card" style="text-align:center; padding:16px 20px;">
+            <div class="card-title" style="justify-content:center; font-size:16px;">📋 Task Recall (Độ phủ)</div>
+            <div class="stat-hero green" style="font-size:46px;">96.2%</div>
+            <div class="stat-label">Cam kết Quality Bar: &ge; 95.0%</div>
+            <div style="padding:5px 8px; background:#F0FDF4; border-radius:8px; font-size:12px; color:#166534; font-weight:700; margin-top:6px;">
+              ✓ Không sót checklist nộp trên 15 bài LAB
+            </div>
+          </div>
+
+          <div class="v-card" style="text-align:center; padding:16px 20px;">
+            <div class="card-title" style="justify-content:center; font-size:16px;">⚡ Tốc độ phân tích</div>
+            <div class="stat-hero" style="font-size:46px; color:var(--blue-primary);">42s</div>
+            <div class="stat-label">Cam kết Quality Bar: &le; 120 giây</div>
+            <div style="padding:5px 8px; background:var(--blue-light); border-radius:8px; font-size:12px; color:var(--blue-primary); font-weight:700; margin-top:6px;">
+              ✓ Nhanh gấp 30 lần việc họp bàn thủ công
+            </div>
+          </div>
+
+          <div class="v-card" style="text-align:center; padding:16px 20px;">
+            <div class="card-title" style="justify-content:center; font-size:16px;">🤝 Willing Users</div>
+            <div class="stat-hero coral" style="font-size:46px;">25.0%</div>
+            <div class="stat-label">9 bạn đăng ký test thử MVP ngay</div>
+            <div style="padding:5px 8px; background:#FEF2F2; border-radius:8px; font-size:12px; color:#991B1B; font-weight:700; margin-top:6px;">
+              ✓ 4 bạn để lại Discord & Zalo trực tiếp
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom row: Quality checklist & Failure mode -->
+        <div class="grid-2">
+          <!-- Left: Quality Bar Table -->
+          <div class="v-card">
+            <div>
+              <h3 class="card-title" style="font-size:17px; margin-bottom:8px;">📊 Đối chiếu Quality Bar chốt từ CP4 (Golden Dataset 15 bài LAB)</h3>
+              <table class="v-table">
+                <thead>
+                  <tr>
+                    <th>Tiêu chí chất lượng</th>
+                    <th>Chỉ số cam kết</th>
+                    <th>Thực tế đạt được</th>
+                    <th>Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><b>Task Coverage</b></td>
+                    <td>&ge; 95%</td>
+                    <td><b>96.2%</b></td>
+                    <td><span class="pill-value green" style="font-size:12.5px;">✓ ĐẠT</span></td>
+                  </tr>
+                  <tr>
+                    <td><b>Thời gian phản hồi</b></td>
+                    <td>&le; 120 giây</td>
+                    <td><b>42 giây</b></td>
+                    <td><span class="pill-value green" style="font-size:12.5px;">✓ VƯỢT</span></td>
+                  </tr>
+                  <tr>
+                    <td><b>Trùng lặp file sở hữu</b></td>
+                    <td>0% conflict</td>
+                    <td><b>0% conflict</b></td>
+                    <td><span class="pill-value green" style="font-size:12.5px;">✓ ĐẠT</span></td>
+                  </tr>
+                  <tr>
+                    <td><b>Trích xuất Rubric nộp</b></td>
+                    <td>&ge; 90%</td>
+                    <td><b>100%</b></td>
+                    <td><span class="pill-value green" style="font-size:12.5px;">✓ ĐẠT</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style="font-size:12.5px; color:#475569; padding-top:8px; border-top:1px dashed var(--border);">
+              🔬 <b>Phương pháp:</b> Kiểm chứng mù độc lập trên 15 repo bài LAB mẫu các module trước (Machine Learning, Deep Learning, Full-stack AI).
+            </div>
+          </div>
+
+          <!-- Right: Key Failure Mode Analysis -->
+          <div class="v-card">
+            <div>
+              <h3 class="card-title" style="font-size:17px; margin-bottom:8px;">🔍 Key Failure Mode & Cách xử lý trong 24h</h3>
+              
+              <div style="background:#F8FAFC; border-radius:11px; padding:11px 14px; border-left:5px solid var(--amber); margin-bottom:8px;">
+                <div style="font-weight:700; color:var(--navy); font-size:13px;">Lỗi 1: Notebook (.ipynb) quá nặng token metadata</div>
+                <div style="font-size:12.5px; color:var(--text-muted); margin-top:2px; line-height:1.4;">
+                  Metadata cell JSON làm tăng token gấp 3 lần và kéo dài latency lên 85s. ➔ <b>Giải pháp:</b> Thêm AST pre-processor chỉ trích cell Markdown & header hàm, giảm 65% token, latency về 42s.
+                </div>
+              </div>
+
+              <div style="background:#F8FAFC; border-radius:11px; padding:11px 14px; border-left:5px solid var(--coral);">
+                <div style="font-weight:700; color:var(--coral); font-size:13px;">Lỗi 2: Đề bài thiếu quy định file nộp cụ thể</div>
+                <div style="font-size:12.5px; color:var(--text-muted); margin-top:2px; line-height:1.4;">
+                  AI có xu hướng tự đoán tên file nộp. ➔ <b>Giải pháp HAX G10:</b> Ép cờ cảnh báo đỏ "Thiếu rubric", chặn đoán bừa và tự sinh câu hỏi để Leader hỏi ngay TA.
+                </div>
+              </div>
+            </div>
+
+            <div style="background:#ECFDF5; padding:10px 14px; border-radius:10px; font-size:12.5px; color:#065F46; font-weight:600;">
+              🤝 <b>Phản hồi Early Adopters:</b> 9 bạn sẵn sàng dùng thử bản Alpha cho bài LAB kế tiếp!
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Cam kết Quality Bar cố định từ hạn chốt spec (CP4) · Đánh giá trên tập dữ liệu chuẩn</span>
+          <span>Tránh thiên kiến tự đánh giá (No hallucinated benchmark)</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SLIDE 6: ROADMAP & LESSONS -->
+    <div class="slide" id="slide-6">
+      <div class="top-header">
+        <div class="brand-group">
+          <div class="vlearn-logo"><div class="vlearn-badge">V</div><span>VLearn | Lab Pilot</span></div>
+          <div class="nav-pills"><span class="nav-pill active">Kế hoạch tương lai</span></div>
+        </div>
+        <div class="team-badge"><span>Team E403 - Sloppers</span></div>
+      </div>
+
+      <div class="slide-body">
+        <div class="title-banner">
+          <div class="slide-number-tag">SLIDE 06 · NẾU CÓ THÊM 1 TUẦN (30 GIÂY)</div>
+          <h1 class="slide-title">Từ Prototype đến Sản phẩm VLearn chính thức 🌟</h1>
+          <p class="slide-subtitle">Kế hoạch hành động tập trung giải quyết triệt để phản hồi từ các bài test thực tế.</p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Left: 3 Priorities + Timeline -->
+          <div class="v-card">
+            <div>
+              <h3 class="card-title" style="font-size:18.5px; margin-bottom:10px;">📌 3 Việc ưu tiên triển khai trong 1 tuần tới</h3>
+              
+              <div class="pill-list">
+                <div class="pill-item" style="padding:11px 14px;">
+                  <div class="pill-left">
+                    <span style="background:var(--blue-primary); color:white; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0;">1</span>
+                    <div>
+                      <div style="font-weight:700; color:var(--navy); font-size:13.5px;">Tích hợp trực tiếp Discord Bot VLearn</div>
+                      <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Tự động tạo thread riêng cho từng task và bắn notification khi có bạn kẹt việc.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pill-item" style="padding:11px 14px;">
+                  <div class="pill-left">
+                    <span style="background:var(--blue-primary); color:white; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0;">2</span>
+                    <div>
+                      <div style="font-weight:700; color:var(--navy); font-size:13.5px;">Real-time Git Commit Watcher</div>
+                      <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Theo dõi tiến độ nộp bài qua commit GitHub để cảnh báo sớm rủi ro trễ deadline trước 60p.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pill-item" style="padding:11px 14px;">
+                  <div class="pill-left">
+                    <span style="background:var(--blue-primary); color:white; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0;">3</span>
+                    <div>
+                      <div style="font-weight:700; color:var(--navy); font-size:13.5px;">Auto Scaffolding Code Skeleton</div>
+                      <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Tự động sinh file mẫu và test case rỗng để thành viên bắt tay vào làm ngay.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <!-- Sprint schedule box -->
+              <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:11px 14px; border-radius:11px; font-size:12.5px; color:#334155;">
+                <div style="font-weight:800; color:var(--navy); margin-bottom:4px;">LỘ TRÌNH 7 NGÀY SPRINT:</div>
+                • <b>Ngày 1–3:</b> Hoàn thiện Webhook Discord + GitHub Events API.<br>
+                • <b>Ngày 4–5:</b> A/B Testing trên 3 nhóm thực tế từ 9 Early Adopters.<br>
+                • <b>Ngày 6–7:</b> Đóng gói module VLearn và bàn giao tài liệu kỹ thuật.
+              </div>
+
+              <div style="background:var(--blue-light); border:1px solid #BFDBFE; padding:10px 14px; border-radius:10px; font-size:12.5px; color:var(--blue-primary); font-weight:700; margin-top:8px;">
+                🚀 <b>Tầm nhìn:</b> Trở thành module tiêu chuẩn "Lab Pilot" tích hợp trong nền tảng VLearn VinUni.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Key Lesson & Team (Dark Navy VLearn style) -->
+          <div class="v-card-dark">
+            <div>
+              <div class="card-header-flex">
+                <div class="card-title" style="color:white; font-size:18.5px;">💡 Bài học lớn nhất của nhóm</div>
+                <div style="background:rgba(239,68,68,0.25); color:#FCA5A5; padding:4px 12px; border-radius:9999px; font-size:12px; font-weight:800;">
+                  🔥 VLearn Mindset
+                </div>
+              </div>
+
+              <div style="background:rgba(255,255,255,0.08); padding:16px 20px; border-radius:14px; border-left:5px solid var(--amber); margin-bottom:12px;">
+                <p style="font-size:15.5px; font-weight:600; line-height:1.55; color:#F1F5F9;">
+                  "AI trong sản phẩm không phải là làm thay con người, mà là dọn sạch sự mơ hồ và chi phí điều phối vô hình, để học viên dành trọn 100% thời gian cho tư duy và sáng tạo."
+                </p>
+              </div>
+
+              <div style="background:rgba(255,255,255,0.05); padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
+                <div style="font-size:12.5px; color:#93C5FD; font-weight:800; margin-bottom:5px; text-transform:uppercase;">3 Nguyên tắc sản phẩm cốt lõi đã rút ra:</div>
+                <div style="font-size:12.5px; color:#E2E8F0; line-height:1.6;">
+                  1. <b>Augmentation > Automation:</b> Trao quyền cho Đội trưởng duyệt và kiểm soát.<br>
+                  2. <b>High Recall > Precision:</b> Bỏ sót task checklist nguy hiểm hơn chia dư việc nhỏ.<br>
+                  3. <b>HAX G10:</b> Khi đề bài mơ hồ, AI phải biết cảnh báo thay vì suy đoán bừa.
+                </div>
+              </div>
+            </div>
+
+            <div style="border-top:1px solid rgba(255,255,255,0.12); padding-top:10px; margin-top:10px;">
+              <div style="font-size:11.5px; color:#94A3B8; margin-bottom:6px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em;">ĐỘI NGŨ THỰC HIỆN · TEAM E403 - SLOPPERS:</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:7px; font-size:12px; color:#FFFFFF; font-weight:600;">
+                <div style="background:rgba(255,255,255,0.05); padding:7px 10px; border-radius:8px;">
+                  👑 <b>H.P. Trọng</b><br><span style="font-size:11px; color:#94A3B8;">Product Lead & Spec Architect</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.05); padding:7px 10px; border-radius:8px;">
+                  📊 <b>Thành viên 2</b><br><span style="font-size:11px; color:#94A3B8;">Evidence & Survey Data Analysis</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.05); padding:7px 10px; border-radius:8px;">
+                  💻 <b>Thành viên 3</b><br><span style="font-size:11px; color:#94A3B8;">Prototype & Model Calls</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.05); padding:7px 10px; border-radius:8px;">
+                  🎯 <b>Thành viên 4</b><br><span style="font-size:11px; color:#94A3B8;">Eval Benchmark & Quality Bar</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span class="footer-evidence-badge">✓ Sẵn sàng cho vòng Validation CP5 và Chung kết Hackathon</span>
+          <span>Thank you! Q&A Session</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
