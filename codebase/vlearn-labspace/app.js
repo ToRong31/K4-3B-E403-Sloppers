@@ -153,7 +153,6 @@ function collapseChatSidebar() {
   if (sidebar) sidebar.classList.add('collapsed');
   if (rail) rail.classList.add('visible');
   document.body.classList.remove('chat-sidebar-open');
-  showToast('Đã thu gọn sidebar chat. Bấm tab mép phải để mở lại.');
 }
 
 function expandChatSidebar() {
@@ -203,8 +202,8 @@ function renderChatMessages() {
     }
 
     const isMine = (currentRole === 'leader' && msg.sender === 'Lan') ||
-                   (currentRole === 'member' && msg.sender === 'Minh') ||
-                   (currentRole === 'coach' && msg.sender === 'Coach E403');
+      (currentRole === 'member' && msg.sender === 'Minh') ||
+      (currentRole === 'coach' && msg.sender === 'Coach E403');
 
     const row = document.createElement('div');
     row.className = `chat-msg-row ${msg.isBot ? 'ai-bot' : (isMine ? 'mine' : 'peer')}`;
@@ -270,7 +269,7 @@ function renderAiPrivateMessages() {
   container.scrollTop = container.scrollHeight;
 }
 
-window.handlePreviewDocument = function(docName) {
+window.handlePreviewDocument = function (docName) {
   showToast(`📂 Đang mở tài liệu: ${docName}`);
 };
 
@@ -756,21 +755,10 @@ document.querySelectorAll('.tour-action-btn').forEach(btn => {
 function setGlobalRole(role, autoNavigate = true) {
   currentRole = role;
 
-  // 1. Cập nhật Dock cố định ở chân màn hình
-  document.querySelectorAll('.dock-role-item').forEach(btn => {
+  // 1. Cập nhật trạng thái active trong Dropdown menu trên Header
+  document.querySelectorAll('.role-menu-item').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.role === role);
   });
-
-  const dockFootnote = document.getElementById('dockFootnote');
-  if (dockFootnote) {
-    if (role === 'leader') {
-      dockFootnote.innerHTML = 'Đang ở góc nhìn: <b>👑 Nhóm trưởng (Lan)</b> — Toàn quyền tạo nhóm, phân chia task AI và duyệt kế hoạch.';
-    } else if (role === 'member') {
-      dockFootnote.innerHTML = 'Đang ở góc nhìn: <b>👤 Học viên được mời (Minh)</b> — Nhận thông báo mời vào nhóm Sloppers & onboarding kỹ năng.';
-    } else if (role === 'coach') {
-      dockFootnote.innerHTML = 'Đang ở góc nhìn: <b>👨‍🏫 Lab Coach (E403)</b> — Giám sát tiến độ 12 nhóm, can thiệp khi có task blocked.';
-    }
-  }
 
   // 2. Cập nhật Header: Role Chip, Avatar, Thông báo
   const roleChipIcon = document.getElementById('roleChipIcon');
@@ -816,10 +804,6 @@ function setGlobalRole(role, autoNavigate = true) {
   // 3. Cập nhật Workspace View
   const workspaceRoleTag = document.getElementById('workspaceRoleTag');
   const workspaceRoleDesc = document.getElementById('workspaceRoleDesc');
-  const workspaceRoleAlert = document.getElementById('workspaceRoleAlert');
-  const wsAlertIcon = document.getElementById('wsAlertIcon');
-  const wsAlertContent = document.getElementById('wsAlertContent');
-  const wsAlertActionBtn = document.getElementById('wsAlertActionBtn');
   const startAssignment = document.getElementById('startAssignment');
   const startAssignmentBoard = document.getElementById('startAssignmentBoard');
   const memberRoleLock = document.getElementById('memberRoleLock');
@@ -830,22 +814,12 @@ function setGlobalRole(role, autoNavigate = true) {
   if (role === 'leader') {
     if (workspaceRoleTag) workspaceRoleTag.textContent = 'VIEW NHÓM TRƯỞNG · LAN';
     if (workspaceRoleDesc) workspaceRoleDesc.textContent = 'Mini Hackathon AI · Toàn quyền quản lý & phân task';
-    if (workspaceRoleAlert) {
-      workspaceRoleAlert.className = 'workspace-role-alert leader';
-      if (wsAlertIcon) wsAlertIcon.textContent = '👑';
-      if (wsAlertContent) wsAlertContent.innerHTML = '<b>Góc nhìn Nhóm trưởng (Lan):</b> Bạn có toàn quyền quản lý nhóm Sloppers, gửi lời mời thành viên, tạo bản nháp phân công AI và phê duyệt kế hoạch.';
-      if (wsAlertActionBtn) {
-        wsAlertActionBtn.style.display = 'inline-block';
-        wsAlertActionBtn.textContent = '✦ Phân chia task AI';
-        wsAlertActionBtn.onclick = openAssignment;
-      }
-    }
     if (startAssignment) startAssignment.hidden = false;
     if (startAssignmentBoard) startAssignmentBoard.hidden = false;
     if (memberRoleLock) memberRoleLock.style.display = 'none';
     if (tagLan) { tagLan.style.display = 'inline-block'; tagLan.textContent = '(Bạn - Trưởng nhóm)'; }
     if (tagMinh) { tagMinh.style.display = 'none'; }
-    if (requestCoach) requestCoach.textContent = '☝ Yêu cầu Coach hỗ trợ';
+    updateRequestCoachButtonState();
 
     if (!planApproved) {
       document.getElementById('planStatus').textContent = 'Chờ nhóm trưởng tạo bản nháp phân công. Checklist vẫn lấy từ bài LAB chính thức.';
@@ -853,32 +827,12 @@ function setGlobalRole(role, autoNavigate = true) {
   } else if (role === 'member') {
     if (workspaceRoleTag) workspaceRoleTag.textContent = 'VIEW THÀNH VIÊN · MINH';
     if (workspaceRoleDesc) workspaceRoleDesc.textContent = 'Mini Hackathon AI · Đã tham gia nhóm Sloppers';
-    if (workspaceRoleAlert) {
-      workspaceRoleAlert.className = 'workspace-role-alert member';
-      if (wsAlertIcon) wsAlertIcon.textContent = '👤';
-      if (wsAlertContent) {
-        if (!minhProfileSubmitted) {
-          wsAlertContent.innerHTML = '<b>Góc nhìn Học viên (Minh):</b> Bạn nhận được lời mời tham gia nhóm Sloppers từ Lan. Hãy hoàn thành hồ sơ năng lực để AI phân công đúng chuyên môn.';
-        } else {
-          wsAlertContent.innerHTML = '<b>Góc nhìn Học viên (Minh):</b> Bạn đã tham gia nhóm Sloppers (chuyên môn Frontend & UI/UX). Đang đợi nhóm trưởng Lan phê duyệt phân công task.';
-        }
-      }
-      if (wsAlertActionBtn) {
-        if (!minhProfileSubmitted) {
-          wsAlertActionBtn.style.display = 'inline-block';
-          wsAlertActionBtn.textContent = '📩 Xem lời mời & Onboarding';
-          wsAlertActionBtn.onclick = openNotifications;
-        } else {
-          wsAlertActionBtn.style.display = 'none';
-        }
-      }
-    }
     if (startAssignment) startAssignment.hidden = true;
     if (startAssignmentBoard) startAssignmentBoard.hidden = true;
     if (memberRoleLock) memberRoleLock.style.display = 'block';
     if (tagLan) { tagLan.style.display = 'inline-block'; tagLan.textContent = '(Trưởng nhóm)'; }
     if (tagMinh) { tagMinh.style.display = 'inline-block'; tagMinh.textContent = '(Bạn)'; }
-    if (requestCoach) requestCoach.textContent = '☝ Yêu cầu Coach hỗ trợ';
+    updateRequestCoachButtonState();
 
     if (!planApproved) {
       document.getElementById('planStatus').textContent = 'Bạn đã vào nhóm. Đang chờ nhóm trưởng kiểm tra và phê duyệt kế hoạch.';
@@ -886,23 +840,15 @@ function setGlobalRole(role, autoNavigate = true) {
   } else if (role === 'coach') {
     if (workspaceRoleTag) workspaceRoleTag.textContent = 'VIEW LAB COACH · GIÁM SÁT';
     if (workspaceRoleDesc) workspaceRoleDesc.textContent = 'Chế độ xem của Giảng viên / Mentor (Read-only)';
-    if (workspaceRoleAlert) {
-      workspaceRoleAlert.className = 'workspace-role-alert coach';
-      if (wsAlertIcon) wsAlertIcon.textContent = '👨‍🏫';
-      if (wsAlertContent) wsAlertContent.innerHTML = '<b>Góc nhìn Lab Coach:</b> Bạn đang quan sát nhóm Sloppers ở chế độ Giám sát. Bạn có thể theo dõi tiến độ hoàn thành deliverable và hỗ trợ khi nhóm bị blocked.';
-      if (wsAlertActionBtn) {
-        wsAlertActionBtn.style.display = 'inline-block';
-        wsAlertActionBtn.textContent = '📊 Xem toàn bộ 12 nhóm';
-        wsAlertActionBtn.onclick = () => showView('coach');
-      }
-    }
     if (startAssignment) startAssignment.hidden = true;
     if (startAssignmentBoard) startAssignmentBoard.hidden = true;
     if (memberRoleLock) memberRoleLock.style.display = 'none';
     if (tagLan) { tagLan.style.display = 'inline-block'; tagLan.textContent = '(Trưởng nhóm)'; }
     if (tagMinh) { tagMinh.style.display = 'none'; }
-    if (requestCoach) requestCoach.textContent = '✓ Gửi phản hồi / Hỗ trợ nhóm này';
+    updateRequestCoachButtonState();
+    updateCoachViewIndicators();
   }
+  updateGithubSubmitCardState();
 
   // 4. Cập nhật Banner bài học (Lesson View)
   const lessonBannerTitle = document.getElementById('lessonBannerTitle');
@@ -949,24 +895,65 @@ function setGlobalRole(role, autoNavigate = true) {
   if (autoNavigate) {
     if (role === 'coach') {
       showView('coach');
-      showToast('Đã chuyển sang góc nhìn: Lab Coach (Giảng viên E403)');
     } else if (role === 'member') {
       showView('workspace');
-      showToast('Đã chuyển sang góc nhìn: Học viên được mời (Minh)');
     } else if (role === 'leader') {
       const activeView = views.find(v => v.classList.contains('active'));
       if (activeView && activeView.id === 'view-coach') {
         showView('workspace');
       }
-      showToast('Đã chuyển sang góc nhìn: Nhóm trưởng (Lan)');
     }
   }
 }
 
-// Bắt sự kiện Click cho Dock cố định
-document.getElementById('dockBtnLeader')?.addEventListener('click', () => setGlobalRole('leader'));
-document.getElementById('dockBtnMember')?.addEventListener('click', () => setGlobalRole('member'));
-document.getElementById('dockBtnCoach')?.addEventListener('click', () => setGlobalRole('coach'));
+// Bắt sự kiện Click cho Role Dropdown trên Header
+const roleDropdownWrap = document.getElementById('headerRoleDropdownWrap');
+const headerRoleChip = document.getElementById('headerRoleChip');
+const roleDropdownMenu = document.getElementById('roleDropdownMenu');
+
+function toggleRoleDropdown(forceState) {
+  if (!roleDropdownMenu) return;
+  const isHidden = roleDropdownMenu.hidden;
+  const willShow = typeof forceState === 'boolean' ? forceState : isHidden;
+  roleDropdownMenu.hidden = !willShow;
+  if (roleDropdownWrap) roleDropdownWrap.classList.toggle('open', willShow);
+  if (headerRoleChip) headerRoleChip.setAttribute('aria-expanded', String(willShow));
+}
+
+function closeRoleDropdown() {
+  toggleRoleDropdown(false);
+}
+
+headerRoleChip?.addEventListener('click', event => {
+  event.stopPropagation();
+  toggleRoleDropdown();
+});
+
+// Click chọn vai trò trong dropdown
+document.querySelectorAll('.role-menu-item').forEach(item => {
+  item.addEventListener('click', event => {
+    event.stopPropagation();
+    const role = item.dataset.role;
+    if (role) {
+      setGlobalRole(role, true);
+    }
+    closeRoleDropdown();
+  });
+});
+
+// Click ra ngoài đóng dropdown
+document.addEventListener('click', event => {
+  if (roleDropdownWrap && !roleDropdownWrap.contains(event.target)) {
+    closeRoleDropdown();
+  }
+});
+
+// Nút mở tour từ dropdown
+document.getElementById('dropdownTourBtn')?.addEventListener('click', event => {
+  event.stopPropagation();
+  closeRoleDropdown();
+  openTour();
+});
 
 // Điều hướng chung
 navButtons.forEach(button => button.addEventListener('click', event => {
@@ -1027,6 +1014,8 @@ document.getElementById('submitMemberProfile')?.addEventListener('click', () => 
   }
   const dockBadge = document.getElementById('dockMemberBadge');
   if (dockBadge) dockBadge.style.display = 'none';
+  const memberDropdownBadge = document.getElementById('memberDropdownBadge');
+  if (memberDropdownBadge) memberDropdownBadge.style.display = 'none';
   const notifBadge = document.getElementById('notifBadge');
   if (notifBadge) notifBadge.style.display = 'none';
   setGlobalRole('member', false);
@@ -1136,13 +1125,615 @@ tasks.forEach(task => task.querySelector('input').addEventListener('change', eve
   showToast(event.target.checked ? 'Đã đánh dấu task hoàn thành' : 'Đã mở lại task');
 }));
 
+/* =========================================================
+   AI DOUBLE-CHECK GITHUB DELIVERABLES SUBMISSION SYSTEM
+   ========================================================= */
+
+let labGithubSubmitted = false;
+let aiGithubChecked = false;
+let aiScanTimers = [];
+
+function clearAiScanTimers() {
+  aiScanTimers.forEach(t => clearTimeout(t));
+  aiScanTimers = [];
+}
+
+const githubCheckModalEl = document.getElementById('githubCheckModal');
+githubCheckModalEl?.addEventListener('click', event => closeOnBackdrop(githubCheckModalEl, event));
+githubCheckModalEl?.addEventListener('close', () => {
+  clearAiScanTimers();
+});
+
+window.openGithubCheckModal = function () {
+  const repoInput = document.getElementById('githubRepoInput');
+  const repoUrl = repoInput ? repoInput.value.trim() : '';
+
+  if (!repoUrl || !repoUrl.toLowerCase().includes('github.com')) {
+    showToast('Vui lòng nhập đường dẫn GitHub Repository hợp lệ của nhóm (VD: https://github.com/sloppers-team/vlearn-hackathon-cp1-5).');
+    if (repoInput) repoInput.focus();
+    return;
+  }
+
+  const modal = document.getElementById('githubCheckModal');
+  if (!modal) return;
+
+  const targetUrlDisplay = document.getElementById('scanTargetUrlDisplay');
+  if (targetUrlDisplay) targetUrlDisplay.textContent = repoUrl;
+
+  const progressBar = document.getElementById('scanProgressBar');
+  const liveLogs = document.getElementById('scanLiveLogs');
+  const summaryBanner = document.getElementById('verificationSummaryBanner');
+  const btnConfirm = document.getElementById('btnConfirmFinalSubmit');
+
+  if (progressBar) progressBar.style.width = '0%';
+  if (liveLogs) {
+    liveLogs.innerHTML = `
+      <div class="scan-log-item info">
+        <span>⏳ Đang kết nối tới ${escapeHtml(repoUrl)}...</span>
+      </div>
+    `;
+  }
+  if (summaryBanner) summaryBanner.style.display = 'none';
+  if (btnConfirm) btnConfirm.disabled = true;
+
+  // Đặt lại các huy hiệu trạng thái về scanning
+  const checkpoints = ['Cp1', 'Cp2', 'Cp3', 'Cp4', 'Cp5'];
+  checkpoints.forEach(cp => {
+    const pill = document.getElementById('statusPill' + cp);
+    if (pill) {
+      pill.className = 'status-pill scanning';
+      pill.textContent = '⏳ Đang quét...';
+    }
+  });
+
+  clearAiScanTimers();
+  modal.showModal();
+
+  // Chuỗi quét đối chiếu mô phỏng trực quan
+  aiScanTimers.push(setTimeout(() => {
+    if (progressBar) progressBar.style.width = '20%';
+    const pill1 = document.getElementById('statusPillCp1');
+    if (pill1) { pill1.className = 'status-pill ok'; pill1.textContent = '✓ Đã có'; }
+    appendScanLog('✓ [1. Canvas CP1] docs/canvas-7-dong.md: 22 dòng, đủ 7 mục bài toán & giá trị.');
+  }, 450));
+
+  aiScanTimers.push(setTimeout(() => {
+    if (progressBar) progressBar.style.width = '45%';
+    const pill2 = document.getElementById('statusPillCp2');
+    if (pill2) { pill2.className = 'status-pill ok'; pill2.textContent = '✓ Đã có'; }
+    appendScanLog('✓ [2. Flow CP2] mockups/Flow_Mockup_CP2_Figma.png: 2.4 MB, sơ đồ luồng tương tác UX/UI.');
+  }, 900));
+
+  aiScanTimers.push(setTimeout(() => {
+    if (progressBar) progressBar.style.width = '70%';
+    const pill3 = document.getElementById('statusPillCp3');
+    if (pill3) { pill3.className = 'status-pill ok'; pill3.textContent = '✓ Đạt chuẩn'; }
+    appendScanLog('✓ [3. Golden Set CP3] benchmarks/Golden_Set_Benchmark_CP3.csv: 20 prompt test + ground truth rubric.');
+  }, 1350));
+
+  aiScanTimers.push(setTimeout(() => {
+    if (progressBar) progressBar.style.width = '90%';
+    const pill4 = document.getElementById('statusPillCp4');
+    if (pill4) { pill4.className = 'status-pill ok'; pill4.textContent = '✓ Đạt chuẩn'; }
+    appendScanLog('✓ [4. Evidence Log] evidence/evidence_log_20_users.csv: 20 mẫu khảo sát người dùng.');
+  }, 1800));
+
+  aiScanTimers.push(setTimeout(() => {
+    if (progressBar) progressBar.style.width = '100%';
+    const pill5 = document.getElementById('statusPillCp5');
+    if (pill5) { pill5.className = 'status-pill ok'; pill5.textContent = '✓ Đã có'; }
+    appendScanLog('✓ [5. Slide & README] README.md & slides/day06_pitch.pdf: Đặc tả & slide báo cáo.');
+    appendScanLog('✨ AI SUBMISSION VALIDATOR: Toàn bộ 5/5 Deliverables đã đầy đủ & hợp lệ theo Rubric!', 'success');
+
+    if (summaryBanner) summaryBanner.style.display = 'flex';
+    if (btnConfirm) btnConfirm.disabled = false;
+
+    aiGithubChecked = true;
+    const btnFinalSubmitLab = document.getElementById('btnFinalSubmitLab');
+    if (btnFinalSubmitLab) btnFinalSubmitLab.disabled = false;
+  }, 2250));
+};
+
+function appendScanLog(text, type = 'info') {
+  const liveLogs = document.getElementById('scanLiveLogs');
+  if (!liveLogs) return;
+  const item = document.createElement('div');
+  item.className = `scan-log-item ${type}`;
+  item.innerHTML = `<span>${escapeHtml(text)}</span>`;
+  liveLogs.appendChild(item);
+  liveLogs.scrollTop = liveLogs.scrollHeight;
+}
+
+window.confirmFinalSubmitLab = function () {
+  const modal = document.getElementById('githubCheckModal');
+  if (modal) modal.close();
+  executeFinalSubmitLab();
+};
+
+window.handleFinalSubmitLab = function () {
+  if (!aiGithubChecked) {
+    openGithubCheckModal();
+    return;
+  }
+  executeFinalSubmitLab();
+};
+
+function executeFinalSubmitLab() {
+  if (currentRole === 'coach') {
+    showToast('Chế độ Lab Coach chỉ xem, không thể nộp bài thay nhóm sinh viên.');
+    return;
+  }
+
+  const repoInput = document.getElementById('githubRepoInput');
+  const repoUrl = repoInput ? repoInput.value.trim() : 'https://github.com/sloppers-team/vlearn-hackathon-cp1-5';
+
+  labGithubSubmitted = true;
+  planApproved = true;
+
+  // 1. Đánh dấu tất cả 5 task hoàn thành
+  tasks.forEach(task => {
+    const chk = task.querySelector('input');
+    if (chk) chk.checked = true;
+    task.classList.add('done');
+  });
+  updateProgress();
+
+  // 2. Tick tất cả deliverable trong submit-panel
+  document.querySelectorAll('.deliverable-list input').forEach(input => {
+    input.checked = true;
+  });
+
+  // 3. Cập nhật vòng tròn tiến độ và tiêu đề
+  const readyPercent = document.getElementById('readyPercent');
+  if (readyPercent) readyPercent.textContent = '100%';
+  const ring = document.querySelector('.ring');
+  if (ring) ring.style.background = 'conic-gradient(var(--blue) 100%, #e6e8eb 0)';
+  const readyScoreTitle = document.querySelector('.ready-score h2');
+  if (readyScoreTitle) readyScoreTitle.textContent = 'Đã hoàn thành bài Lab!';
+  const remainingText = document.getElementById('remainingText');
+  if (remainingText) remainingText.textContent = 'Đã nộp bài chính thức qua GitHub (5/5 Deliverables)';
+
+  // 4. Cập nhật thẻ nộp GitHub
+  const card = document.getElementById('githubSubmitCard');
+  if (card) card.classList.add('submitted');
+  if (repoInput) repoInput.disabled = true;
+
+  const btnAi = document.getElementById('btnAiCheckGithub');
+  if (btnAi) {
+    btnAi.innerHTML = '✓ Đã kiểm tra đối chiếu AI (5/5 Đạt chuẩn)';
+    btnAi.classList.remove('primary-button');
+    btnAi.classList.add('secondary-button');
+  }
+
+  const btnFinal = document.getElementById('btnFinalSubmitLab');
+  if (btnFinal) {
+    btnFinal.disabled = true;
+    btnFinal.innerHTML = '✓ Đã nộp bài qua GitHub';
+    btnFinal.style.background = '#16a34a';
+    btnFinal.style.color = '#ffffff';
+  }
+
+  // 5. Gửi thông báo chúc mừng vào Kênh thảo luận nhóm
+  const senderName = currentRole === 'leader' ? 'Lan' : 'Minh';
+  const senderRoleName = currentRole === 'leader' ? '👑 Nhóm trưởng' : 'UI / Frontend';
+  const avatarChar = currentRole === 'leader' ? 'L' : 'M';
+  const avatarClass = currentRole === 'leader' ? 'leader' : 'member';
+
+  chatMessagesData.push({
+    id: Date.now(),
+    sender: senderName,
+    role: currentRole,
+    roleName: senderRoleName,
+    avatarChar: avatarChar,
+    avatarClass: avatarClass,
+    time: formatTimeNow(),
+    html: `
+      <div class="chat-help-notice-card resolved">
+        <div class="chat-help-notice-title" style="color: #166534;">
+          <span>🎉 NỘP BÀI LAB QUA GITHUB THÀNH CÔNG (5/5 DELIVERABLES)</span>
+        </div>
+        <div style="font-size: 12.5px; color: #166534; line-height: 1.45; margin-bottom: 6px;">
+          ${senderName} (${senderRoleName}) đã hoàn tất nộp link GitHub sau khi AI Double-Check xác nhận đầy đủ <b>5/5 Deliverables</b>!
+        </div>
+        <div style="font-size: 11.5px; background: rgba(22, 163, 74, 0.08); padding: 6px 10px; border-radius: 6px; color: #15803d; word-break: break-all;">
+          🔗 <b>Repository:</b> <a href="${escapeHtml(repoUrl)}" target="_blank" style="color: #0369a1; text-decoration: underline; font-family: ui-monospace, monospace;">${escapeHtml(repoUrl)}</a>
+        </div>
+        <div style="margin-top: 6px; font-size: 11px; color: #64748b;">
+          🛡️ Đã đối chiếu: Canvas CP1, Flow CP2, Golden Set CP3, Evidence Log, Slide & README.
+        </div>
+      </div>
+    `,
+    attachment: null
+  });
+  renderChatMessages();
+  unreadChatCount++;
+  updateRailBadge();
+
+  // 6. Cập nhật Bảng giám sát của Lab Coach
+  const sloppersRow = document.getElementById('coachRowSloppers');
+  if (sloppersRow) {
+    const checklistCell = sloppersRow.children[1];
+    if (checklistCell) {
+      checklistCell.innerHTML = `
+        <i class="mini-progress"><em style="width:100%"></em></i><b>100%</b>
+        <small style="display:block; color:#0284c7; font-size:10.5px; margin-top:2px;">Repo: sloppers-team/vlearn... ↗</small>
+      `;
+    }
+  }
+
+  showToast('🎉 Nhóm Sloppers đã nộp bài Lab thành công! Toàn bộ 5 Deliverable đã hoàn tất.');
+}
+
+function updateGithubSubmitCardState() {
+  const card = document.getElementById('githubSubmitCard');
+  const btnAi = document.getElementById('btnAiCheckGithub');
+  const btnFinal = document.getElementById('btnFinalSubmitLab');
+  const repoInput = document.getElementById('githubRepoInput');
+  if (!card) return;
+
+  if (labGithubSubmitted) {
+    card.classList.add('submitted');
+    if (repoInput) repoInput.disabled = true;
+    if (btnAi) {
+      btnAi.innerHTML = '✓ Đã kiểm tra đối chiếu AI (5/5 Đạt chuẩn)';
+      btnAi.classList.remove('primary-button');
+      btnAi.classList.add('secondary-button');
+    }
+    if (btnFinal) {
+      btnFinal.disabled = true;
+      btnFinal.innerHTML = '✓ Đã nộp bài qua GitHub';
+      btnFinal.style.background = '#16a34a';
+      btnFinal.style.color = '#ffffff';
+    }
+  } else {
+    if (currentRole === 'coach') {
+      if (btnAi) btnAi.title = 'Chế độ Coach chỉ xem, không thay thế sinh viên thao tác';
+      if (btnFinal) btnFinal.title = 'Chế độ Coach chỉ xem';
+    } else {
+      if (btnAi) btnAi.removeAttribute('title');
+      if (btnFinal) btnFinal.removeAttribute('title');
+    }
+  }
+}
+
+/* =========================================================
+   COACH HELP REQUEST & RESPONSE SYSTEM (STUDENT & COACH FLOW)
+   ========================================================= */
+
+let coachHelpRequests = {
+  Sloppers: {
+    id: 'req-slop-01',
+    team: 'Sloppers',
+    teamCode: 'SLOP-3B',
+    sender: 'Lan (Nhóm trưởng)',
+    senderRole: 'leader',
+    senderAvatar: '👑',
+    topic: 'Checkpoint 3: Golden Set Benchmark & Prompt (CP3)',
+    question: 'Nhóm em đang bị vướng tiêu chí đánh giá độ chính xác của Golden Set CP3, mong Coach xem giúp bộ test 20 prompt ạ!',
+    time: '2 phút trước',
+    isUrgent: true,
+    status: 'pending', // 'pending' | 'resolved'
+    replies: []
+  },
+  'Null Pointers': {
+    id: 'req-null-02',
+    team: 'Null Pointers',
+    teamCode: 'NULL-12',
+    sender: 'Đức (Nhóm trưởng)',
+    senderRole: 'leader',
+    senderAvatar: '👑',
+    topic: 'Kỹ thuật: Kết nối API & Pipeline CP1',
+    question: 'Nhóm em gặp lỗi timeout khi gọi LLM API để parse dữ liệu evidence log, nhờ Coach hỗ trợ cấu hình key và rate limit ạ.',
+    time: '11 phút trước',
+    isUrgent: true,
+    status: 'pending',
+    replies: []
+  }
+};
+
+let currentViewingCoachTeam = 'Sloppers';
+
+const coachHelpModal = document.getElementById('coachHelpModal');
+const coachResponseModal = document.getElementById('coachResponseModal');
+
+// Nút ở Workspace
 document.getElementById('requestCoach')?.addEventListener('click', () => {
   if (currentRole === 'coach') {
-    showToast('Lab Coach đã ghi nhận và gửi hỗ trợ cho nhóm Sloppers.');
-  } else {
-    showToast('Yêu cầu hỗ trợ đã được gửi cho Lab Coach');
+    openCoachResponseModal('Sloppers');
+    return;
   }
+  openCoachHelpModal();
 });
+
+function updateRequestCoachButtonState() {
+  const requestCoach = document.getElementById('requestCoach');
+  if (!requestCoach) return;
+
+  if (currentRole === 'coach') {
+    requestCoach.className = 'primary-button full';
+    requestCoach.textContent = '👨‍🏫 Xem & Giải đáp yêu cầu nhóm này';
+    return;
+  }
+
+  const req = coachHelpRequests['Sloppers'];
+  if (req && req.status === 'pending') {
+    requestCoach.className = 'danger-outline full pending-request';
+    requestCoach.textContent = '⏳ Đang chờ Coach hỗ trợ (1 yêu cầu)';
+  } else if (req && req.status === 'resolved') {
+    requestCoach.className = 'secondary-button full resolved-request';
+    requestCoach.textContent = '✓ Coach đã giải đáp · Gửi yêu cầu mới';
+  } else {
+    requestCoach.className = 'danger-outline full';
+    requestCoach.textContent = '☝ Yêu cầu Coach hỗ trợ';
+  }
+}
+
+function openCoachHelpModal() {
+  if (!coachHelpModal) return;
+  const senderBadge = document.getElementById('helpSenderBadge');
+  if (senderBadge) {
+    const roleTitle = currentRole === 'leader' ? 'Lan (Nhóm trưởng)' : 'Minh (Thành viên)';
+    senderBadge.textContent = `Người gửi: ${roleTitle} · Mini Hackathon AI`;
+  }
+  coachHelpModal.showModal();
+}
+
+window.applyQuickQuestion = function (text) {
+  const textarea = document.getElementById('helpQuestionText');
+  if (textarea) {
+    textarea.value = text;
+    textarea.focus();
+  }
+};
+
+window.handleSendHelpRequest = function (event) {
+  event.preventDefault();
+  const topicSelect = document.getElementById('helpTopicSelect');
+  const questionInput = document.getElementById('helpQuestionText');
+  const urgentCheck = document.getElementById('helpUrgentCheck');
+
+  const topic = topicSelect ? topicSelect.value : 'Hỗ trợ chung bài Lab';
+  const question = questionInput ? questionInput.value.trim() : '';
+  const isUrgent = urgentCheck ? urgentCheck.checked : false;
+
+  if (!question) {
+    showToast('Vui lòng nhập nội dung câu hỏi hoặc vấn đề nhóm đang gặp phải.');
+    return;
+  }
+
+  const senderName = currentRole === 'leader' ? 'Lan (Nhóm trưởng)' : 'Minh (Thành viên)';
+  const senderAvatar = currentRole === 'leader' ? '👑' : '👤';
+
+  coachHelpRequests.Sloppers = {
+    id: 'req-slop-' + Date.now(),
+    team: 'Sloppers',
+    teamCode: 'SLOP-3B',
+    sender: senderName,
+    senderRole: currentRole,
+    senderAvatar: senderAvatar,
+    topic: topic,
+    question: question,
+    time: 'Vừa xong',
+    isUrgent: isUrgent,
+    status: 'pending',
+    replies: []
+  };
+
+  // Thông báo vào Kênh thảo luận nhóm
+  chatMessagesData.push({
+    id: Date.now(),
+    sender: currentRole === 'leader' ? 'Lan' : 'Minh',
+    role: currentRole,
+    roleName: currentRole === 'leader' ? '👑 Nhóm trưởng' : 'UI / Frontend',
+    avatarChar: currentRole === 'leader' ? 'L' : 'M',
+    avatarClass: currentRole === 'leader' ? 'leader' : 'member',
+    time: formatTimeNow(),
+    html: `
+      <div class="chat-help-notice-card">
+        <div class="chat-help-notice-title">
+          <span>☝ Đã gửi yêu cầu hỗ trợ tới Lab Coach</span>
+        </div>
+        <div style="font-size: 12px; margin-bottom: 5px; color: #0369a1;">
+          <b>Chủ đề:</b> ${escapeHtml(topic)}
+        </div>
+        <div class="chat-help-notice-body">"${escapeHtml(question)}"</div>
+        <div style="margin-top: 6px; font-size: 11px; color: #64748b;">
+          ⏳ Đang chờ Lab Coach (E403) xem xét và giải đáp...
+        </div>
+      </div>
+    `,
+    attachment: null
+  });
+  renderChatMessages();
+
+  // Cập nhật nút bấm và chỉ số
+  updateRequestCoachButtonState();
+  updateCoachViewIndicators();
+
+  if (coachHelpModal) coachHelpModal.close();
+  showToast('🚀 Đã gửi yêu cầu hỗ trợ tới Lab Coach thành công!');
+};
+
+// Lab Coach mở modal xem chi tiết yêu cầu của nhóm
+window.openCoachResponseModal = function (teamName) {
+  currentViewingCoachTeam = teamName || 'Sloppers';
+  const req = coachHelpRequests[currentViewingCoachTeam];
+  if (!req || !coachResponseModal) return;
+
+  const title = document.getElementById('coachResponseTitle');
+  const kicker = document.getElementById('coachResponseKicker');
+  const avatar = document.getElementById('coachReqAvatar');
+  const senderName = document.getElementById('coachReqSenderName');
+  const time = document.getElementById('coachReqTime');
+  const topic = document.getElementById('coachReqTopic');
+  const questionText = document.getElementById('coachReqQuestionText');
+  const statusBadge = document.getElementById('coachReqStatusBadge');
+  const replyInput = document.getElementById('coachReplyText');
+
+  if (title) title.textContent = `Yêu cầu hỗ trợ — Nhóm ${req.team} (${req.teamCode})`;
+  if (kicker) kicker.textContent = `LAB COACH · PHIÊN HỖ TRỢ NHÓM ${req.team.toUpperCase()}`;
+  if (avatar) avatar.textContent = req.senderAvatar || '👑';
+  if (senderName) senderName.textContent = `${req.sender} · Nhóm ${req.team}`;
+  if (time) time.textContent = `Gửi lúc ${req.time} · Mã nhóm: ${req.teamCode}`;
+  if (topic) topic.textContent = req.topic;
+  if (questionText) questionText.textContent = `"${req.question}"`;
+
+  if (statusBadge) {
+    if (req.status === 'pending') {
+      statusBadge.className = 'request-status-badge pending';
+      statusBadge.textContent = '⏳ Chờ giải đáp';
+    } else {
+      statusBadge.className = 'request-status-badge resolved';
+      statusBadge.textContent = '✓ Đã hoàn thành';
+    }
+  }
+
+  if (replyInput) replyInput.value = '';
+  renderCoachReplyHistory(req);
+
+  coachResponseModal.showModal();
+};
+
+function renderCoachReplyHistory(req) {
+  const historySection = document.getElementById('coachHistorySection');
+  const historyList = document.getElementById('coachHistoryList');
+  if (!historySection || !historyList) return;
+
+  if (req.replies && req.replies.length > 0) {
+    historySection.style.display = 'block';
+    historyList.innerHTML = req.replies.map(r => `
+      <div class="coach-history-item">
+        <strong>👨‍🏫 Lời giải đáp:</strong> ${escapeHtml(r.text)}
+        <small>Gửi lúc: ${r.time}</small>
+      </div>
+    `).join('');
+  } else {
+    historySection.style.display = 'none';
+    historyList.innerHTML = '';
+  }
+}
+
+window.applyCoachQuickReply = function (text) {
+  const replyTextarea = document.getElementById('coachReplyText');
+  if (replyTextarea) {
+    replyTextarea.value = text;
+    replyTextarea.focus();
+  }
+};
+
+window.handleCoachSendReply = function () {
+  const replyTextarea = document.getElementById('coachReplyText');
+  const replyText = replyTextarea ? replyTextarea.value.trim() : '';
+
+  if (!replyText) {
+    showToast('Vui lòng nhập nội dung giải đáp cho nhóm.');
+    return;
+  }
+
+  const req = coachHelpRequests[currentViewingCoachTeam];
+  if (!req) return;
+
+  const timeNow = formatTimeNow();
+  req.replies.push({
+    time: timeNow,
+    text: replyText
+  });
+
+  // Gửi trực tiếp vào Kênh chat nhóm
+  chatMessagesData.push({
+    id: Date.now(),
+    sender: 'Lab Coach (E403)',
+    role: 'coach',
+    roleName: '👨‍🏫 Lab Coach',
+    avatarChar: '👨‍🏫',
+    avatarClass: 'ai',
+    time: timeNow,
+    html: `
+      <div style="border-left: 3px solid #0284c7; padding-left: 8px; margin-bottom: 6px; font-size: 12px; color: #0369a1;">
+        📌 <b>Giải đáp yêu cầu hỗ trợ:</b> ${escapeHtml(req.topic)}
+      </div>
+      <div style="line-height: 1.5; color: #0f172a;">${escapeHtml(replyText).replace(/\n/g, '<br>')}</div>
+    `,
+    attachment: null
+  });
+  renderChatMessages();
+  unreadChatCount++;
+  updateRailBadge();
+
+  renderCoachReplyHistory(req);
+  if (replyTextarea) replyTextarea.value = '';
+
+  showToast(`💬 Đã gửi lời giải đáp của Coach tới nhóm ${req.team}!`);
+};
+
+window.handleCoachCompleteRequest = function () {
+  const req = coachHelpRequests[currentViewingCoachTeam];
+  if (!req) return;
+
+  req.status = 'resolved';
+
+  // Thêm thông báo hoàn thành vào chat nhóm
+  chatMessagesData.push({
+    id: Date.now(),
+    sender: 'Lab Coach (E403)',
+    role: 'coach',
+    roleName: '👨‍🏫 Lab Coach',
+    avatarChar: '👨‍🏫',
+    avatarClass: 'ai',
+    time: formatTimeNow(),
+    html: `
+      <div class="chat-help-notice-card resolved">
+        <div class="chat-help-notice-title">
+          <span>✓ Lab Coach đã hoàn thành phiên giải đáp</span>
+        </div>
+        <div style="font-size: 12.5px; color: #166534; line-height: 1.45;">
+          Yêu cầu hỗ trợ về <b>${escapeHtml(req.topic)}</b> đã được giải đáp hoàn tất. Chúc nhóm ${req.team} tiếp tục hoàn thành tốt bài Lab!
+        </div>
+      </div>
+    `,
+    attachment: null
+  });
+  renderChatMessages();
+  unreadChatCount++;
+  updateRailBadge();
+
+  // Cập nhật giao diện
+  updateRequestCoachButtonState();
+  updateCoachViewIndicators();
+
+  if (coachResponseModal) coachResponseModal.close();
+  showToast(`✅ Đã hoàn thành giải đáp cho nhóm ${req.team}!`);
+};
+
+function updateCoachViewIndicators() {
+  const sloppersReq = coachHelpRequests['Sloppers'];
+  const sloppersActionCell = document.getElementById('coachSloppersActionCell');
+  const sloppersBlocked = document.getElementById('coachSloppersBlocked');
+
+  if (sloppersActionCell && sloppersReq) {
+    if (sloppersReq.status === 'pending') {
+      sloppersActionCell.innerHTML = `<button class="danger-outline coach-btn-req-pending" type="button" id="btnCoachViewSloppers" onclick="openCoachResponseModal('Sloppers')">⚠️ Xem yêu cầu</button>`;
+      if (sloppersBlocked) {
+        sloppersBlocked.className = 'warning';
+        sloppersBlocked.textContent = '1 task';
+      }
+    } else {
+      sloppersActionCell.innerHTML = `<button class="secondary-button coach-btn-req-done" type="button" id="btnCoachViewSloppers" onclick="openCoachResponseModal('Sloppers')">✓ Đã giải đáp</button>`;
+      if (sloppersBlocked) {
+        sloppersBlocked.className = '';
+        sloppersBlocked.textContent = '0 task';
+      }
+    }
+  }
+
+  // Cập nhật số liệu Coach summary
+  let pendingCount = 0;
+  for (const team in coachHelpRequests) {
+    if (coachHelpRequests[team].status === 'pending') pendingCount++;
+  }
+  const helpCountEl = document.getElementById('coachHelpNeededCount');
+  if (helpCountEl) helpCountEl.textContent = pendingCount;
+}
 
 function initTeamChatListeners() {
   // Sidebar Controls
@@ -1233,6 +1824,8 @@ function initTeamChatListeners() {
 }
 
 initTeamChatListeners();
+updateRequestCoachButtonState();
+updateCoachViewIndicators();
 
 // Khởi tạo ban đầu
 const initial = location.hash.replace('#', '');

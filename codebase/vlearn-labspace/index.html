@@ -25,16 +25,69 @@
       <button type="button" class="active" data-view-link="labs"><span aria-hidden="true">⚗</span> Lab <em
           class="new">Mới</em></button>
       <button type="button" data-view-link="workspace"><span aria-hidden="true">◫</span> LabSpace</button>
-      <button type="button" data-view-link="coach" id="navCoachBtn"><span aria-hidden="true">👨‍🏫</span> Coach
-        View</button>
     </nav>
 
     <div class="header-tools">
       <button class="tour-header-btn" id="openTourBtn" type="button" title="Hướng dẫn tính năng mới & vai trò AI">✨
-        Hướng dẫn LabSpace & AI</button>
-      <div class="header-role-chip" id="headerRoleChip" title="Vai trò người dùng hiện tại">
-        <span class="role-chip-icon" id="roleChipIcon">👑</span>
-        <span class="role-chip-text" id="roleChipText">Lan · Nhóm trưởng</span>
+        Hướng dẫn</button>
+      <!-- ROLE SELECTOR DROPDOWN IN HEADER -->
+      <div class="header-role-dropdown-wrap" id="headerRoleDropdownWrap">
+        <button type="button" class="header-role-chip" id="headerRoleChip" aria-expanded="false" aria-haspopup="true"
+          title="Bấm để đổi vai trò Demo">
+          <span class="role-chip-icon" id="roleChipIcon">👑</span>
+          <span class="role-chip-text" id="roleChipText">Lan · Nhóm trưởng</span>
+          <span class="role-chip-chevron">▾</span>
+        </button>
+
+        <!-- DROPDOWN MENU CHUYỂN ROLE DEMO -->
+        <div class="role-dropdown-menu" id="roleDropdownMenu" hidden>
+          <div class="role-dropdown-header">
+            <div class="role-dropdown-title-row">
+              <span class="dropdown-live-dot"></span>
+              <strong>GÓC NHÌN DEMO</strong>
+            </div>
+            <small>Chuyển đổi vai trò & toàn bộ giao diện</small>
+          </div>
+
+          <div class="role-dropdown-items" role="menu">
+            <button type="button" class="role-menu-item active" data-role="leader" id="roleItemLeader" role="menuitem">
+              <span class="role-item-avatar leader">👑</span>
+              <div class="role-item-text">
+                <div class="role-item-name">Nhóm trưởng <small>(Lan · Sloppers)</small></div>
+                <div class="role-item-desc">Toàn quyền tạo nhóm, phân task AI & duyệt kế hoạch</div>
+              </div>
+              <span class="role-item-status-icon">✓</span>
+            </button>
+
+            <button type="button" class="role-menu-item" data-role="member" id="roleItemMember" role="menuitem">
+              <span class="role-item-avatar member">👤</span>
+              <div class="role-item-text">
+                <div class="role-item-name">
+                  Học viên được mời <small>(Minh)</small>
+                  <span class="role-item-badge" id="memberDropdownBadge">1 mời</span>
+                </div>
+                <div class="role-item-desc">Nhận thông báo mời & khai báo kỹ năng phiên Lab</div>
+              </div>
+              <span class="role-item-status-icon">✓</span>
+            </button>
+
+            <button type="button" class="role-menu-item" data-role="coach" id="roleItemCoach" role="menuitem">
+              <span class="role-item-avatar coach">👨‍🏫</span>
+              <div class="role-item-text">
+                <div class="role-item-name">Lab Coach <small>(Giảng viên E403)</small></div>
+                <div class="role-item-desc">Giám sát 12 nhóm, xem bảng can thiệp khi blocked</div>
+              </div>
+              <span class="role-item-status-icon">✓</span>
+            </button>
+          </div>
+
+          <div class="role-dropdown-footer">
+            <button type="button" class="dropdown-tour-action" id="dropdownTourBtn"
+              title="Xem hướng dẫn tính năng mới & vai trò AI">
+              ✨ Hướng dẫn LabSpace & AI
+            </button>
+          </div>
+        </div>
       </div>
       <button class="language" type="button" aria-label="Ngôn ngữ"><span>EN</span><b>VI</b></button>
       <button class="icon-button" type="button" aria-label="Đổi giao diện">☾</button>
@@ -248,18 +301,9 @@
             <p><span class="role-tag" id="workspaceRoleTag">VIEW NHÓM TRƯỞNG · LAN</span> <span
                 id="workspaceRoleDesc">Mini Hackathon AI · Toàn quyền quản lý & phân task</span></p>
           </div>
-          <div class="workspace-actions"><button class="secondary-button" type="button" id="copyCode">Mã nhóm:
-              <b>SLOP-3B</b> ⧉</button><button class="primary-button" type="button" data-view-link="coach"
-              id="wsCoachBtn">Coach view</button></div>
-        </div>
-
-        <div class="workspace-role-alert leader" id="workspaceRoleAlert">
-          <span class="role-alert-icon" id="wsAlertIcon">👑</span>
-          <div class="role-alert-text" id="wsAlertContent">
-            <b>Góc nhìn Nhóm trưởng (Lan):</b> Bạn có toàn quyền quản lý nhóm Sloppers, gửi lời mời thành viên, tạo bản
-            nháp phân công AI và phê duyệt kế hoạch.
+          <div class="workspace-actions">
+            <button class="secondary-button" type="button" id="copyCode">Mã nhóm: <b>SLOP-3B</b> ⧉</button>
           </div>
-          <button type="button" class="primary-button compact" id="wsAlertActionBtn">✦ Phân chia task AI</button>
         </div>
 
         <div class="workspace-grid">
@@ -284,7 +328,8 @@
                 <div><b>Bình</b><small>Đã gửi lời mời</small></div><em class="pending">Chờ</em>
               </li>
             </ul>
-            <button class="secondary-button full ai-run-btn" id="startAssignment" type="button"><span class="sparkle-icon">✦</span> Bắt đầu phân chia task AI</button>
+            <button class="secondary-button full ai-run-btn" id="startAssignment" type="button"><span
+                class="sparkle-icon">✦</span> Bắt đầu phân chia task AI</button>
             <div class="member-role-lock" id="memberRoleLock" style="display:none">
               🔒 <i>Chỉ Nhóm trưởng (Lan) mới có quyền tạo bản nháp và phê duyệt phân công.</i>
             </div>
@@ -298,7 +343,8 @@
               <div>
                 <h2>Kế hoạch của nhóm</h2>
                 <p id="planStatus">Chờ nhóm trưởng tạo bản nháp phân công. Checklist vẫn lấy từ bài LAB chính thức.</p>
-              </div><button class="primary-button compact ai-run-btn" id="startAssignmentBoard" type="button"><span class="sparkle-icon">✦</span> Phân chia task AI</button>
+              </div><button class="primary-button compact ai-run-btn" id="startAssignmentBoard" type="button"><span
+                  class="sparkle-icon">✦</span> Phân chia task AI</button>
             </div>
             <div class="overall-progress"><i id="progressBar"></i></div>
             <div class="task-list" id="taskList">
@@ -362,7 +408,31 @@
                 CP2</label><label><input type="checkbox" disabled /> Golden set + số đo</label><label><input
                   type="checkbox" disabled /> Spec + slide + video</label>
             </div>
-            <button class="danger-outline full" id="requestCoach" type="button">☝ Yêu cầu Coach hỗ trợ</button>
+
+            <!-- NỘP LINK GITHUB REPO & AI DOUBLE-CHECK -->
+            <div class="github-submit-card" id="githubSubmitCard">
+              <div class="github-card-title">
+                <svg class="github-icon-svg" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                <span>Nộp bài qua GitHub</span>
+              </div>
+              <p class="github-card-desc">AI sẽ đối chiếu danh mục tệp để đảm bảo nhóm không nộp thiếu Deliverable.</p>
+              <div class="github-input-wrap">
+                <span class="github-input-icon">🔗</span>
+                <input type="url" class="github-repo-input" id="githubRepoInput"
+                  value="https://github.com/sloppers-team/vlearn-hackathon-cp1-5"
+                  placeholder="https://github.com/username/repo-name" />
+              </div>
+              <div class="github-action-btns">
+                <button type="button" class="primary-button full btn-ai-check" id="btnAiCheckGithub" onclick="openGithubCheckModal()">
+                  <span class="sparkle-icon">✦</span> AI Double-Check tệp bài nộp
+                </button>
+                <button type="button" class="secondary-button full btn-final-submit" id="btnFinalSubmitLab" disabled onclick="handleFinalSubmitLab()">
+                  🚀 Nộp bài chính thức
+                </button>
+              </div>
+            </div>
+
+            <button class="danger-outline full" id="requestCoach" type="button" style="margin-top: 14px;">☝ Yêu cầu Coach hỗ trợ</button>
             <p class="privacy-note">Coach chỉ thấy tiến độ nhóm và yêu cầu hỗ trợ được gửi.</p>
           </aside>
         </div>
@@ -381,22 +451,27 @@
         <div class="coach-summary">
           <div><span>12</span><small>Nhóm đang làm</small></div>
           <div><span>5</span><small>Đã hoàn thành ≥80%</small></div>
-          <div><span>3</span><small>Có task blocked</small></div>
-          <div class="alert"><span>2</span><small>Đang yêu cầu hỗ trợ</small></div>
+          <div><span id="coachBlockedCount">3</span><small>Có task blocked</small></div>
+          <div class="alert"><span id="coachHelpNeededCount">2</span><small>Đang yêu cầu hỗ trợ</small></div>
         </div>
         <div class="coach-table card">
           <div class="coach-row header"><span>Nhóm</span><span>Checklist</span><span>Blocked</span><span>Check-in gần
               nhất</span><span>Yêu cầu hỗ trợ</span></div>
-          <div class="coach-row highlighted"><span><b>Sloppers</b><small>SLOP-3B</small></span><span><i
-                class="mini-progress"><em style="width:40%"></em></i><b>40%</b></span><span class="warning">1
-              task</span><span>2 phút trước</span><span><button class="danger-outline" data-view-link="workspace">Xem
-                yêu cầu</button></span></div>
+          <div class="coach-row highlighted" id="coachRowSloppers">
+            <span><b>Sloppers</b><small>SLOP-3B</small></span>
+            <span><i class="mini-progress"><em style="width:40%"></em></i><b>40%</b></span>
+            <span class="warning" id="coachSloppersBlocked">1 task</span>
+            <span id="coachSloppersTime">2 phút trước</span>
+            <span id="coachSloppersActionCell">
+              <button class="danger-outline coach-btn-req-pending" type="button" id="btnCoachViewSloppers" onclick="openCoachResponseModal('Sloppers')">⚠️ Xem yêu cầu</button>
+            </span>
+          </div>
           <div class="coach-row"><span><b>Team Phoenix</b><small>PHNX-08</small></span><span><i
                 class="mini-progress"><em style="width:80%"></em></i><b>80%</b></span><span>0 task</span><span>5 phút
               trước</span><span>—</span></div>
-          <div class="coach-row"><span><b>Null Pointers</b><small>NULL-12</small></span><span><i
+          <div class="coach-row" id="coachRowNullPointers"><span><b>Null Pointers</b><small>NULL-12</small></span><span><i
                 class="mini-progress"><em style="width:20%"></em></i><b>20%</b></span><span class="warning">2
-              task</span><span>11 phút trước</span><span><button class="danger-outline">Xem yêu cầu</button></span>
+              task</span><span>11 phút trước</span><span id="coachNullPointersActionCell"><button class="danger-outline coach-btn-req-pending" type="button" id="btnCoachViewNull" onclick="openCoachResponseModal('Null Pointers')">⚠️ Xem yêu cầu</button></span>
           </div>
           <div class="coach-row"><span><b>AI Sprinters</b><small>AISP-04</small></span><span><i
                 class="mini-progress"><em style="width:100%"></em></i><b>100%</b></span><span>0 task</span><span>1 phút
@@ -498,7 +573,8 @@
         <div class="ai-orb-core">✦</div>
       </div>
       <h3 class="ai-analyzing-title" id="aiAnalyzingTitle">AI đang phân tích ma trận kỹ năng & bài lab...</h3>
-      <p class="ai-analyzing-subtitle" id="aiAnalyzingSubtitle">Đang đối soát hồ sơ 4 thành viên với 5 deliverable từ checklist chính thức</p>
+      <p class="ai-analyzing-subtitle" id="aiAnalyzingSubtitle">Đang đối soát hồ sơ 4 thành viên với 5 deliverable từ
+        checklist chính thức</p>
 
       <div class="ai-bar-wrap">
         <div class="ai-bar-fill" id="aiBarFill"></div>
@@ -661,33 +737,32 @@
       <section class="tour-step-content active" data-tour-step="1">
         <div class="tour-hero">
           <div class="hero-text">
-            <h3>Không còn cảnh chia nhóm qua Zalo hay task bị bỏ quên!</h3>
-            <p>Trong các buổi Lab hoặc Codelab, việc lập nhóm tạm thời, phân công công bằng và theo dõi checklist luôn
-              là nỗi đau lớn nhất của sinh viên và mentor.</p>
+            <h3>Đừng để yêu cầu Lab, owner và deliverable bị rời rạc.</h3>
+            <p>Mỗi buổi Lab hoặc Codelab có thể có nhóm mới. Nhóm cần nhanh chóng hiểu đúng đầu ra phải nộp, có task–owner
+              rõ ràng và theo dõi checklist ngay trong VLearn.</p>
           </div>
         </div>
 
         <div class="tour-feature-grid">
           <div class="tour-feat-card">
             <span class="feat-icon">👥</span>
-            <h4>Lập nhóm tức thì</h4>
-            <p>Trưởng nhóm nhập mã sinh viên để gửi lời mời; thành viên tự xác nhận trong tài khoản VLearn.</p>
+            <h4>Nhóm theo từng bài Lab</h4>
+            <p>Nhóm trưởng tạo workspace cho bài đang mở và gửi lời mời bằng mã học viên; thành viên tự xác nhận trong Thông báo VLearn.</p>
           </div>
           <div class="tour-feat-card">
             <span class="feat-icon">🎯</span>
-            <h4>Đồng bộ Checklist 100%</h4>
-            <p>Checklist bài LAB chính thức (Canvas, Evidence, Prototype, Golden set) tự động đồng bộ vào workspace
-              nhóm.</p>
+            <h4>Checklist từ đề bài chính thức</h4>
+            <p>LabSpace hiển thị checklist và deliverable canonical của bài Lab trong workspace; nhóm không phải tự ghép yêu cầu từ nhiều nơi.</p>
           </div>
           <div class="tour-feat-card">
             <span class="feat-icon">🤖</span>
-            <h4>AI hỗ trợ phân task</h4>
-            <p>AI phân tích điểm kỹ năng từng người để đề xuất bản nháp phân công tối ưu thế mạnh.</p>
+            <h4>AI đề xuất bản nháp phân công</h4>
+            <p>Từ checklist và skill tự khai, AI gợi ý task–owner, lý do và gap cần làm rõ. Nhóm trưởng có thể sửa trước khi phê duyệt.</p>
           </div>
           <div class="tour-feat-card">
             <span class="feat-icon">👨‍🏫</span>
-            <h4>Mentor hỗ trợ đúng lúc</h4>
-            <p>Lab Coach theo dõi tiến độ tổng thể cả lớp và nhận ticket cứu trợ ngay khi nhóm bị blocked task.</p>
+            <h4>Lab Coach theo dõi cấp nhóm</h4>
+            <p>Lab Coach xem tiến độ checklist, task bị chặn và yêu cầu hỗ trợ do nhóm gửi; không theo dõi hồ sơ năng lực hay hoạt động cá nhân.</p>
           </div>
         </div>
 
@@ -829,11 +904,254 @@
     </div>
   </dialog>
 
+  <!-- MODAL 1: SINH VIÊN GỬI YÊU CẦU HỖ TRỢ TỚI LAB COACH -->
+  <dialog id="coachHelpModal" class="setup-dialog help-dialog" aria-labelledby="coachHelpTitle">
+    <div class="dialog-top">
+      <div>
+        <span>LABSPACE · PHIÊN HỖ TRỢ TRỰC TUYẾN</span>
+        <h2 id="coachHelpTitle">Gửi yêu cầu hỗ trợ tới Lab Coach</h2>
+      </div>
+      <button type="button" id="closeCoachHelpModal" aria-label="Đóng">×</button>
+    </div>
+    <form class="dialog-step active" id="coachHelpForm" onsubmit="handleSendHelpRequest(event)">
+      <p class="step-intro">
+        Coach sẽ nhận được thông báo về tình trạng nhóm kèm câu hỏi để hỗ trợ trực tiếp hoặc gửi giải đáp qua kênh thảo luận.
+      </p>
+
+      <div class="help-team-info-banner">
+        <div class="team-avatar-badge">👥</div>
+        <div>
+          <strong>Nhóm Sloppers (Mã nhóm: SLOP-3B)</strong>
+          <small id="helpSenderBadge">Người gửi: Lan (Nhóm trưởng) · Mini Hackathon AI</small>
+        </div>
+      </div>
+
+      <div class="form-field" style="margin-top: 14px;">
+        <label for="helpTopicSelect">Chủ đề cần Coach hướng dẫn / giải đáp:</label>
+        <select id="helpTopicSelect" class="help-select">
+          <option value="Checkpoint 2: Flow tương tác & Wireframe (CP2)">Checkpoint 2: Flow tương tác & Wireframe (CP2)</option>
+          <option value="Checkpoint 3: Golden Set Benchmark & Prompt (CP3)" selected>Checkpoint 3: Golden Set Benchmark & Prompt (CP3)</option>
+          <option value="Checkpoint 1: Phỏng vấn & Canvas 7 dòng">Checkpoint 1: Phỏng vấn & Canvas 7 dòng</option>
+          <option value="Kỹ thuật: Kết nối API & Cấu trúc mã nguồn">Kỹ thuật: Kết nối API & Cấu trúc mã nguồn</option>
+          <option value="Khác: Phân bổ công việc & Thắc mắc tiêu chí">Khác: Phân bổ công việc & Thắc mắc tiêu chí</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="helpQuestionText">Nội dung câu hỏi hoặc vấn đề nhóm đang gặp phải: <b style="color:var(--red)">*</b></label>
+        <textarea id="helpQuestionText" class="help-textarea" rows="4" required
+          placeholder="Mô tả cụ thể khó khăn nhóm đang gặp phải, câu hỏi cần Coach hướng dẫn, đoạn lỗi code hoặc thắc mắc về tiêu chí đánh giá..."></textarea>
+      </div>
+
+      <div class="quick-question-suggestions">
+        <span class="quick-suggest-label">Gợi ý mẫu câu hỏi nhanh:</span>
+        <div class="quick-suggest-chips">
+          <button type="button" class="quick-chip-btn" onclick="applyQuickQuestion('Nhóm em đang bị vướng tiêu chí đánh giá độ chính xác của Golden Set CP3, mong Coach xem giúp bộ test 20 prompt ạ!')">🎯 Vướng Golden Set CP3</button>
+          <button type="button" class="quick-chip-btn" onclick="applyQuickQuestion('Task dựng Flow CP2 của bạn Minh đang bị blocked do chưa thống nhất luồng Canvas, Coach cho nhóm xin ý kiến với ạ.')">⚠️ Task CP2 bị Blocked</button>
+          <button type="button" class="quick-chip-btn" onclick="applyQuickQuestion('Nhóm em cần Coach review trước bản nháp phân công công việc AI xem đã cân bằng khối lượng chưa ạ.')">📋 Review phân công task</button>
+        </div>
+      </div>
+
+      <label class="help-urgent-checkbox">
+        <input type="checkbox" id="helpUrgentCheck" checked />
+        <span>⚠️ Đánh dấu <b>Khẩn cấp</b> (Nhóm đang bị tắc nghẽn hoàn toàn - Blocked)</span>
+      </label>
+
+      <div class="dialog-actions">
+        <button class="secondary-button" id="cancelCoachHelpBtn" type="button" onclick="document.getElementById('coachHelpModal').close()">Hủy</button>
+        <button class="primary-button" id="submitCoachHelpBtn" type="submit">🚀 Gửi yêu cầu tới Coach</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- MODAL 2: LAB COACH XEM CHI TIẾT, GIẢI ĐÁP & HOÀN THÀNH -->
+  <dialog id="coachResponseModal" class="setup-dialog coach-response-dialog" aria-labelledby="coachResponseTitle">
+    <div class="dialog-top">
+      <div>
+        <span id="coachResponseKicker">LAB COACH · PHIÊN HỖ TRỢ NHÓM LAB</span>
+        <h2 id="coachResponseTitle">Yêu cầu hỗ trợ — Nhóm Sloppers (SLOP-3B)</h2>
+      </div>
+      <button type="button" id="closeCoachResponseModal" aria-label="Đóng">×</button>
+    </div>
+    <div class="dialog-step active">
+      <!-- THÔNG TIN YÊU CẦU CỦA NHÓM -->
+      <div class="coach-request-card">
+        <div class="request-card-header">
+          <div class="request-sender-info">
+            <span class="request-role-avatar" id="coachReqAvatar">👑</span>
+            <div>
+              <strong id="coachReqSenderName">Lan (Nhóm trưởng) · Nhóm Sloppers</strong>
+              <small id="coachReqTime">Gửi lúc 20:38 · Mã nhóm: SLOP-3B</small>
+            </div>
+          </div>
+          <span class="request-status-badge pending" id="coachReqStatusBadge">⏳ Chờ giải đáp</span>
+        </div>
+
+        <div class="request-topic-row">
+          <span>Chủ đề:</span>
+          <strong id="coachReqTopic">Checkpoint 3: Golden Set Benchmark & Prompt</strong>
+        </div>
+
+        <div class="request-question-content">
+          <div class="question-label">💬 Câu hỏi của sinh viên:</div>
+          <blockquote id="coachReqQuestionText">
+            "Nhóm em đang bị vướng tiêu chí đánh giá độ chính xác của Golden Set CP3, mong Coach xem giúp bộ test 20 prompt ạ!"
+          </blockquote>
+        </div>
+      </div>
+
+      <!-- LỊCH SỬ GIẢI ĐÁP NẾU CÓ -->
+      <div class="coach-history-section" id="coachHistorySection" style="display:none">
+        <div class="section-label">📜 Lời giải đáp đã gửi cho nhóm:</div>
+        <div class="coach-history-list" id="coachHistoryList"></div>
+      </div>
+
+      <!-- KHU VỰC COACH NHẬP GIẢI ĐÁP -->
+      <div class="coach-reply-box" id="coachReplyBox">
+        <label for="coachReplyText" class="form-field-label">
+          <strong>Nhập nội dung giải đáp / hướng dẫn của Coach:</strong>
+          <small>Nội dung này sẽ được gửi trực tiếp tới Kênh thảo luận của nhóm.</small>
+        </label>
+        <textarea id="coachReplyText" class="coach-textarea" rows="3"
+          placeholder="Nhập giải đáp chuyên môn, tài liệu tham khảo hoặc gợi ý giải pháp cho nhóm..."></textarea>
+
+        <div class="quick-reply-suggestions">
+          <span class="quick-suggest-label">Gợi ý trả lời nhanh:</span>
+          <div class="quick-suggest-chips">
+            <button type="button" class="quick-chip-btn" onclick="applyCoachQuickReply('Coach đã xem qua Golden set của nhóm. Các em lưu ý rubric CP3 cần tối thiểu 20 test case có ground truth rõ ràng và chia theo 3 mức độ khó nhé.')">💡 Hướng dẫn Golden set CP3</button>
+            <button type="button" class="quick-chip-btn" onclick="applyCoachQuickReply('Với flow CP2 bị vướng: Bạn Lan và bạn Minh hãy đối chiếu lại với 7 dòng Canvas CP1 đã chốt để thống nhất luồng tương tác chính nhé.')">🛠️ Gỡ blocked Flow CP2</button>
+            <button type="button" class="quick-chip-btn" onclick="applyCoachQuickReply('Coach đã review kế hoạch phân công của nhóm Sloppers, độ phủ kỹ năng rất tốt. Nhóm trưởng có thể bấm Phê duyệt để bắt đầu nhé!')">👍 Phê duyệt kế hoạch</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="coach-modal-actions">
+        <button class="secondary-button" type="button" id="btnCoachBack" onclick="document.getElementById('coachResponseModal').close()">Đóng</button>
+        <div class="coach-right-btns">
+          <button class="secondary-button" type="button" id="btnCoachSendReply" onclick="handleCoachSendReply()">
+            💬 Gửi giải đáp vào nhóm
+          </button>
+          <button class="primary-button success-btn" type="button" id="btnCoachComplete" onclick="handleCoachCompleteRequest()">
+            ✓ Hoàn thành giải đáp
+          </button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL 3: AI DOUBLE-CHECK LINK GITHUB DELIVERABLES -->
+  <dialog id="githubCheckModal" class="setup-dialog github-check-dialog" aria-labelledby="githubCheckTitle">
+    <div class="dialog-top">
+      <div>
+        <span>AI SUBMISSION VALIDATOR · VLEARN LABSPACE</span>
+        <h2 id="githubCheckTitle">AI Double-Check: Kiểm tra tệp nộp bài Lab</h2>
+      </div>
+      <button type="button" id="closeGithubCheckModal" onclick="document.getElementById('githubCheckModal').close()" aria-label="Đóng">×</button>
+    </div>
+    <div class="dialog-step active">
+      <!-- AI GUARDRAIL NOTICE -->
+      <div class="guardrail-notice-box">
+        <div class="guardrail-shield">🛡️</div>
+        <div class="guardrail-text">
+          <strong>Ranh giới hoạt động của AI (AI Guardrail)</strong>
+          Hệ thống chỉ quét đối chiếu danh mục tệp, kiểm tra số lượng và định dạng của 5 Deliverables bắt buộc theo Rubric bài Lab. 
+          <b>AI tuyệt đối không can thiệp, không chỉnh sửa mã nguồn và không làm bài thay sinh viên</b>.
+        </div>
+      </div>
+
+      <!-- SCANNING TERMINAL BOX -->
+      <div class="repo-scan-box" id="repoScanBox">
+        <div class="scan-target-url">
+          <span>🔎 Repository:</span>
+          <code id="scanTargetUrlDisplay">https://github.com/sloppers-team/vlearn-hackathon-cp1-5</code>
+        </div>
+        <div class="scan-progress-track">
+          <div class="scan-progress-bar" id="scanProgressBar"></div>
+        </div>
+        <div class="scan-live-logs" id="scanLiveLogs">
+          <div class="scan-log-item info"><span>⏳ Đang kết nối tới GitHub Repository...</span></div>
+        </div>
+      </div>
+
+      <!-- DELIVERABLES CHECKLIST TABLE -->
+      <div class="check-deliverables-table" id="checkDeliverablesTable">
+        <div class="check-table-header">
+          <span>Hạng mục</span>
+          <span>Tệp phát hiện & Định dạng</span>
+          <span style="text-align:center">Trạng thái</span>
+        </div>
+        <div class="check-table-row" id="checkRowCp1">
+          <span class="cp-tag">1. Canvas CP1</span>
+          <div class="file-meta-col">
+            <code>docs/canvas-7-dong.md</code>
+            <small>22 dòng · 7 mục bài toán & giá trị cốt lõi</small>
+          </div>
+          <span class="status-pill ok" id="statusPillCp1">✓ Đã có</span>
+        </div>
+        <div class="check-table-row" id="checkRowCp2">
+          <span class="cp-tag">2. Flow CP2</span>
+          <div class="file-meta-col">
+            <code>mockups/Flow_Mockup_CP2_Figma.png</code>
+            <small>2.4 MB · Ảnh sơ đồ luồng tương tác sản phẩm</small>
+          </div>
+          <span class="status-pill ok" id="statusPillCp2">✓ Đã có</span>
+        </div>
+        <div class="check-table-row" id="checkRowCp3">
+          <span class="cp-tag">3. Golden Set CP3</span>
+          <div class="file-meta-col">
+            <code>benchmarks/Golden_Set_Benchmark_CP3.csv</code>
+            <small>680 KB · 20 prompt test + ground truth rubric</small>
+          </div>
+          <span class="status-pill ok" id="statusPillCp3">✓ Đạt chuẩn</span>
+        </div>
+        <div class="check-table-row" id="checkRowCp4">
+          <span class="cp-tag">4. Evidence Log</span>
+          <div class="file-meta-col">
+            <code>evidence/evidence_log_20_users.csv</code>
+            <small>420 KB · Khảo sát 20 học viên + 5 quote trích dẫn</small>
+          </div>
+          <span class="status-pill ok" id="statusPillCp4">✓ Đạt chuẩn</span>
+        </div>
+        <div class="check-table-row" id="checkRowCp5">
+          <span class="cp-tag">5. Slide & README</span>
+          <div class="file-meta-col">
+            <code>README.md & slides/day06_pitch.pdf</code>
+            <small>Đặc tả hệ thống, hướng dẫn chạy & slide thuyết trình</small>
+          </div>
+          <span class="status-pill ok" id="statusPillCp5">✓ Đã có</span>
+        </div>
+      </div>
+
+      <!-- VERIFICATION SUMMARY -->
+      <div class="verification-summary-banner" id="verificationSummaryBanner" style="display:none">
+        <div class="summary-main-info">
+          <span class="summary-tick-icon">✓</span>
+          <div>
+            <strong>Tất cả 5/5 Deliverables đã đầy đủ và hợp lệ!</strong>
+            <small>Danh mục tệp đáp ứng 100% tiêu chí quy định của bài Mini Hackathon.</small>
+          </div>
+        </div>
+        <span class="score-badge-5">5 / 5 ✓</span>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="dialog-actions">
+        <button type="button" class="secondary-button" onclick="document.getElementById('githubCheckModal').close()">Đóng & Sửa link</button>
+        <button type="button" class="primary-button btn-final-submit" id="btnConfirmFinalSubmit" onclick="confirmFinalSubmitLab()">
+          🚀 Xác nhận & Nộp bài chính thức
+        </button>
+      </div>
+    </div>
+  </dialog>
+
   <!-- DISCORD-STYLE RIGHT CHAT SIDEBAR -->
   <aside class="chat-sidebar" id="chatSidebar" aria-label="Kênh thảo luận nhóm và Trợ lý Lab AI">
     <!-- NÚT THU GỌN Ở PHÍA NGOÀI RÌA (LEFT BORDER FACING WORKSPACE) -->
-    <button type="button" class="sidebar-outer-collapse-btn" id="chatCollapseBtn" onclick="collapseChatSidebar()" title="Thu gọn khung chat (⇥)" aria-label="Thu gọn sidebar">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <button type="button" class="sidebar-outer-collapse-btn" id="chatCollapseBtn" onclick="collapseChatSidebar()"
+      title="Thu gọn khung chat (⇥)" aria-label="Thu gọn sidebar">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+        stroke-linecap="round" stroke-linejoin="round">
         <polyline points="9 18 15 12 9 6"></polyline>
         <line x1="19" y1="5" x2="19" y2="19"></line>
       </svg>
@@ -862,13 +1180,10 @@
           <span class="online-pill">🟢 4 bạn online</span>
           <span class="bot-present-pill">🤖 Trợ lý AI đang trong nhóm</span>
         </div>
-        <button type="button" class="group-ai-summary-btn" id="chatAiSummaryBtn" title="Nhờ AI tóm tắt thảo luận">✨ AI tóm tắt</button>
+        <button type="button" class="group-ai-summary-btn" id="chatAiSummaryBtn" title="Nhờ AI tóm tắt thảo luận">✨ AI
+          tóm tắt</button>
       </div>
 
-      <div class="chat-identity-banner" id="chatIdentityBanner">
-        <span>Gửi với tư cách:</span>
-        <strong id="chatSenderRoleName">👑 Lan (Nhóm trưởng)</strong>
-      </div>
 
       <!-- GROUP MESSAGES CONTAINER -->
       <div class="chat-messages" id="chatMessages">
@@ -890,30 +1205,39 @@
       <!-- QUICK DOCS POPUP -->
       <div class="quick-docs-menu" id="quickDocsMenu" style="display: none;">
         <div class="quick-docs-title">Chọn tài liệu nộp bài Lab:</div>
-        <button type="button" class="quick-doc-option" data-name="Checklist_Deliverable_Day05.pdf" data-size="420 KB" data-type="pdf">
+        <button type="button" class="quick-doc-option" data-name="Checklist_Deliverable_Day05.pdf" data-size="420 KB"
+          data-type="pdf">
           📄 Checklist_Deliverable_Day05.pdf <small>(Checklist lab)</small>
         </button>
-        <button type="button" class="quick-doc-option" data-name="Flow_Mockup_CP2_Figma.png" data-size="2.4 MB" data-type="img">
+        <button type="button" class="quick-doc-option" data-name="Flow_Mockup_CP2_Figma.png" data-size="2.4 MB"
+          data-type="img">
           🖼️ Flow_Mockup_CP2_Figma.png <small>(Thiết kế giao diện)</small>
         </button>
-        <button type="button" class="quick-doc-option" data-name="Golden_Set_Benchmark_CP3.csv" data-size="680 KB" data-type="data">
+        <button type="button" class="quick-doc-option" data-name="Golden_Set_Benchmark_CP3.csv" data-size="680 KB"
+          data-type="data">
           📊 Golden_Set_Benchmark_CP3.csv <small>(Bộ test AI)</small>
         </button>
-        <button type="button" class="quick-doc-option" data-name="Architecture_Diagram_Draft.pdf" data-size="1.1 MB" data-type="pdf">
+        <button type="button" class="quick-doc-option" data-name="Architecture_Diagram_Draft.pdf" data-size="1.1 MB"
+          data-type="pdf">
           📑 Architecture_Diagram_Draft.pdf <small>(Sơ đồ hệ thống)</small>
         </button>
       </div>
 
       <!-- GROUP FOOTER & INPUT -->
       <div class="chat-footer">
-        <input type="file" id="chatFileInput" style="display: none;" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.csv,.json,.zip,.txt">
+        <input type="file" id="chatFileInput" style="display: none;"
+          accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.csv,.json,.zip,.txt">
         <div class="chat-input-toolbar">
-          <button type="button" class="chat-tool-btn" id="chatAttachPickerBtn" title="Chọn file từ máy tính">📎 File</button>
-          <button type="button" class="chat-tool-btn" id="chatQuickDocsBtn" title="Gửi nhanh tài liệu bài Lab">📑 Tài liệu Lab</button>
-          <button type="button" class="chat-tool-btn ai-mention-btn" id="chatAskAiInGroupBtn" title="Hỏi Trợ lý AI trong nhóm">🤖 @Trợ lý AI</button>
+          <button type="button" class="chat-tool-btn" id="chatAttachPickerBtn" title="Chọn file từ máy tính">📎
+            File</button>
+          <button type="button" class="chat-tool-btn" id="chatQuickDocsBtn" title="Gửi nhanh tài liệu bài Lab">📑 Tài
+            liệu Lab</button>
+          <button type="button" class="chat-tool-btn ai-mention-btn" id="chatAskAiInGroupBtn"
+            title="Hỏi Trợ lý AI trong nhóm">🤖 @Trợ lý AI</button>
         </div>
         <form class="chat-input-form" id="chatInputForm">
-          <input type="text" id="chatInputText" class="chat-input" placeholder="Nhắn tin với nhóm hoặc tag @Trợ lý AI..." autocomplete="off">
+          <input type="text" id="chatInputText" class="chat-input"
+            placeholder="Nhắn tin với nhóm hoặc tag @Trợ lý AI..." autocomplete="off">
           <button type="submit" class="chat-send-btn" id="chatSendBtn" aria-label="Gửi tin nhắn">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
@@ -940,10 +1264,16 @@
       <div class="ai-quick-prompts-tray">
         <div class="quick-prompts-label">Gợi ý câu hỏi bài Lab 1-chạm:</div>
         <div class="quick-prompts-scroll">
-          <button type="button" class="ai-quick-chip" onclick="askAiPrompt('Lab này cần nộp những gì?')">📌 Lab này cần nộp gì?</button>
-          <button type="button" class="ai-quick-chip" onclick="askAiPrompt('Tôi đã làm xong Checkpoint 1 thì làm gì tiếp theo?')">🚀 Xong CP1 thì làm gì tiếp?</button>
-          <button type="button" class="ai-quick-chip" onclick="askAiPrompt('Tiêu chí chấm điểm và Golden set CP3 là gì?')">🎯 Tiêu chí Golden set CP3?</button>
-          <button type="button" class="ai-quick-chip" onclick="askAiPrompt('Làm sao để giải quyết mâu thuẫn phân chia task trong nhóm?')">⚖️ Giải quyết mâu thuẫn task?</button>
+          <button type="button" class="ai-quick-chip" onclick="askAiPrompt('Lab này cần nộp những gì?')">📌 Lab này cần
+            nộp gì?</button>
+          <button type="button" class="ai-quick-chip"
+            onclick="askAiPrompt('Tôi đã làm xong Checkpoint 1 thì làm gì tiếp theo?')">🚀 Xong CP1 thì làm gì
+            tiếp?</button>
+          <button type="button" class="ai-quick-chip"
+            onclick="askAiPrompt('Tiêu chí chấm điểm và Golden set CP3 là gì?')">🎯 Tiêu chí Golden set CP3?</button>
+          <button type="button" class="ai-quick-chip"
+            onclick="askAiPrompt('Làm sao để giải quyết mâu thuẫn phân chia task trong nhóm?')">⚖️ Giải quyết mâu thuẫn
+            task?</button>
         </div>
       </div>
 
@@ -955,7 +1285,8 @@
       <!-- AI 1:1 FOOTER & INPUT -->
       <div class="ai-chat-footer">
         <form class="chat-input-form" id="aiChatInputForm">
-          <input type="text" id="aiChatInputText" class="chat-input" placeholder="Hỏi Trợ lý AI về bài Lab, checklist, tiến độ..." autocomplete="off">
+          <input type="text" id="aiChatInputText" class="chat-input"
+            placeholder="Hỏi Trợ lý AI về bài Lab, checklist, tiến độ..." autocomplete="off">
           <button type="submit" class="ai-send-btn" id="aiChatSendBtn" aria-label="Hỏi Trợ lý AI">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
@@ -967,57 +1298,15 @@
   </aside>
 
   <!-- COLLAPSED TRIGGER RAIL (KHI SIDEBAR THU GỌN) -->
-  <button type="button" class="chat-expand-rail" id="chatExpandRail" onclick="expandChatSidebar()" title="Mở kênh chat nhóm & Trợ lý AI">
+  <button type="button" class="chat-expand-rail" id="chatExpandRail" onclick="expandChatSidebar()"
+    title="Mở kênh chat nhóm & Trợ lý AI">
     <span class="rail-icon">💬</span>
     <span class="rail-text">Kênh nhóm & Trợ lý AI</span>
     <span class="rail-badge" id="railBadge">2</span>
     <span class="rail-arrow">◀</span>
   </button>
 
-  <!-- FIXED DEMO ROLE CONTROLLER DOCK -->
-  <aside class="demo-fixed-dock" id="demoFixedDock" aria-label="Góc nhìn Demo cố định">
-    <div class="dock-inner">
-      <div class="dock-top-row">
-        <div class="dock-title-group">
-          <span class="dock-live-dot" title="Đang hoạt động"></span>
-          <span class="dock-title-text">GÓC NHÌN DEMO</span>
-          <span class="dock-subnote">Cố định toàn trang · Click để đổi cả giao diện</span>
-        </div>
-        <button type="button" class="dock-tour-link" id="dockTourBtn" title="Xem hướng dẫn tính năng mới & vai trò AI">✨
-          Hướng dẫn LabSpace & AI</button>
-      </div>
-      <div class="dock-btn-group" role="tablist">
-        <button type="button" class="dock-role-item active" data-role="leader" id="dockBtnLeader"
-          title="Đóng vai Nhóm trưởng (Lan)">
-          <span class="dock-role-icon">👑</span>
-          <span class="dock-role-meta">
-            <strong class="role-name">Nhóm trưởng</strong>
-            <small class="role-char">Lan · Sloppers</small>
-          </span>
-        </button>
-        <button type="button" class="dock-role-item" data-role="member" id="dockBtnMember"
-          title="Đóng vai Học viên được mời (Minh)">
-          <span class="dock-role-icon">👤</span>
-          <span class="dock-role-meta">
-            <strong class="role-name">Học viên được mời</strong>
-            <small class="role-char">Minh · Frontend</small>
-          </span>
-          <span class="dock-badge-bubble" id="dockMemberBadge">1 mời</span>
-        </button>
-        <button type="button" class="dock-role-item" data-role="coach" id="dockBtnCoach"
-          title="Đóng vai Lab Coach (E403)">
-          <span class="dock-role-icon">👨‍🏫</span>
-          <span class="dock-role-meta">
-            <strong class="role-name">Lab Coach</strong>
-            <small class="role-char">Giảng viên E403</small>
-          </span>
-        </button>
-      </div>
-      <div class="dock-footnote" id="dockFootnote">
-        Đang ở góc nhìn: <b>👑 Nhóm trưởng (Lan)</b> — Toàn quyền tạo nhóm, phân chia task AI và duyệt kế hoạch.
-      </div>
-    </div>
-  </aside>
+
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="./app.js?v=discord_chat_v3"></script>
