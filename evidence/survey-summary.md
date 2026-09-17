@@ -238,37 +238,65 @@ Mối quan hệ giữa thời gian khởi động và thời gian thiệt hại 
 
 ---
 
-## 5. Trích dẫn ý kiến & Tiếng nói người dùng ẩn danh (Voice of Customer)
+## 5. Phản hồi định tính & Hồ sơ tình huống người dùng (Qualitative & User Profiles)
 
-Toàn bộ thông tin định danh cá nhân (số điện thoại, họ tên đầy đủ) đã được mã hóa và bảo vệ theo nguyên tắc bảo mật. Dưới đây là các trích dẫn và tổng hợp tiếng nói người dùng từ khảo sát:
+> [!NOTE]
+> **Lưu ý về nguồn dữ liệu:**  
+> Trong biểu mẫu khảo sát, các câu hỏi từ Câu 1 đến Câu 7 là dạng trắc nghiệm chọn đáp án (`Single Choice` và `Checkboxes`), không có ô nhập văn bản tự do. Duy nhất **Câu 8** là ô nhập tự do (`Short Answer`).  
+> Do đó, phần này tách biệt rõ ràng giữa:  
+> 1. **Dữ liệu nguyên văn từ người dùng gõ (Raw Text)** tại Câu 8.  
+> 2. **Hồ sơ tình huống điển hình (Case Profiles)** được trích xuất trực tiếp từ tổ hợp các lựa chọn trắc nghiệm của từng người tham gia (mã hóa R01, R02, ...).
 
-### 5.1. Nhóm Đội trưởng / Người điều phối (Leader Perspective)
-* **Mã R01 (Leader):** *"Nhóm mất trên 30 phút để thống nhất. Tự nhớ hoặc vừa làm vừa hỏi nên bị trùng việc, bỏ sót phần nộp và task không phù hợp năng lực, mất thêm 15-30 phút sửa lại."*
-* **Mã R02 (Leader):** *"Dù chỉ mất 10 phút chia việc qua chat, nhưng sau đó phải chia lại task giữa chừng và làm trùng việc, hậu quả là phải làm lại toàn bộ và mất thêm trên 30 phút."*
-* **Mã R14 (Leader - Phản hồi thực tế):** *"Gặp phải toàn bộ 8/8 vấn đề: người chưa biết làm gì, trùng việc, sót việc, lệch năng lực, gánh team, chia lại task, mù mờ tiến độ và không biết nộp thiếu gì."* *(Người này phản hồi hóm hỉnh từ chối MVP vì lý do cá nhân với leader nhưng bộc lộ 100% nỗi đau của việc chia task).*
-* **Mã R17 (Leader - Sẵn sàng test MVP):** *"Thời gian thống nhất 15-30 phút, mất thêm thời gian và giảm chất lượng bài vì người làm chưa biết bắt đầu từ đâu. Đã để lại thông tin liên hệ và sẵn sàng test giải pháp."*
+---
 
-### 5.2. Nhóm Thành viên nhận việc (Member Perspective)
-* **Mã R03 (Member):** *"Nhóm cuối cùng vẫn không rõ phải làm gì. Khó biết tiến độ đến đâu, không rõ còn thiếu gì trước khi nộp, và có người bị kẹt nhưng cả nhóm biết quá muộn."*
-* **Mã R07 (Member):** *"Quản lý bằng Google Docs tự tạo nhưng thành viên tự nhận việc nên vẫn bị hai người làm trùng một phần việc, mất oan 15 phút."*
-* **Mã R08 (Member - Sẵn sàng test MVP):** *"Đề bài chỉ đọc README, bị sót việc và mất thêm thời gian. Phản hồi sẵn sàng thử MVP: 'ok'."*
-* **Mã R09 (Member - Sẵn sàng test MVP):** *"Gặp tình trạng có người không biết làm gì, sót việc, phải chia lại task giữa chừng, làm trễ deadline của cả nhóm. Để lại số điện thoại sẵn sàng làm tester."*
-* **Mã R20 (Member):** *"Một người phải làm quá nhiều, người khác thì chưa biết làm gì, task lệch năng lực và đến sát giờ nộp vẫn không biết còn thiếu gì."*
-* **Mã R32 (Member - Sẵn sàng test MVP):** *"Gặp tình trạng bỏ sót việc quan trọng do phân công cảm tính. Để lại lời nhắn: 'Được, sẵn sàng dùng thử kèm SĐT'."*
+### 5.1. Phản hồi nguyên văn từ người dùng tại Câu 8 (Raw Text Responses)
+Dưới đây là 100% các câu trả lời dạng văn bản do học viên tự gõ vào ô nhập của Câu 8 *(thông tin số điện thoại và họ tên đầy đủ đã được che một phần để bảo vệ quyền riêng tư)*:
 
-### 5.3. Bảng tổng hợp các Early Adopters / Willing Users đã ghi nhận
-*(Đã mã hóa thông tin nhạy cảm theo tiêu chuẩn nghiên cứu)*
+| Mã phản hồi | Vai trò | Nội dung nguyên văn người dùng gõ vào form | Phân loại trạng thái |
+| :---: | :---: | :--- | :--- |
+| **R05** | Đội trưởng | `uyh04` | Cung cấp tài khoản Discord |
+| **R08** | Thành viên | `ok` | Xác nhận đồng ý thử nghiệm |
+| **R09** | Thành viên | `0983***747` | Cung cấp số điện thoại Zalo |
+| **R11** | Chưa làm nhóm | `nah` | Từ chối tham gia |
+| **R14** | Đội trưởng | `Ko thích Trọng nên ko cho` | Từ chối cung cấp thông tin liên hệ |
+| **R15** | Thành viên | `Ok` | Xác nhận đồng ý thử nghiệm |
+| **R17** | Đội trưởng | `T092-Phùng Quang ***` | Cung cấp mã học viên & tên |
+| **R18** | Thành viên | `có thể ` | Sẵn sàng cân nhắc thử nghiệm |
+| **R32** | Thành viên | `Được, 0393***834` | Xác nhận đồng ý kèm số điện thoại |
 
-| Mã phản hồi | Vai trò trong LAB | Vấn đề chính gặp phải | Trạng thái sẵn sàng dùng thử MVP | Kênh liên hệ ghi nhận |
-| :---: | :---: | :--- | :--- | :--- |
-| **R05** | Leader | Trùng việc, sót việc, mất thêm thời gian | Sẵn sàng tham gia test | Discord Handle (`uy***`) |
-| **R08** | Member | Sót việc, mất thêm thời gian | Đồng ý thử nghiệm | Xác nhận qua form (`ok`) |
-| **R09** | Member | Chưa biết làm gì, sót việc, trễ deadline | Rất nhiệt tình tham gia | Số điện thoại Zalo (`0983***747`) |
-| **R14** | Leader | Trải nghiệm toàn bộ 8 điểm nghẽn | Nhận diện pain point tuyệt đối | Trích dẫn định tính |
-| **R15** | Member | Trùng việc, lệch năng lực, làm lại | Xác nhận sẵn sàng | Xác nhận qua form (`Ok`) |
-| **R17** | Leader | Chưa biết làm, lệch năng lực, trễ hạn | Sẵn sàng tham gia test nhóm | Mã học viên (`T092-***`) |
-| **R18** | Member | Khó biết tiến độ, trễ deadline | Đồng ý hỗ trợ | Xác nhận qua form (`có thể`) |
-| **R32** | Member | Sót việc, trễ deadline | Sẵn sàng tham gia test ngay | Số điện thoại Zalo (`0393***834`) |
+---
+
+### 5.2. Hồ sơ tình huống điển hình từ dữ liệu trắc nghiệm (User Case Profiles)
+*(Dữ liệu trích xuất trực tiếp từ các cột trắc nghiệm trong `survey-responses.csv`)*
+
+#### Case 1: Tình huống Đội trưởng quá tải và sửa sai liên tục (Mã R01 & R02)
+* **Học viên R01 (Đội trưởng):**
+  - *Thời gian thống nhất ban đầu:* Trên 30 phút.
+  - *Phương pháp xác định đầu việc:* Tự nhớ hoặc vừa làm vừa hỏi.
+  - *Vấn đề gặp phải:* Hai hoặc nhiều người làm trùng một phần + Có phần việc bị bỏ sót + Task không phù hợp năng lực.
+  - *Cơ chế phân công:* Thành viên tự nhận.
+  - *Hậu quả & Thời gian mất thêm:* Mất thêm thời gian, chất lượng bài giảm, lãng phí thêm 15–30 phút.
+* **Học viên R02 (Đội trưởng):**
+  - *Thời gian thống nhất ban đầu:* 5 đến 15 phút (chia việc qua Discord/Docs).
+  - *Vấn đề gặp phải:* Hai hoặc nhiều người làm trùng một phần + Phải chia lại task giữa chừng.
+  - *Hậu quả & Thời gian mất thêm:* Phải làm lại từ đầu, chất lượng bài giảm, lãng phí thêm trên 30 phút.
+
+#### Case 2: Tình huống Thành viên mất phương hướng và gánh team (Mã R03 & R20)
+* **Học viên R03 (Thành viên nhận task):**
+  - *Thời gian thống nhất ban đầu:* Cuối cùng vẫn chưa rõ "cần làm gì và nộp gì".
+  - *Phương pháp xác định việc:* Một thành viên tóm tắt miệng + đọc README.
+  - *Vấn đề gặp phải:* Khó biết nhóm xong đến đâu + Không rõ còn thiếu gì trước khi nộp + Có người bị kẹt nhưng nhóm biết quá muộn.
+  - *Cơ chế phân công:* Chia ngẫu nhiên.
+  - *Hậu quả:* Mất thêm thời gian, chất lượng bài giảm.
+* **Học viên R20 (Thành viên nhận task):**
+  - *Vấn đề gặp phải:* Có phần việc bị bỏ sót + Task không phù hợp năng lực + Một người phải làm quá nhiều + Phải chia lại task giữa chừng + Có người kẹt nhưng biết muộn.
+  - *Hậu quả:* Mất thêm thời gian, thành viên bị kẹt, trễ deadline.
+
+#### Case 3: Trải nghiệm cực đoan — Gặp đủ 8/8 vấn đề (Mã R14)
+* **Học viên R14 (Đội trưởng):**
+  - *Thời gian thống nhất ban đầu:* 15 đến 30 phút.
+  - *Vấn đề tích chọn:* Chọn toàn bộ **8/8 vấn đề** có trong form khảo sát (chưa biết làm gì, làm trùng, bỏ sót, lệch năng lực, quá tải 1 người, chia lại task, mù mờ tiến độ, không rõ nộp gì).
+  - *Hậu quả:* Mất thêm thời gian, thành viên bị kẹt, chất lượng bài giảm.
 
 ---
 
