@@ -4,14 +4,14 @@
 
 ## 👥 Thành viên nhóm & Phân công vai trò
 
-**Lớp:** 3B · **Phòng:** ____ · **Cụm:** ____ · **Track:** ____
+**Lớp:** 3B · **Phòng:** E403 · **Cụm:** A · **Track:** A2
 
 | Họ và Tên | Mã Học Viên | Vai trò chính | Phần việc đảm nhiệm trong dự án |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+|  Phạm Hoàng Trọng | 2A202602765 | Nhóm trưởng | Lập canvas, phân công công việc, quản lý tiến độ |
+|  Lê Thị Thùy Trang | 2A202602678 | Thành viên | Thu thập dữ liệu, khảo sát người dùng, viết báo cáo |
+|  Lâm Hải Dương | 2A202602676 | Thành viên | Phân tích yêu cầu, thiết kế hệ thống, hỗ trợ kỹ thuật |
+|  Hoàng Quốc Dũng | 2A202602523 | Thành viên | Phát triển phần mềm, kiểm thử, hỗ trợ người dùng |
 
 > Nhóm copy nguyên file README này về repo của mình, rồi điền bảng trên. Cột **Phần việc đảm nhiệm** ghi càng cụ thể càng tốt.
 
