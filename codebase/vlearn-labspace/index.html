@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f4d86" />
+  <meta name="description" content="VLearn LabSpace — mockup workspace nhóm LAB của Sloppers, lớp 3B." />
+  <title>VLearn LabSpace — Sloppers</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%230f4d86' d='M6 12l20 20 12-12 8 8-20 20L6 28z'/%3E%3Cpath fill='%23ce2029' d='M26 8l10 10-10 10-10-10z'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#labs" data-view-link="labs" aria-label="VLearn trang Lab">
+      <svg class="brand-mark" viewBox="0 0 64 56" aria-hidden="true">
+        <path fill="#0c4f87" d="M4 8 26 30 38 18 48 28 26 50 4 28z" />
+        <path fill="#cf2430" d="m26 4 10 10-10 10-10-10z" />
+      </svg>
+      <span><b>V</b>Learn</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Điều hướng chính">
+      <button type="button" data-view-link="home"><span aria-hidden="true">⌂</span> Trang chủ</button>
+      <button type="button" data-view-link="lesson"><span aria-hidden="true">▣</span> Khóa học</button>
+      <button type="button"><span aria-hidden="true">🛠</span> Luyện tập <em>Sắp ra mắt</em></button>
+      <button type="button" class="active" data-view-link="labs"><span aria-hidden="true">⚗</span> Lab <em class="new">Mới</em></button>
+      <button type="button" data-view-link="workspace"><span aria-hidden="true">◫</span> LabSpace</button>
+    </nav>
+
+    <div class="header-tools">
+      <button class="language" type="button" aria-label="Ngôn ngữ"><span>EN</span><b>VI</b></button>
+      <button class="icon-button" type="button" aria-label="Đổi giao diện">☾</button>
+      <button class="icon-button" type="button" aria-label="Thông báo">♧</button>
+      <button class="avatar" type="button" aria-label="Tài khoản">L</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="view active" id="view-labs" aria-labelledby="labs-title">
+      <div class="page-shell">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">L3–L4 · KHÓA 4 PHASE 1</p>
+            <h1 id="labs-title">BÀI LAB <span>CỦA TÔI</span></h1>
+          </div>
+          <div class="lab-count">7 bài lab</div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><span class="stat-icon green">✓</span><div><small>Đã nộp</small><strong>4/7 bài</strong></div></article>
+          <article class="stat-card"><span class="stat-icon blue">◌</span><div><small>Đang làm</small><strong>1 bài</strong></div></article>
+          <article class="stat-card"><span class="stat-icon red">⇧</span><div><small>Cần nộp</small><strong>2 bài</strong></div></article>
+        </div>
+
+        <div class="lab-table-wrap">
+          <table class="lab-table">
+            <thead>
+              <tr><th>Khóa ↕</th><th>Bài lab ↑</th><th>Tiến độ</th><th>Trạng thái nộp</th><th>Rating</th><th>Link nộp bài</th><th>Cập nhật</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>L3–L4 - Khóa 4 Phase 1</td><td><button class="text-link" data-view-link="lesson">Lab 01 — Nền tảng LLM API</button></td><td><span class="progress-ring done">✓</span> Đã nộp</td><td>Đúng hạn</td><td class="rating">★ 5/5</td><td><a href="#">Mở ↗</a></td><td>12:06 12/9/2026</td></tr>
+              <tr><td>L3–L4 - Khóa 4 Phase 1</td><td>Day02–AI–Product–Labs</td><td><span class="progress-ring done">✓</span> Đã nộp</td><td>Chưa xác định</td><td class="rating">★ 5/5</td><td><a href="#">Mở ↗</a></td><td>10:53 13/9/2026</td></tr>
+              <tr><td>L3–L4 - Khóa 4 Phase 1</td><td>CHATBOT VS REACT AGENT</td><td><span class="progress-ring done">✓</span> Đã nộp</td><td>Chưa xác định</td><td class="rating">★ 5/5</td><td><a href="#">Mở ↗</a></td><td>20:53 13/9/2026</td></tr>
+              <tr><td>L3–L4 - Khóa 4 Phase 1</td><td>Day04–Prompt–Engineering–Tool–Calling–Labs</td><td><span class="progress-ring">0%</span> Chưa nộp</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr><td>L3–L4 - Khóa 4 Phase 1</td><td>K4–L3B–Day04–Prompt–Engineering</td><td><span class="progress-ring done">✓</span> Đã nộp</td><td>Đúng hạn</td><td class="rating">★ 5/5</td><td><a href="#">Mở ↗</a></td><td>23:11 15/9/2026</td></tr>
+              <tr class="featured-row">
+                <td>L3–L4 - Khóa 4 Phase 1</td>
+                <td><button class="text-link" data-view-link="lesson">K4–L3B–DAY05–06–MINI–HACKATHON</button><span class="team-badge">Có LabSpace</span></td>
+                <td><span class="progress-ring partial">40%</span> Đang làm</td>
+                <td>Chưa nộp</td><td>—</td><td>—</td><td>17:42 hôm nay</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="feature-note">
+          <div class="note-icon">◫</div>
+          <div><strong>Mới: làm LAB theo nhóm ngay trên VLearn</strong><p>Tạo workspace, chia task theo kỹ năng và theo dõi những phần cần nộp trong cùng một nơi.</p></div>
+          <button class="primary-button" type="button" data-view-link="lesson">Mở bài Hackathon</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-home" aria-labelledby="home-title">
+      <div class="page-shell home-shell">
+        <div class="welcome-row"><div><h1 id="home-title">TỐI RỒI, TRANG ôn lại chút nhé? 👋</h1><p>Tiếp tục bài đang học và giữ nhịp với nhóm của bạn.</p></div><button class="primary-button" data-view-link="lesson">Vào khóa học</button></div>
+        <div class="home-grid"><article class="large-panel"><h2>KHÓA HỌC CỦA TÔI</h2><div class="course-tabs"><b>L3–L4 - Khóa 4 Phase 1</b><span>Khóa 3 Phase 1</span></div><button class="course-item active" data-view-link="lesson">▶ <span>Buổi 16: MINI HACKATHON</span><b>ĐANG HỌC...</b></button><button class="course-item">○ <span>Buổi 5: Day05</span></button><button class="course-item">○ <span>Buổi 6: Day06</span></button><button class="course-item">○ <span>Buổi 7: Day07</span></button></article><aside><h2>CHUỖI NGÀY HỌC</h2><div class="streak-card">Học hôm nay để bắt đầu chuỗi <b>Vào học 🔥</b></div><h2>NHÓM LAB CỦA BẠN</h2><div class="aside-card"><b>Sloppers · LabSpace</b><p>2/5 task đã hoàn thành</p><button class="secondary-button" data-view-link="workspace">Mở workspace</button></div></aside></div>
+      </div>
+    </section>
+
+    <section class="view lesson-view" id="view-lesson" aria-labelledby="lesson-title">
+      <div class="lesson-topbar"><button class="back-button" data-view-link="labs">←</button><b>Bài 16 · MINI HACKATHON</b><span class="lesson-progress">2/21 bài <i><em></em></i></span><button type="button">✦ Đặt câu hỏi với AI</button><button type="button">☝ Gửi yêu cầu</button><span class="small-avatar">L</span></div>
+      <div class="lesson-layout">
+        <aside class="lesson-sidebar"><div class="sidebar-title">NỘI DUNG BÀI HỌC <span>×</span></div><button>Slides <span>›</span></button><button class="material">⚗ k4-3b-d05-06-ai-product <span>›</span></button><button>Video <span>›</span></button><button class="course-name">⚗ K4–L3B–DAY05–06–MINI–HACKATHON⌄</button><ol><li class="done">✓ Chuẩn bị đội ngũ, chọn track</li><li class="active">2 Khám phá bài toán, thu thập bằng chứng</li><li>3 Thiết kế luồng trải nghiệm</li><li>4 Xây dựng prototype AI thật</li><li>5 Hoàn thiện AI Spec</li><li>6 Xác thực người dùng</li></ol></aside>
+        <article class="lesson-content">
+          <div class="labspace-banner">
+            <div><span class="banner-kicker">TÍNH NĂNG MỚI · LABSPACE</span><h2>Biến bài LAB này thành kế hoạch nhóm</h2><p>Checklist được lấy từ yêu cầu chính thức của bài. Nhóm xác nhận phân công trước khi bắt đầu.</p></div>
+            <button class="primary-button" id="openSetup" type="button">＋ Tạo nhóm Lab</button>
+          </div>
+          <h1 id="lesson-title">Khám phá bài toán, thu thập bằng chứng và chốt Canvas 7 dòng (CP1)</h1>
+          <p class="lead">Mục tiêu cốt lõi của giai đoạn này là xác định rõ đối tượng hưởng lợi và nỗi đau thực tế trước khi bắt tay vào xây dựng sản phẩm.</p>
+          <div class="info-callout"><span>✓</span><div><b>Đầu ra cần hoàn thành</b><p>Canvas 7 dòng, bằng chứng ban đầu, danh sách willing users và link repository công khai.</p></div></div>
+          <h2>Một bài toán đạt tiêu chuẩn</h2>
+          <p>Một lát cắt tốt có đúng một người dùng cụ thể, một công việc cụ thể, một quyết định AI và một kết quả đo đếm được. Bằng chứng cần có số liệu và phương pháp kiểm lại.</p>
+          <div class="diagram"><div>Nỗi đau thực tế</div><span>↓</span><div>Bằng chứng số liệu</div><span>↓</span><div>Lát cắt một câu</div><span>↓</span><div>Canvas & phân công</div></div>
+          <h2>Checklist của bài này</h2>
+          <ul class="official-checklist"><li>Chốt Canvas 7 dòng và phân công có tên</li><li>Khảo sát ít nhất 20 học viên ngoài nhóm</li><li>Dựng flow prototype cho CP2</li><li>Chuẩn bị golden set và AI call cho CP3</li><li>Hoàn thiện spec, slide và video demo</li></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="view" id="view-workspace" aria-labelledby="workspace-title">
+      <div class="workspace-shell">
+        <div class="workspace-header">
+          <div><p class="breadcrumbs">Lab › K4–L3B–DAY05–06 › Nhóm Sloppers</p><h1 id="workspace-title">LABSPACE · SLOPPERS</h1><p>Mini Hackathon AI · Phiên nhóm hôm nay</p></div>
+          <div class="workspace-actions"><button class="secondary-button" type="button" id="copyCode">Mã nhóm: <b>SLOP-3B</b> ⧉</button><button class="primary-button" type="button" data-view-link="coach">Coach view</button></div>
+        </div>
+
+        <div class="workspace-grid">
+          <aside class="team-panel card">
+            <div class="card-heading"><h2>Thành viên</h2><span>4 người</span></div>
+            <ul class="member-list"><li><span class="member-avatar blue-bg">L</span><div><b>Lan</b><small>Nhóm trưởng · Product</small></div><em>Online</em></li><li><span class="member-avatar teal-bg">M</span><div><b>Minh</b><small>Frontend · UI</small></div><em>Online</em></li><li><span class="member-avatar purple-bg">A</span><div><b>An</b><small>AI · Evaluation</small></div><em>Online</em></li><li><span class="member-avatar orange-bg">B</span><div><b>Bình</b><small>Backend · Data</small></div><em>Away</em></li></ul>
+            <button class="secondary-button full" id="editPlan" type="button">✦ Xem gợi ý phân công AI</button>
+            <div class="source-note"><b>Nguồn checklist</b><p>K4–L3B–DAY05–06–MINI–HACKATHON</p><span>Đã đồng bộ từ bài chính thức ✓</span></div>
+          </aside>
+
+          <section class="board-panel card">
+            <div class="card-heading"><div><h2>Kế hoạch của nhóm</h2><p>Tick khi hoàn tất. VLearn sẽ cập nhật tiến độ cho cả nhóm.</p></div><span class="progress-pill" id="progressPill">40% hoàn thành</span></div>
+            <div class="overall-progress"><i id="progressBar"></i></div>
+            <div class="task-list" id="taskList">
+              <article class="task done" data-task><label><input type="checkbox" checked /><span class="checkmark"></span></label><div class="task-main"><span class="task-tag evidence">EVIDENCE</span><h3>Khảo sát ≥20 học viên và tổng hợp pain</h3><p>Deliverable: evidence log + 5 quote nguyên văn</p></div><div class="task-owner"><span class="member-avatar blue-bg">L</span><div><b>Lan</b><small>Đã xong</small></div></div></article>
+              <article class="task done" data-task><label><input type="checkbox" checked /><span class="checkmark"></span></label><div class="task-main"><span class="task-tag product">PRODUCT</span><h3>Chốt Canvas 7 dòng</h3><p>Deliverable: canvas.md + form CP1</p></div><div class="task-owner"><span class="member-avatar blue-bg">L</span><div><b>Lan</b><small>Đã xong</small></div></div></article>
+              <article class="task" data-task><label><input type="checkbox" /><span class="checkmark"></span></label><div class="task-main"><span class="task-tag ui">UI / FLOW</span><h3>Dựng flow tương tác cho CP2</h3><p>Deliverable: mockup bấm được + video dự phòng</p></div><div class="task-owner"><span class="member-avatar teal-bg">M</span><div><b>Minh</b><small>Đang làm</small></div></div></article>
+              <article class="task blocked" data-task><label><input type="checkbox" /><span class="checkmark"></span></label><div class="task-main"><span class="task-tag ai">AI / EVAL</span><h3>AI assignment + golden set</h3><p>Deliverable: model call thật + ≥20 case đo</p><div class="blocked-note">⚠ Thiếu 5 case CLARIFY để phủ input mơ hồ</div></div><div class="task-owner"><span class="member-avatar purple-bg">A</span><div><b>An</b><small>Bị chặn</small></div></div></article>
+              <article class="task" data-task><label><input type="checkbox" /><span class="checkmark"></span></label><div class="task-main"><span class="task-tag backend">DATA</span><h3>Hoàn thiện spec và submission package</h3><p>Deliverable: spec.md, slide PDF, demo video</p></div><div class="task-owner"><span class="member-avatar orange-bg">B</span><div><b>Bình</b><small>Chưa bắt đầu</small></div></div></article>
+            </div>
+          </section>
+
+          <aside class="submit-panel card">
+            <div class="ready-score"><div class="ring"><span id="readyPercent">40%</span></div><h2>Chưa sẵn sàng nộp</h2><p id="remainingText">Còn 3 mục cần hoàn thành</p></div>
+            <div class="deliverable-list"><h3>Deliverable chính thức</h3><label><input type="checkbox" checked disabled /> Canvas CP1</label><label><input type="checkbox" checked disabled /> Evidence log</label><label><input type="checkbox" disabled /> Flow CP2</label><label><input type="checkbox" disabled /> Golden set + số đo</label><label><input type="checkbox" disabled /> Spec + slide + video</label></div>
+            <button class="danger-outline full" id="requestCoach" type="button">☝ Yêu cầu Coach hỗ trợ</button>
+            <p class="privacy-note">Coach chỉ thấy tiến độ nhóm và yêu cầu hỗ trợ được gửi.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-coach" aria-labelledby="coach-title">
+      <div class="page-shell coach-shell">
+        <div class="page-heading"><div><p class="eyebrow">LAB COACH · E403</p><h1 id="coach-title">TIẾN ĐỘ <span>NHÓM LAB</span></h1><p>Chỉ hiển thị trạng thái nhóm và yêu cầu hỗ trợ đã gửi.</p></div><button class="secondary-button" data-view-link="workspace">← Quay lại nhóm Sloppers</button></div>
+        <div class="coach-summary"><div><span>12</span><small>Nhóm đang làm</small></div><div><span>5</span><small>Đã hoàn thành ≥80%</small></div><div><span>3</span><small>Có task blocked</small></div><div class="alert"><span>2</span><small>Đang yêu cầu hỗ trợ</small></div></div>
+        <div class="coach-table card"><div class="coach-row header"><span>Nhóm</span><span>Checklist</span><span>Blocked</span><span>Check-in gần nhất</span><span>Yêu cầu hỗ trợ</span></div><div class="coach-row highlighted"><span><b>Sloppers</b><small>SLOP-3B</small></span><span><i class="mini-progress"><em style="width:40%"></em></i><b>40%</b></span><span class="warning">1 task</span><span>2 phút trước</span><span><button class="danger-outline" data-view-link="workspace">Xem yêu cầu</button></span></div><div class="coach-row"><span><b>Team Phoenix</b><small>PHNX-08</small></span><span><i class="mini-progress"><em style="width:80%"></em></i><b>80%</b></span><span>0 task</span><span>5 phút trước</span><span>—</span></div><div class="coach-row"><span><b>Null Pointers</b><small>NULL-12</small></span><span><i class="mini-progress"><em style="width:20%"></em></i><b>20%</b></span><span class="warning">2 task</span><span>11 phút trước</span><span><button class="danger-outline">Xem yêu cầu</button></span></div><div class="coach-row"><span><b>AI Sprinters</b><small>AISP-04</small></span><span><i class="mini-progress"><em style="width:100%"></em></i><b>100%</b></span><span>0 task</span><span>1 phút trước</span><span>—</span></div></div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="setupDialog" class="setup-dialog" aria-labelledby="dialogTitle">
+    <div class="dialog-top"><div><span>VLEARN LABSPACE</span><h2 id="dialogTitle">Tạo workspace nhóm</h2></div><button type="button" id="closeDialog" aria-label="Đóng">×</button></div>
+    <div class="stepper" aria-label="Tiến trình"><span class="active">1<i>Nhóm</i></span><span>2<i>Kỹ năng</i></span><span>3<i>Phân công AI</i></span></div>
+    <section class="dialog-step active" data-step="1"><label class="form-field">Tên nhóm<input id="groupName" value="Sloppers" /></label><label class="form-field">Bài LAB<input value="K4–L3B–DAY05–06–MINI–HACKATHON" disabled /></label><div class="invite-box"><div><b>Mã mời nhóm</b><strong>SLOP-3B</strong></div><button class="secondary-button" type="button" id="copyInvite">Sao chép mã</button></div><div class="joined-members"><b>Đã tham gia</b><span>Lan · Nhóm trưởng</span><span>Minh</span><span>An</span><span>Bình</span></div><div class="dialog-actions"><button class="primary-button next-step" type="button">Tiếp tục →</button></div></section>
+    <section class="dialog-step" data-step="2"><p class="step-intro">Mỗi người chọn kỹ năng muốn dùng trong buổi LAB này. Skill chỉ dùng cho phiên hiện tại.</p><div class="skill-person"><div><span class="member-avatar blue-bg">L</span><b>Lan</b></div><div class="skill-chips"><button class="selected">Product</button><button class="selected">Research</button><button>Presentation</button></div></div><div class="skill-person"><div><span class="member-avatar teal-bg">M</span><b>Minh</b></div><div class="skill-chips"><button class="selected">Frontend</button><button class="selected">UI/UX</button><button>Testing</button></div></div><div class="skill-person"><div><span class="member-avatar purple-bg">A</span><b>An</b></div><div class="skill-chips"><button class="selected">AI</button><button class="selected">Evaluation</button><button>Prompt</button></div></div><div class="skill-person"><div><span class="member-avatar orange-bg">B</span><b>Bình</b></div><div class="skill-chips"><button class="selected">Backend</button><button class="selected">Data</button><button>DevOps</button></div></div><div class="dialog-actions"><button class="secondary-button prev-step" type="button">← Quay lại</button><button class="primary-button" id="generatePlan" type="button">✦ Gợi ý phân công bằng AI</button></div></section>
+    <section class="dialog-step" data-step="3"><div class="ai-summary"><span>✦</span><div><b>AI đã tạo bản nháp từ 5 checklist item và 8 skill được khai</b><p>Mọi phân công dưới đây cần được nhóm xác nhận.</p></div></div><div class="plan-list"><div><span>Evidence & khảo sát</span><b>Lan</b><small>Research + Product</small></div><div><span>Flow & giao diện CP2</span><b>Minh</b><small>Frontend + UI/UX</small></div><div><span>AI assignment & eval</span><b>An</b><small>AI + Evaluation</small></div><div><span>Data model & submission</span><b>Bình</b><small>Backend + Data</small></div><div class="shared"><span>Spec, slide & demo</span><b>Cả nhóm</b><small>Cần cùng xác nhận</small></div></div><div class="ai-gap">⚠ AI chưa thấy người có skill “Presentation”. Nhóm có thể giữ task chung hoặc cập nhật skill.</div><div class="dialog-actions"><button class="secondary-button prev-step" type="button">← Chỉnh skill</button><button class="primary-button" id="confirmPlan" type="button">Xác nhận & mở LabSpace</button></div></section>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js"></script>
+</body>
+</html>
+
