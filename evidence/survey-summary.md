@@ -180,7 +180,7 @@ Theo quy chế Hackathon Day 05-06, tiêu chí đánh giá Bằng chứng (Evide
 | Trạng thái phản hồi | Số lượng (n) | Tỷ lệ (%) | Chi tiết liên hệ / Ghi chú |
 | :--- | :---: | :---: | :--- |
 | **Có thông tin liên hệ trực tiếp** | 4 | 11.1% | Discord ID, Số Zalo, Mã định danh học viên |
-| **Sẵn sàng thử nghiệm (Đồng ý/Góp ý)** | 5 | 13.9% | Xác nhận đồng ý, quote góp ý ẩn danh |
+| **Sẵn sàng thử nghiệm (Đồng ý)** | 5 | 13.9% | Xác nhận sẵn sàng tham gia thử nghiệm |
 | **Không để lại thông tin (Bỏ trống)** | 27 | 75.0% | Câu hỏi không bắt buộc |
 | **Tổng số người có tín hiệu quan tâm MVP** | **9** | **25.0%** | **Tín hiệu chuyển đổi tốt cho giai đoạn CP1-CP4** |
 
@@ -238,73 +238,11 @@ Mối quan hệ giữa thời gian khởi động và thời gian thiệt hại 
 
 ---
 
-## 5. Phản hồi định tính & Hồ sơ tình huống người dùng (Qualitative & User Profiles)
-
-> [!NOTE]
-> **Lưu ý về nguồn dữ liệu:**  
-> Trong biểu mẫu khảo sát, các câu hỏi từ Câu 1 đến Câu 7 là dạng trắc nghiệm chọn đáp án (`Single Choice` và `Checkboxes`), không có ô nhập văn bản tự do. Duy nhất **Câu 8** là ô nhập tự do (`Short Answer`).  
-> Do đó, phần này tách biệt rõ ràng giữa:  
-> 1. **Dữ liệu nguyên văn từ người dùng gõ (Raw Text)** tại Câu 8.  
-> 2. **Hồ sơ tình huống điển hình (Case Profiles)** được trích xuất trực tiếp từ tổ hợp các lựa chọn trắc nghiệm của từng người tham gia (mã hóa R01, R02, ...).
-
----
-
-### 5.1. Phản hồi nguyên văn từ người dùng tại Câu 8 (Raw Text Responses)
-Dưới đây là 100% các câu trả lời dạng văn bản do học viên tự gõ vào ô nhập của Câu 8 *(thông tin số điện thoại và họ tên đầy đủ đã được che một phần để bảo vệ quyền riêng tư)*:
-
-| Mã phản hồi | Vai trò | Nội dung nguyên văn người dùng gõ vào form | Phân loại trạng thái |
-| :---: | :---: | :--- | :--- |
-| **R05** | Đội trưởng | `uyh04` | Cung cấp tài khoản Discord |
-| **R08** | Thành viên | `ok` | Xác nhận đồng ý thử nghiệm |
-| **R09** | Thành viên | `0983***747` | Cung cấp số điện thoại Zalo |
-| **R11** | Chưa làm nhóm | `nah` | Từ chối tham gia |
-| **R14** | Đội trưởng | `Ko thích Trọng nên ko cho` | Từ chối cung cấp thông tin liên hệ |
-| **R15** | Thành viên | `Ok` | Xác nhận đồng ý thử nghiệm |
-| **R17** | Đội trưởng | `T092-Phùng Quang ***` | Cung cấp mã học viên & tên |
-| **R18** | Thành viên | `có thể ` | Sẵn sàng cân nhắc thử nghiệm |
-| **R32** | Thành viên | `Được, 0393***834` | Xác nhận đồng ý kèm số điện thoại |
-
----
-
-### 5.2. Hồ sơ tình huống điển hình từ dữ liệu trắc nghiệm (User Case Profiles)
-*(Dữ liệu trích xuất trực tiếp từ các cột trắc nghiệm trong `survey-responses.csv`)*
-
-#### Case 1: Tình huống Đội trưởng quá tải và sửa sai liên tục (Mã R01 & R02)
-* **Học viên R01 (Đội trưởng):**
-  - *Thời gian thống nhất ban đầu:* Trên 30 phút.
-  - *Phương pháp xác định đầu việc:* Tự nhớ hoặc vừa làm vừa hỏi.
-  - *Vấn đề gặp phải:* Hai hoặc nhiều người làm trùng một phần + Có phần việc bị bỏ sót + Task không phù hợp năng lực.
-  - *Cơ chế phân công:* Thành viên tự nhận.
-  - *Hậu quả & Thời gian mất thêm:* Mất thêm thời gian, chất lượng bài giảm, lãng phí thêm 15–30 phút.
-* **Học viên R02 (Đội trưởng):**
-  - *Thời gian thống nhất ban đầu:* 5 đến 15 phút (chia việc qua Discord/Docs).
-  - *Vấn đề gặp phải:* Hai hoặc nhiều người làm trùng một phần + Phải chia lại task giữa chừng.
-  - *Hậu quả & Thời gian mất thêm:* Phải làm lại từ đầu, chất lượng bài giảm, lãng phí thêm trên 30 phút.
-
-#### Case 2: Tình huống Thành viên mất phương hướng và gánh team (Mã R03 & R20)
-* **Học viên R03 (Thành viên nhận task):**
-  - *Thời gian thống nhất ban đầu:* Cuối cùng vẫn chưa rõ "cần làm gì và nộp gì".
-  - *Phương pháp xác định việc:* Một thành viên tóm tắt miệng + đọc README.
-  - *Vấn đề gặp phải:* Khó biết nhóm xong đến đâu + Không rõ còn thiếu gì trước khi nộp + Có người bị kẹt nhưng nhóm biết quá muộn.
-  - *Cơ chế phân công:* Chia ngẫu nhiên.
-  - *Hậu quả:* Mất thêm thời gian, chất lượng bài giảm.
-* **Học viên R20 (Thành viên nhận task):**
-  - *Vấn đề gặp phải:* Có phần việc bị bỏ sót + Task không phù hợp năng lực + Một người phải làm quá nhiều + Phải chia lại task giữa chừng + Có người kẹt nhưng biết muộn.
-  - *Hậu quả:* Mất thêm thời gian, thành viên bị kẹt, trễ deadline.
-
-#### Case 3: Trải nghiệm cực đoan — Gặp đủ 8/8 vấn đề (Mã R14)
-* **Học viên R14 (Đội trưởng):**
-  - *Thời gian thống nhất ban đầu:* 15 đến 30 phút.
-  - *Vấn đề tích chọn:* Chọn toàn bộ **8/8 vấn đề** có trong form khảo sát (chưa biết làm gì, làm trùng, bỏ sót, lệch năng lực, quá tải 1 người, chia lại task, mù mờ tiến độ, không rõ nộp gì).
-  - *Hậu quả:* Mất thêm thời gian, thành viên bị kẹt, chất lượng bài giảm.
-
----
-
-## 6. Định hướng giải pháp cho Team E403 - Sloppers (Product Mapping)
+## 5. Định hướng giải pháp cho Team E403 - Sloppers (Product Mapping)
 
 Từ những số liệu và insight định lượng vững chắc trên, sản phẩm của Team Sloppers sẽ tập trung giải quyết bài toán: **"AI Agent Tự Động Bóc Tách Đề Bài & Điều Phối Task Bài LAB"**.
 
-### 6.1. Ánh xạ từ Nỗi đau khảo sát sang Lát cắt tính năng AI (Feature Mapping)
+### 5.1. Ánh xạ từ Nỗi đau khảo sát sang Lát cắt tính năng AI (Feature Mapping)
 
 | Nỗi đau từ Khảo sát (Pain Point) | Số liệu chứng minh | Tính năng AI tương ứng (Product Slice) | Giá trị mang lại |
 | :--- | :---: | :--- | :--- |
@@ -313,7 +251,7 @@ Từ những số liệu và insight định lượng vững chắc trên, sản
 | **Hai hoặc nhiều người làm trùng việc** | **41.7%** nhóm gặp phải | **DAG Dependency & Boundary Mapping**:<br>Xây dựng đồ thị phụ thuộc giữa các task, chỉ rõ file nào do ai phụ trách, cấm đè code. | **Triệt tiêu xung đột và trùng lặp công việc**. |
 | **Có người chưa biết làm gì / Lệch năng lực** | **50.0%** & **25.0%** nhóm gặp phải | **Skill-based Task Allocator**:<br>Gợi ý phân công thông minh dựa trên thế mạnh từng bạn (Data, Prompt, Code, Eval). | **Cân bằng tải nhóm**, tránh tình trạng 1 người gánh team. |
 
-### 6.2. Cam kết chỉ số chất lượng (Target Quality Bar)
+### 5.2. Cam kết chỉ số chất lượng (Target Quality Bar)
 Dựa trên đường cơ sở (Baseline) từ khảo sát:
 - **Baseline hiện tại:** Thời gian thống nhất trung bình 20.5 phút; thời gian lãng phí trung bình 16.8 phút; tỷ lệ lỗi bỏ sót 55.6%.
 - **Mục tiêu sản phẩm MVP:**
