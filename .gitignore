@@ -6,7 +6,8 @@
 .env.*
 !.env.example
 !.env.*.example
-
+AGENTS.md
+IMPLEMENTATION-PLAN.md
 # Python bytecode and caches
 __pycache__/
 *.py[cod]
