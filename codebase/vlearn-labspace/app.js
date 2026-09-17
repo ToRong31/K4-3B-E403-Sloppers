@@ -13,19 +13,19 @@ let currentRole = 'leader';
 let minhProfileSubmitted = false;
 
 const ownerMeta = {
-  Lan: { initial: 'L', className: 'blue-bg', skill: 'Product · Research' },
-  Minh: { initial: 'M', className: 'teal-bg', skill: 'Frontend · UI/UX' },
-  An: { initial: 'A', className: 'purple-bg', skill: 'AI · Prompt' },
-  Bình: { initial: 'B', className: 'orange-bg', skill: 'Backend · Data' },
+  Trọng: { initial: 'T', className: 'blue-bg', skill: 'Product · Research' },
+  Trang: { initial: 'T', className: 'teal-bg', skill: 'Frontend · UI/UX' },
+  Dương: { initial: 'D', className: 'purple-bg', skill: 'AI · Prompt' },
+  Dũng: { initial: 'D', className: 'orange-bg', skill: 'Backend · Data' },
   'Cả nhóm': { initial: '•', className: 'blue-bg', skill: 'Cùng thực hiện' }
 };
 
 const initialAiProposals = {
-  0: { name: 'Lan', desc: 'Product & Research · Match 95%' },
-  1: { name: 'Lan', desc: 'Product Lead · Match 98%' },
-  2: { name: 'Minh', desc: 'Frontend 4★, UI/UX 4★ · Match 96%' },
-  3: { name: 'An', desc: 'Prompt Eng 3★, AI · Match 93%' },
-  4: { name: 'Bình', desc: 'Backend 4★, Data · Match 92%' }
+  0: { name: 'Trọng', desc: 'Product & Research · Match 95%' },
+  1: { name: 'Trọng', desc: 'Product Lead · Match 98%' },
+  2: { name: 'Trang', desc: 'Frontend 4★, UI/UX 4★ · Match 96%' },
+  3: { name: 'Dương', desc: 'Prompt Eng 4★, AI · Match 94%' },
+  4: { name: 'Dũng', desc: 'Backend 4★, Data · Match 92%' }
 };
 
 /* =========================================================
@@ -40,21 +40,21 @@ let unreadChatCount = 2;
 let chatMessagesData = [
   {
     id: 1,
-    sender: 'Lan',
+    sender: 'Trọng',
     role: 'leader',
     roleName: '👑 Nhóm trưởng',
-    avatarChar: 'L',
+    avatarChar: 'T',
     avatarClass: 'leader',
     time: '20:30',
-    text: 'Chào cả nhóm Sloppers! Lan vừa tạo xong workspace cho bài Mini Hackathon AI. Mọi người kiểm tra kết nối nhé.',
+    text: 'Chào cả nhóm Sloppers! Trọng vừa tạo xong workspace cho bài Mini Hackathon AI. Mọi người kiểm tra kết nối nhé.',
     attachment: null
   },
   {
     id: 2,
-    sender: 'Minh',
+    sender: 'Trang',
     role: 'member',
     roleName: 'UI / Frontend',
-    avatarChar: 'M',
+    avatarChar: 'T',
     avatarClass: 'member',
     time: '20:33',
     text: 'Em đã chuẩn bị sẵn sơ đồ thiết kế luồng Canvas CP1 và Flow CP2 cho sản phẩm. Em đính kèm file mockup ở đây để nhóm xem trước và đóng góp ý kiến ạ!',
@@ -67,10 +67,10 @@ let chatMessagesData = [
   },
   {
     id: 3,
-    sender: 'An',
+    sender: 'Dương',
     role: 'member',
     roleName: 'AI / Prompt Eng',
-    avatarChar: 'A',
+    avatarChar: 'D',
     avatarClass: 'member',
     time: '20:36',
     text: 'Về phần bài test Golden Set CP3, em đã tổng hợp bộ 20 prompt test và rubric đánh giá. Em gửi trước file dữ liệu benchmark.',
@@ -83,13 +83,13 @@ let chatMessagesData = [
   },
   {
     id: 4,
-    sender: 'Lan',
+    sender: 'Trọng',
     role: 'leader',
     roleName: '👑 Nhóm trưởng',
-    avatarChar: 'L',
+    avatarChar: 'T',
     avatarClass: 'leader',
     time: '20:38',
-    text: 'Cảm ơn Minh và An nhé! Giờ mình sẽ dùng tính năng "Phân chia task AI" để thuật toán phân bổ nhiệm vụ theo ma trận kỹ năng chuẩn nhất cho 4 bạn.',
+    text: 'Cảm ơn Trang và Dương nhé! Giờ mình sẽ dùng tính năng "Phân chia task AI" để thuật toán phân bổ nhiệm vụ theo ma trận kỹ năng chuẩn nhất cho 4 bạn.',
     attachment: null
   }
 ];
@@ -201,8 +201,8 @@ function renderChatMessages() {
       return;
     }
 
-    const isMine = (currentRole === 'leader' && msg.sender === 'Lan') ||
-      (currentRole === 'member' && msg.sender === 'Minh') ||
+    const isMine = (currentRole === 'leader' && msg.sender === 'Trọng') ||
+      (currentRole === 'member' && (msg.sender === 'Trang' || msg.sender === 'Thùy Trang')) ||
       (currentRole === 'coach' && msg.sender === 'Coach E403');
 
     const row = document.createElement('div');
@@ -277,17 +277,17 @@ window.handlePreviewDocument = function (docName) {
 function sendChatMessage(text, attachment) {
   if (!text && !attachment) return;
 
-  let sender = 'Lan';
+  let sender = 'Trọng';
   let role = 'leader';
   let roleName = '👑 Nhóm trưởng';
-  let avatarChar = 'L';
+  let avatarChar = 'T';
   let avatarClass = 'leader';
 
   if (currentRole === 'member') {
-    sender = 'Minh';
+    sender = 'Trang';
     role = 'member';
     roleName = 'UI / Frontend';
-    avatarChar = 'M';
+    avatarChar = 'T';
     avatarClass = 'member';
   } else if (currentRole === 'coach') {
     sender = 'Coach E403';
@@ -363,9 +363,9 @@ function generateLabAiAnswer(prompt) {
   if (p.includes('checkpoint 1') || p.includes('cp1') || p.includes('làm gì tiếp') || p.includes('xong cp1')) {
     return `<strong>Bạn đã hoàn thành Checkpoint 1 (Canvas 7 dòng)? Các bước tiếp theo:</strong>
     <ul>
-      <li>1. <b>Nhóm trưởng phê duyệt phân công:</b> Lan bấm nút <code>✦ Phân chia task</code> để AI khớp thế mạnh 4 thành viên và duyệt bảng nháp.</li>
-      <li>2. <b>Triển khai Checkpoint 2:</b> Minh (Frontend/UI) bắt tay dựng Wireframe & Flow trên Figma theo Canvas đã chốt.</li>
-      <li>3. <b>Triển khai Checkpoint 3:</b> An (AI Lead) nạp bộ 20 prompt test vào file <code>Golden_Set_Benchmark_CP3.csv</code>.</li>
+      <li>1. <b>Nhóm trưởng phê duyệt phân công:</b> Trọng bấm nút <code>✦ Phân chia task</code> để AI khớp thế mạnh 4 thành viên và duyệt bảng nháp.</li>
+      <li>2. <b>Triển khai Checkpoint 2:</b> Trang (Frontend/UI) bắt tay dựng Wireframe & Flow trên Figma theo Canvas đã chốt.</li>
+      <li>3. <b>Triển khai Checkpoint 3:</b> Dương (AI Lead) nạp bộ 20 prompt test vào file <code>Golden_Set_Benchmark_CP3.csv</code>.</li>
       <li>4. <b>Tự động cập nhật:</b> Khi từng bạn hoàn thành deliverable của mình, tick vào checkbox để tiến độ nhóm tăng lên!</li>
     </ul>`;
   }
@@ -383,7 +383,7 @@ function generateLabAiAnswer(prompt) {
     return `<strong>Ranh giới AI & Quyết định của Con người:</strong>
     <ul>
       <li>AI <b>chỉ gợi ý bản nháp</b> dựa trên ma trận kỹ năng của 4 bạn.</li>
-      <li><b>Nhóm trưởng Lan có toàn quyền ghi đè (Override):</b> Đổi bất kỳ ai phụ trách nếu nhóm thấy phù hợp hơn.</li>
+      <li><b>Nhóm trưởng Trọng có toàn quyền ghi đè (Override):</b> Đổi bất kỳ ai phụ trách nếu nhóm thấy phù hợp hơn.</li>
       <li>Nếu cần trợ giúp thêm từ Giảng viên, bạn có thể bấm nút <b>'Yêu cầu hỗ trợ Lab Coach'</b> trên Workspace!</li>
     </ul>`;
   }
@@ -391,7 +391,7 @@ function generateLabAiAnswer(prompt) {
   return `Cảm ơn câu hỏi của bạn! Với nội dung bài <b>Mini Hackathon AI</b>, mình khuyến nghị nhóm:
   <ul>
     <li>Bám sát <b>Checklist chính thức</b> ở góc phải Workspace.</li>
-    <li>Phân chia công việc theo thế mạnh: Lan (Product), Minh (Frontend), An (AI), Bình (Backend).</li>
+    <li>Phân chia công việc theo thế mạnh: Trọng (Product), Trang (Frontend), Dương (AI), Dũng (Backend).</li>
     <li>Đính kèm file báo cáo trực tiếp trong kênh chat này để đồng đội tiện theo dõi!</li>
   </ul>`;
 }
@@ -469,9 +469,9 @@ function triggerAiChatSummary() {
     isAiSummary: true,
     time: formatTimeNow(),
     summary: [
-      '<b>CP2 (Wireframe & Flow):</b> Minh đã gửi bản mockup <code>Flow_Mockup_CP2_Figma.png</code> (2.4 MB) để cả nhóm tham khảo.',
-      '<b>CP3 (Prompt & Benchmark):</b> An đã chuẩn bị sẵn bộ kiểm thử <code>Golden_Set_Benchmark_CP3.csv</code> (680 KB).',
-      '<b>Bước tiếp theo:</b> Nhóm trưởng Lan kích hoạt tính năng <b>Phân chia task AI</b> để thuật toán tính toán ma trận kỹ năng.'
+      '<b>CP2 (Wireframe & Flow):</b> Trang đã gửi bản mockup <code>Flow_Mockup_CP2_Figma.png</code> (2.4 MB) để cả nhóm tham khảo.',
+      '<b>CP3 (Prompt & Benchmark):</b> Dương đã chuẩn bị sẵn bộ kiểm thử <code>Golden_Set_Benchmark_CP3.csv</code> (680 KB).',
+      '<b>Bước tiếp theo:</b> Nhóm trưởng Trọng kích hoạt tính năng <b>Phân chia task AI</b> để thuật toán tính toán ma trận kỹ năng.'
     ]
   };
   chatMessagesData.push(summaryMsg);
@@ -644,7 +644,7 @@ function runAiTaskAnalysis(isRegenerate = false) {
       if (barFill) barFill.style.width = '35%';
       if (barPercent) barPercent.textContent = '35%';
       if (barStatus) barStatus.textContent = 'Đang nạp hồ sơ năng lực 4 thành viên...';
-      addAiLog('👥', '[Profiles] Đọc điểm tự đánh giá: Lan (Product Lead), Minh (Frontend 4★, UI 4★), An (AI 3★), Bình (Backend 4★)...', 'active');
+      addAiLog('👥', '[Profiles] Đọc điểm tự đánh giá: Trọng (Product Lead), Trang (Frontend 4★, UI 4★), Dương (AI 4★), Dũng (Backend 4★)...', 'active');
     }, 400));
 
     aiAnalysisTimers.push(setTimeout(() => {
@@ -652,7 +652,7 @@ function runAiTaskAnalysis(isRegenerate = false) {
       if (barFill) barFill.style.width = '70%';
       if (barPercent) barPercent.textContent = '70%';
       if (barStatus) barStatus.textContent = 'Đang tính toán Match Rate & tối ưu hóa...';
-      addAiLog('🧠', '[Matching] Tính toán độ tương thích thế mạnh: Lan 98% · Minh 96% · An 93% · Bình 92%...', 'active');
+      addAiLog('🧠', '[Matching] Tính toán độ tương thích thế mạnh: Trọng 98% · Trang 96% · Dương 94% · Dũng 92%...', 'active');
     }, 850));
 
     aiAnalysisTimers.push(setTimeout(() => {
@@ -668,7 +668,7 @@ function runAiTaskAnalysis(isRegenerate = false) {
       if (barFill) barFill.style.width = '100%';
       if (barPercent) barPercent.textContent = '100%';
       if (barStatus) barStatus.textContent = 'Hoàn tất phân tích bản nháp AI!';
-      addAiLog('✨', '[Complete] Đã sinh bản nháp tối ưu! Bàn giao quyền kiểm duyệt cho Nhóm trưởng Lan.', 'done');
+      addAiLog('✨', '[Complete] Đã sinh bản nháp tối ưu! Bàn giao quyền kiểm duyệt cho Nhóm trưởng Trọng.', 'done');
     }, 1650));
 
     aiAnalysisTimers.push(setTimeout(() => {
@@ -679,7 +679,7 @@ function runAiTaskAnalysis(isRegenerate = false) {
 
 function openAssignment() {
   if (currentRole !== 'leader') {
-    showToast('Chỉ Nhóm trưởng (Lan) mới có quyền tạo bản nháp và phân task AI.');
+    showToast('Chỉ Nhóm trưởng (Trọng) mới có quyền tạo bản nháp và phân task AI.');
     return;
   }
   assignmentDialog.showModal();
@@ -768,20 +768,20 @@ function setGlobalRole(role, autoNavigate = true) {
 
   if (role === 'leader') {
     if (roleChipIcon) roleChipIcon.textContent = '👑';
-    if (roleChipText) roleChipText.textContent = 'Lan · Nhóm trưởng';
+    if (roleChipText) roleChipText.textContent = 'Trọng · Nhóm trưởng';
     if (headerAvatar) {
-      headerAvatar.textContent = 'L';
+      headerAvatar.textContent = 'T';
       headerAvatar.style.background = 'var(--blue)';
-      headerAvatar.title = 'Tài khoản: Lan (Nhóm trưởng)';
+      headerAvatar.title = 'Tài khoản: Trọng (Nhóm trưởng)';
     }
     if (notifBadge) notifBadge.style.display = 'none';
   } else if (role === 'member') {
     if (roleChipIcon) roleChipIcon.textContent = '👤';
-    if (roleChipText) roleChipText.textContent = 'Minh · Thành viên';
+    if (roleChipText) roleChipText.textContent = 'Thùy Trang · Thành viên';
     if (headerAvatar) {
-      headerAvatar.textContent = 'M';
+      headerAvatar.textContent = 'T';
       headerAvatar.style.background = '#098b8e';
-      headerAvatar.title = 'Tài khoản: Minh (Thành viên)';
+      headerAvatar.title = 'Tài khoản: Thùy Trang (Thành viên)';
     }
     if (notifBadge) {
       notifBadge.style.display = 'grid';
@@ -812,7 +812,7 @@ function setGlobalRole(role, autoNavigate = true) {
   const requestCoach = document.getElementById('requestCoach');
 
   if (role === 'leader') {
-    if (workspaceRoleTag) workspaceRoleTag.textContent = 'VIEW NHÓM TRƯỞNG · LAN';
+    if (workspaceRoleTag) workspaceRoleTag.textContent = 'VIEW NHÓM TRƯỞNG · PHẠM HOÀNG TRỌNG';
     if (workspaceRoleDesc) workspaceRoleDesc.textContent = 'Mini Hackathon AI · Toàn quyền quản lý & phân task';
     if (startAssignment) startAssignment.hidden = false;
     if (startAssignmentBoard) startAssignmentBoard.hidden = false;
@@ -825,7 +825,7 @@ function setGlobalRole(role, autoNavigate = true) {
       document.getElementById('planStatus').textContent = 'Chờ nhóm trưởng tạo bản nháp phân công. Checklist vẫn lấy từ bài LAB chính thức.';
     }
   } else if (role === 'member') {
-    if (workspaceRoleTag) workspaceRoleTag.textContent = 'VIEW THÀNH VIÊN · MINH';
+    if (workspaceRoleTag) workspaceRoleTag.textContent = 'VIEW THÀNH VIÊN · LÊ THỊ THÙY TRANG';
     if (workspaceRoleDesc) workspaceRoleDesc.textContent = 'Mini Hackathon AI · Đã tham gia nhóm Sloppers';
     if (startAssignment) startAssignment.hidden = true;
     if (startAssignmentBoard) startAssignmentBoard.hidden = true;
@@ -857,7 +857,7 @@ function setGlobalRole(role, autoNavigate = true) {
   if (lessonBannerTitle && lessonBannerDesc && lessonBannerActions) {
     if (role === 'leader') {
       lessonBannerTitle.textContent = 'Lập nhóm trước, phân công khi cả nhóm đã sẵn sàng';
-      lessonBannerDesc.textContent = 'Đang ở góc nhìn Nhóm trưởng (Lan): Tạo nhóm, gửi lời mời thành viên và phê duyệt bản nháp phân công AI.';
+      lessonBannerDesc.textContent = 'Đang ở góc nhìn Nhóm trưởng (Trọng): Tạo nhóm, gửi lời mời thành viên và phê duyệt bản nháp phân công AI.';
       lessonBannerActions.innerHTML = '<button class="primary-button" id="openSetup" type="button">＋ Tạo nhóm Lab</button>';
       document.getElementById('openSetup').addEventListener('click', () => {
         setDialogStep(1);
@@ -865,7 +865,7 @@ function setGlobalRole(role, autoNavigate = true) {
       });
     } else if (role === 'member') {
       lessonBannerTitle.textContent = 'Lời mời tham gia nhóm Sloppers · Mini Hackathon AI';
-      lessonBannerDesc.textContent = 'Đang ở góc nhìn Học viên (Minh): Lan đã gửi cho bạn lời mời tham gia nhóm. Hãy xác nhận và khai báo kỹ năng phiên LAB.';
+      lessonBannerDesc.textContent = 'Đang ở góc nhìn Học viên (Thùy Trang): Trọng đã gửi cho bạn lời mời tham gia nhóm. Hãy xác nhận và khai báo kỹ năng phiên LAB.';
       lessonBannerActions.innerHTML = '<button class="primary-button" id="openMemberInviteBtn" type="button">📩 Xem lời mời & Onboarding</button>';
       document.getElementById('openMemberInviteBtn').addEventListener('click', openNotifications);
     } else if (role === 'coach') {
@@ -880,9 +880,9 @@ function setGlobalRole(role, autoNavigate = true) {
   const chatSenderRoleName = document.getElementById('chatSenderRoleName');
   if (chatSenderRoleName) {
     if (role === 'leader') {
-      chatSenderRoleName.innerHTML = '👑 Lan (Nhóm trưởng)';
+      chatSenderRoleName.innerHTML = '👑 Trọng (Nhóm trưởng)';
     } else if (role === 'member') {
-      chatSenderRoleName.innerHTML = '👤 Minh (Thành viên - UI/Frontend)';
+      chatSenderRoleName.innerHTML = '👤 Thùy Trang (Thành viên - UI/Frontend)';
     } else {
       chatSenderRoleName.innerHTML = '👨‍🏫 Lab Coach (Giảng viên E403)';
     }
@@ -966,10 +966,252 @@ navButtons.forEach(button => button.addEventListener('click', event => {
   }
 }));
 
+/* =========================================================
+   STUDENT ID BLOCK INTERFACE & AUTO-RESOLVE LOOKUP MODULE
+   ========================================================= */
+
+const studentDirectory = {
+  '2A202602765': { name: 'Phạm Hoàng Trọng', role: '👑 Nhóm trưởng (Leader)', class: 'K4-E403', avatar: 'T', color: '#0284c7' },
+  '2A202602678': { name: 'Lê Thị Thùy Trang', role: 'Frontend / UI/UX Design', class: 'K4-E403', avatar: 'T', color: '#0d9488' },
+  '2A202602676': { name: 'Lâm Hải Dương', role: 'AI / Prompt Engineer', class: 'K4-E403', avatar: 'D', color: '#7c3aed' },
+  '2A202602523': { name: 'Hoàng Quốc Dũng', role: 'Backend / Data Engineer', class: 'K4-E403', avatar: 'D', color: '#ea580c' },
+  '2A202602501': { name: 'Nguyễn Văn An', role: 'Data Analyst & ML', class: 'K4-E403', avatar: 'A', color: '#16a34a' },
+  '2A202602555': { name: 'Trần Tuấn Bảo', role: 'Fullstack Web Dev', class: 'K4-E403', avatar: 'B', color: '#2563eb' },
+  '2A202602600': { name: 'Vũ Mai Linh', role: 'Product & Design', class: 'K4-E403', avatar: 'L', color: '#db2777' },
+  '2A202602800': { name: 'Đỗ Thành Nam', role: 'DevOps / Cloud Architecture', class: 'K4-E403', avatar: 'N', color: '#4f46e5' }
+};
+
+let currentMemberSlots = ['2A202602678', '2A202602676', '2A202602523'];
+
+function updateSlotCardView(cardEl, idValue) {
+  const cleanId = (idValue || '').trim().toUpperCase();
+  const student = studentDirectory[cleanId];
+  
+  const statusPill = cardEl.querySelector('.slot-status-pill');
+  const resolvedCard = cardEl.querySelector('.slot-resolved-card');
+  const avatarEl = cardEl.querySelector('.resolved-avatar');
+  const infoEl = cardEl.querySelector('.resolved-info');
+
+  cardEl.classList.remove('matched', 'not-found');
+
+  if (!cleanId) {
+    if (statusPill) {
+      statusPill.className = 'slot-status-pill';
+      statusPill.innerHTML = '<span class="status-icon">○</span> Chưa nhập mã';
+    }
+    if (resolvedCard) {
+      resolvedCard.classList.remove('active');
+    }
+    if (avatarEl) {
+      avatarEl.textContent = '?';
+      avatarEl.style.background = '#94a3b8';
+    }
+    if (infoEl) {
+      infoEl.innerHTML = '<span class="resolved-placeholder">Nhập mã học viên để hệ thống tự nhảy tên...</span>';
+    }
+  } else if (student) {
+    cardEl.classList.add('matched');
+    if (statusPill) {
+      statusPill.className = 'slot-status-pill matched';
+      statusPill.innerHTML = '<span class="status-icon">✓</span> Đã nhận diện';
+    }
+    if (resolvedCard) {
+      resolvedCard.classList.add('active');
+    }
+    if (avatarEl) {
+      avatarEl.textContent = student.avatar;
+      avatarEl.style.background = student.color;
+    }
+    if (infoEl) {
+      infoEl.innerHTML = `
+        <div class="resolved-name-row">
+          <strong class="resolved-name">${student.name}</strong>
+          <span class="resolved-tag">${student.class}</span>
+        </div>
+        <div class="resolved-role">${student.role}</div>
+      `;
+    }
+  } else {
+    cardEl.classList.add('not-found');
+    if (statusPill) {
+      statusPill.className = 'slot-status-pill not-found';
+      statusPill.innerHTML = '<span class="status-icon">⚠️</span> Chưa tìm thấy';
+    }
+    if (resolvedCard) {
+      resolvedCard.classList.remove('active');
+    }
+    if (avatarEl) {
+      avatarEl.textContent = '!';
+      avatarEl.style.background = '#f59e0b';
+    }
+    if (infoEl) {
+      infoEl.innerHTML = '<span class="resolved-warning">⚠️ Không tìm thấy học viên trong khóa K4</span>';
+    }
+  }
+
+  updateCreateGroupButtonState();
+}
+
+function updateCreateGroupButtonState() {
+  const validStudents = [];
+  const inputs = document.querySelectorAll('.student-id-input');
+  inputs.forEach(inp => {
+    const val = inp.value.trim().toUpperCase();
+    if (studentDirectory[val]) {
+      validStudents.push(studentDirectory[val].name);
+    }
+  });
+
+  const count = validStudents.length;
+  const createBtn = document.getElementById('createGroup');
+  const noticeEl = document.getElementById('setupNotice');
+
+  if (createBtn) {
+    if (count > 0) {
+      createBtn.textContent = `Tạo nhóm & gửi ${count} lời mời →`;
+      createBtn.disabled = false;
+    } else {
+      createBtn.textContent = 'Nhập ít nhất 1 mã học viên để mời';
+      createBtn.disabled = true;
+    }
+  }
+
+  if (noticeEl) {
+    if (count > 0) {
+      noticeEl.innerHTML = `⌁ Sau khi tạo nhóm, hệ thống gửi <b>${count} lời mời</b> tham gia tới (${validStudents.join(', ')}). Bạn sẽ thấy số người đã vào nhóm tại LabSpace.`;
+    } else {
+      noticeEl.innerHTML = '⌁ Hãy nhập mã học viên để hệ thống gửi lời mời tham gia nhóm.';
+    }
+  }
+}
+
+function renderStudentSlots() {
+  const container = document.getElementById('studentSlotList');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  currentMemberSlots.forEach((idVal, idx) => {
+    const slotNum = String(idx + 1).padStart(2, '0');
+    const card = document.createElement('div');
+    card.className = 'student-slot-card';
+    card.dataset.slotIndex = idx;
+
+    card.innerHTML = `
+      <div class="slot-card-header">
+        <div class="slot-header-left">
+          <span class="slot-badge-num">${slotNum}</span>
+          <strong class="slot-member-label">Thành viên ${idx + 1}</strong>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="slot-status-pill">
+            <span class="status-icon">○</span> Đang kiểm tra
+          </span>
+          ${currentMemberSlots.length > 2 ? `<button type="button" class="slot-remove-btn" title="Xóa ô mời này" data-remove-index="${idx}">×</button>` : ''}
+        </div>
+      </div>
+      <div class="slot-card-body">
+        <div class="slot-input-wrap">
+          <span class="slot-input-icon">🪪</span>
+          <input type="text" class="student-id-input" value="${idVal}" placeholder="VD: 2A202602678" maxlength="15" autocomplete="off" spellcheck="false" data-slot-index="${idx}" />
+          <button type="button" class="slot-clear-btn" title="Xóa trắng mã" tabindex="-1">×</button>
+        </div>
+        <div class="slot-resolved-card">
+          <div class="resolved-avatar">?</div>
+          <div class="resolved-info"></div>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(card);
+
+    const input = card.querySelector('.student-id-input');
+    const clearBtn = card.querySelector('.slot-clear-btn');
+    const removeBtn = card.querySelector('.slot-remove-btn');
+
+    input.addEventListener('focus', () => card.classList.add('is-focused'));
+    input.addEventListener('blur', () => card.classList.remove('is-focused'));
+
+    input.addEventListener('input', (e) => {
+      const upper = e.target.value.toUpperCase();
+      e.target.value = upper;
+      currentMemberSlots[idx] = upper;
+      updateSlotCardView(card, upper);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+      currentMemberSlots[idx] = '';
+      input.focus();
+      updateSlotCardView(card, '');
+    });
+
+    removeBtn?.addEventListener('click', () => {
+      if (currentMemberSlots.length <= 2) {
+        showToast('Nhóm lab cần tối thiểu 2 thành viên.');
+        return;
+      }
+      currentMemberSlots.splice(idx, 1);
+      renderStudentSlots();
+    });
+
+    // Initial view update
+    updateSlotCardView(card, idVal);
+  });
+
+  updateCreateGroupButtonState();
+}
+
+function initStudentIdBlockHandlers() {
+  document.getElementById('addMemberSlotBtn')?.addEventListener('click', () => {
+    if (currentMemberSlots.length >= 5) {
+      showToast('Số lượng thành viên tối đa trong một nhóm là 5 người.');
+      return;
+    }
+    currentMemberSlots.push('');
+    renderStudentSlots();
+    const inputs = document.querySelectorAll('.student-id-input');
+    if (inputs.length) {
+      inputs[inputs.length - 1].focus();
+    }
+  });
+
+  document.querySelectorAll('.quick-tag-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const idToFill = chip.dataset.id;
+      if (!idToFill) return;
+
+      let targetIdx = currentMemberSlots.findIndex(s => !s || s === idToFill);
+      if (targetIdx === -1) {
+        if (currentMemberSlots.length < 5) {
+          currentMemberSlots.push(idToFill);
+          targetIdx = currentMemberSlots.length - 1;
+        } else {
+          targetIdx = currentMemberSlots.length - 1;
+          currentMemberSlots[targetIdx] = idToFill;
+        }
+      } else {
+        currentMemberSlots[targetIdx] = idToFill;
+      }
+      renderStudentSlots();
+      const card = document.querySelector(`.student-slot-card[data-slot-index="${targetIdx}"]`);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        const input = card.querySelector('.student-id-input');
+        if (input) input.focus();
+      }
+      const student = studentDirectory[idToFill];
+      const name = student ? student.name : idToFill;
+      showToast(`Đã điền mã ${idToFill} · ${name} tự động nhảy lên thẻ!`);
+    });
+  });
+}
+
 // Setup dialog
 document.getElementById('openSetup')?.addEventListener('click', () => {
   setGlobalRole('leader', false);
   setDialogStep(1);
+  renderStudentSlots();
   dialog.showModal();
 });
 document.getElementById('closeDialog')?.addEventListener('click', () => dialog.close());
@@ -979,7 +1221,17 @@ document.getElementById('createGroup')?.addEventListener('click', () => {
   dialog.close();
   setGlobalRole('leader', false);
   showView('workspace');
-  showToast('Đã tạo Sloppers và gửi 3 lời mời. Học viên xác nhận trong Thông báo của họ.');
+
+  const validStudents = [];
+  document.querySelectorAll('.student-id-input').forEach(inp => {
+    const val = inp.value.trim().toUpperCase();
+    if (studentDirectory[val]) {
+      validStudents.push(studentDirectory[val].name);
+    }
+  });
+
+  const memberNames = validStudents.length > 0 ? validStudents.join(', ') : '3 thành viên';
+  showToast(`Đã tạo nhóm Sloppers và gửi ${validStudents.length} lời mời (${memberNames}). Học viên xác nhận trong Thông báo của họ.`);
 });
 
 document.querySelectorAll('.skill-chips button').forEach(button => button.addEventListener('click', () => button.classList.toggle('selected')));
@@ -1020,7 +1272,7 @@ document.getElementById('submitMemberProfile')?.addEventListener('click', () => 
   if (notifBadge) notifBadge.style.display = 'none';
   setGlobalRole('member', false);
   showView('workspace');
-  showToast('Đã lưu hồ sơ phiên Lab của Minh! Lan sẽ thấy cập nhật thành viên trong LabSpace.');
+  showToast('Đã lưu hồ sơ phiên Lab của Thùy Trang! Trọng sẽ thấy cập nhật thành viên trong LabSpace.');
 });
 
 // Phân công task & Tương tác AI vs Human Override
@@ -1314,9 +1566,9 @@ function executeFinalSubmitLab() {
   }
 
   // 5. Gửi thông báo chúc mừng vào Kênh thảo luận nhóm
-  const senderName = currentRole === 'leader' ? 'Lan' : 'Minh';
+  const senderName = currentRole === 'leader' ? 'Trọng' : 'Trang';
   const senderRoleName = currentRole === 'leader' ? '👑 Nhóm trưởng' : 'UI / Frontend';
-  const avatarChar = currentRole === 'leader' ? 'L' : 'M';
+  const avatarChar = 'T';
   const avatarClass = currentRole === 'leader' ? 'leader' : 'member';
 
   chatMessagesData.push({
@@ -1405,7 +1657,7 @@ let coachHelpRequests = {
     id: 'req-slop-01',
     team: 'Sloppers',
     teamCode: 'SLOP-3B',
-    sender: 'Lan (Nhóm trưởng)',
+    sender: 'Trọng (Nhóm trưởng)',
     senderRole: 'leader',
     senderAvatar: '👑',
     topic: 'Checkpoint 3: Golden Set Benchmark & Prompt (CP3)',
@@ -1472,7 +1724,7 @@ function openCoachHelpModal() {
   if (!coachHelpModal) return;
   const senderBadge = document.getElementById('helpSenderBadge');
   if (senderBadge) {
-    const roleTitle = currentRole === 'leader' ? 'Lan (Nhóm trưởng)' : 'Minh (Thành viên)';
+    const roleTitle = currentRole === 'leader' ? 'Trọng (Nhóm trưởng)' : 'Thùy Trang (Thành viên)';
     senderBadge.textContent = `Người gửi: ${roleTitle} · Mini Hackathon AI`;
   }
   coachHelpModal.showModal();
@@ -1501,7 +1753,7 @@ window.handleSendHelpRequest = function (event) {
     return;
   }
 
-  const senderName = currentRole === 'leader' ? 'Lan (Nhóm trưởng)' : 'Minh (Thành viên)';
+  const senderName = currentRole === 'leader' ? 'Trọng (Nhóm trưởng)' : 'Trang (Thành viên)';
   const senderAvatar = currentRole === 'leader' ? '👑' : '👤';
 
   coachHelpRequests.Sloppers = {
@@ -1522,10 +1774,10 @@ window.handleSendHelpRequest = function (event) {
   // Thông báo vào Kênh thảo luận nhóm
   chatMessagesData.push({
     id: Date.now(),
-    sender: currentRole === 'leader' ? 'Lan' : 'Minh',
+    sender: currentRole === 'leader' ? 'Trọng' : 'Trang',
     role: currentRole,
     roleName: currentRole === 'leader' ? '👑 Nhóm trưởng' : 'UI / Frontend',
-    avatarChar: currentRole === 'leader' ? 'L' : 'M',
+    avatarChar: 'T',
     avatarClass: currentRole === 'leader' ? 'leader' : 'member',
     time: formatTimeNow(),
     html: `
@@ -1895,3 +2147,5 @@ function registerWebMcpTools() {
 }
 
 registerWebMcpTools();
+initStudentIdBlockHandlers();
+renderStudentSlots();

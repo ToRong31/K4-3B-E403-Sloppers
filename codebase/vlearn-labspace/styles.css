@@ -1718,7 +1718,373 @@ a { color: var(--blue); text-decoration: none; }
   letter-spacing: -0.5px;
 }
 
+/* =========================================================
+   STUDENT ID INPUT BLOCKS WITH AUTO-RESOLVE NAME LOOKUP
+   ========================================================= */
 
+.setup-group-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.student-blocks-container {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.student-blocks-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.student-blocks-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: 0.4px;
+}
+
+.student-blocks-hint {
+  font-size: 11.5px;
+  color: #64748b;
+  margin: 3px 0 0;
+}
+
+.add-slot-button {
+  background: #f0f9ff;
+  border: 1px dashed #0284c7;
+  color: #0284c7;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.add-slot-button:hover {
+  background: #e0f2fe;
+  border-color: #0369a1;
+  color: #0369a1;
+  transform: translateY(-1px);
+}
+
+.student-slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.student-slot-card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 11px 14px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.student-slot-card.matched {
+  border-color: #a7f3d0;
+  background: linear-gradient(to right, #ffffff, #f0fdf4);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);
+}
+
+.student-slot-card.not-found {
+  border-color: #fde68a;
+  background: #fffdf5;
+}
+
+.student-slot-card.is-focused {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.slot-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.slot-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slot-badge-num {
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.student-slot-card.matched .slot-badge-num {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.slot-member-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.slot-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  transition: all 0.18s ease;
+}
+
+.slot-status-pill.matched {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+.slot-status-pill.not-found {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
+.slot-remove-btn {
+  background: transparent;
+  border: 0;
+  color: #94a3b8;
+  font-size: 16px;
+  padding: 0 4px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+.slot-remove-btn:hover {
+  color: #ef4444;
+}
+
+.slot-card-body {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.slot-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.slot-input-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 13px;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.student-id-input {
+  width: 100%;
+  padding: 8px 30px 8px 32px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 7px;
+  font-size: 13.5px;
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: #0f172a;
+  background: #ffffff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+}
+
+.student-id-input:focus {
+  outline: none;
+  border-color: #0284c7;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+}
+
+.slot-clear-btn {
+  position: absolute;
+  right: 7px;
+  background: #e2e8f0;
+  border: 0;
+  color: #64748b;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 11px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s ease;
+}
+.slot-clear-btn:hover {
+  background: #cbd5e1;
+  color: #0f172a;
+}
+
+/* Thẻ tự động nhảy họ tên học viên */
+.slot-resolved-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  min-height: 44px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slot-resolved-card.active {
+  background: #ffffff;
+  border-color: #7dd3fc;
+  box-shadow: 0 2px 6px rgba(14, 165, 233, 0.08);
+  animation: slotPop 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slotPop {
+  0% { transform: scale(0.97); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.resolved-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: #94a3b8;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.resolved-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.resolved-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.resolved-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resolved-tag {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.resolved-role {
+  font-size: 11px;
+  color: #0284c7;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resolved-placeholder {
+  color: #94a3b8;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.resolved-warning {
+  color: #d97706;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Quick Tags */
+.student-quick-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.quick-tags-label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.quick-tag-chip {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.quick-tag-chip:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+  .setup-group-grid {
+    grid-template-columns: 1fr;
+  }
+  .slot-card-body {
+    grid-template-columns: 1fr;
+  }
+}
 
 
 

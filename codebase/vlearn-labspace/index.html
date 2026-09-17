@@ -35,7 +35,7 @@
         <button type="button" class="header-role-chip" id="headerRoleChip" aria-expanded="false" aria-haspopup="true"
           title="Bấm để đổi vai trò Demo">
           <span class="role-chip-icon" id="roleChipIcon">👑</span>
-          <span class="role-chip-text" id="roleChipText">Lan · Nhóm trưởng</span>
+          <span class="role-chip-text" id="roleChipText">Trọng · Nhóm trưởng</span>
           <span class="role-chip-chevron">▾</span>
         </button>
 
@@ -53,7 +53,7 @@
             <button type="button" class="role-menu-item active" data-role="leader" id="roleItemLeader" role="menuitem">
               <span class="role-item-avatar leader">👑</span>
               <div class="role-item-text">
-                <div class="role-item-name">Nhóm trưởng <small>(Lan · Sloppers)</small></div>
+                <div class="role-item-name">Nhóm trưởng <small>(Trọng · Sloppers)</small></div>
                 <div class="role-item-desc">Toàn quyền tạo nhóm, phân task AI & duyệt kế hoạch</div>
               </div>
               <span class="role-item-status-icon">✓</span>
@@ -63,7 +63,7 @@
               <span class="role-item-avatar member">👤</span>
               <div class="role-item-text">
                 <div class="role-item-name">
-                  Học viên được mời <small>(Minh)</small>
+                  Học viên được mời <small>(Thùy Trang)</small>
                   <span class="role-item-badge" id="memberDropdownBadge">1 mời</span>
                 </div>
                 <div class="role-item-desc">Nhận thông báo mời & khai báo kỹ năng phiên Lab</div>
@@ -312,26 +312,26 @@
               <h2>Thành viên</h2><span id="memberCount">1/4 xác nhận</span>
             </div>
             <ul class="member-list" id="memberList">
-              <li id="memberLan"><span class="member-avatar blue-bg">L</span>
-                <div><b>Lan</b> <span class="member-role-subtag you-tag" id="tagLan">(Bạn - Trưởng
-                    nhóm)</span><small>Nhóm trưởng · Product</small></div><em>Đã vào</em>
+              <li id="memberLan"><span class="member-avatar blue-bg">T</span>
+                <div><b>Trọng</b> <span class="member-role-subtag you-tag" id="tagLan">(Bạn - Trưởng
+                    nhóm)</span><small>Nhóm trưởng · 2A202602765</small></div><em>Đã vào</em>
               </li>
-              <li id="memberMinh"><span class="member-avatar teal-bg">M</span>
-                <div><b>Minh</b> <span class="member-role-subtag you-tag" id="tagMinh"
-                    style="display:none">(Bạn)</span><small id="minhMemberStatus">Đã gửi lời mời</small></div><em
+              <li id="memberMinh"><span class="member-avatar teal-bg">T</span>
+                <div><b>Trang</b> <span class="member-role-subtag you-tag" id="tagMinh"
+                    style="display:none">(Bạn)</span><small id="minhMemberStatus">Đã gửi lời mời · 2A202602678</small></div><em
                   class="pending" id="minhJoinedStatus">Chờ</em>
               </li>
-              <li id="memberAn"><span class="member-avatar purple-bg">A</span>
-                <div><b>An</b><small>Đã gửi lời mời</small></div><em class="pending">Chờ</em>
+              <li id="memberAn"><span class="member-avatar purple-bg">D</span>
+                <div><b>Dương</b><small>Đã gửi lời mời · 2A202602676</small></div><em class="pending">Chờ</em>
               </li>
-              <li id="memberBinh"><span class="member-avatar orange-bg">B</span>
-                <div><b>Bình</b><small>Đã gửi lời mời</small></div><em class="pending">Chờ</em>
+              <li id="memberBinh"><span class="member-avatar orange-bg">D</span>
+                <div><b>Dũng</b><small>Đã gửi lời mời · 2A202602523</small></div><em class="pending">Chờ</em>
               </li>
             </ul>
             <button class="secondary-button full ai-run-btn" id="startAssignment" type="button"><span
                 class="sparkle-icon">✦</span> Bắt đầu phân chia task AI</button>
             <div class="member-role-lock" id="memberRoleLock" style="display:none">
-              🔒 <i>Chỉ Nhóm trưởng (Lan) mới có quyền tạo bản nháp và phê duyệt phân công.</i>
+              🔒 <i>Chỉ Nhóm trưởng (Trọng) mới có quyền tạo bản nháp và phê duyệt phân công.</i>
             </div>
             <div class="source-note"><b>Nguồn checklist</b>
               <p>K4–L3B–DAY05–06–MINI–HACKATHON</p><span>Đã đồng bộ từ bài chính thức ✓</span>
@@ -483,17 +483,49 @@
 
   <dialog id="setupDialog" class="setup-dialog leader-dialog" aria-labelledby="dialogTitle">
     <div class="dialog-top">
-      <div><span>VIEW NHÓM TRƯỞNG · LAN · VLEARN LABSPACE</span>
+      <div><span>VIEW NHÓM TRƯỞNG · PHẠM HOÀNG TRỌNG · VLEARN LABSPACE</span>
         <h2 id="dialogTitle">Lập nhóm Lab</h2>
       </div><button type="button" id="closeDialog" aria-label="Đóng">×</button>
     </div>
     <section class="dialog-step active" data-step="1">
       <p class="step-intro">Nhập mã học viên để gửi lời mời. Mỗi học viên sẽ tự xác nhận trong <b>Thông báo</b> của tài
-        khoản mình; nhóm trưởng không xác nhận thay.</p><label class="form-field">Tên nhóm<input id="groupName"
-          value="Sloppers" /></label><label class="form-field">Mã học viên thành viên<input
-          value="S397001 · S397014 · S397026" /></label><label class="form-field">Bài LAB<input
-          value="K4–L3B–DAY05–06–MINI–HACKATHON" disabled /></label>
-      <div class="leader-notice">⌁ Sau khi tạo nhóm, hệ thống gửi 3 thông báo mời tham gia. Bạn sẽ thấy số người đã vào
+        khoản mình; nhóm trưởng không xác nhận thay.</p>
+      
+      <div class="setup-group-grid">
+        <label class="form-field">Tên nhóm
+          <input id="groupName" value="Sloppers" />
+        </label>
+        <label class="form-field">Bài LAB
+          <input value="K4–L3B–DAY05–06–MINI–HACKATHON" disabled />
+        </label>
+      </div>
+
+      <!-- DANH SÁCH MÃ HỌC VIÊN DẠNG BLOCK (AUTO RESOLVE TÊN) -->
+      <div class="student-blocks-container">
+        <div class="student-blocks-header">
+          <div>
+            <div class="student-blocks-title">
+              <span class="blocks-icon">🪪</span>
+              <strong>MÃ HỌC VIÊN THÀNH VIÊN (DẠNG BLOCK)</strong>
+            </div>
+            <p class="student-blocks-hint">Hệ thống tự động tra cứu MSSV và nhảy họ tên học viên ngay khi nhập.</p>
+          </div>
+          <button type="button" class="add-slot-button" id="addMemberSlotBtn" title="Thêm ô mời thành viên">＋ Thêm ô mời</button>
+        </div>
+
+        <div class="student-slot-list" id="studentSlotList">
+          <!-- Sẽ render động qua app.js hoặc dựng sẵn 3 block khởi tạo -->
+        </div>
+
+        <div class="student-quick-tags">
+          <span class="quick-tags-label">Gợi ý nhanh mã nhóm:</span>
+          <button type="button" class="quick-tag-chip" data-id="2A202602678">2A202602678 · Thùy Trang</button>
+          <button type="button" class="quick-tag-chip" data-id="2A202602676">2A202602676 · Hải Dương</button>
+          <button type="button" class="quick-tag-chip" data-id="2A202602523">2A202602523 · Quốc Dũng</button>
+        </div>
+      </div>
+
+      <div class="leader-notice" id="setupNotice">⌁ Sau khi tạo nhóm, hệ thống gửi 3 thông báo mời tham gia. Bạn sẽ thấy số người đã vào
         nhóm tại LabSpace.</div>
       <div class="dialog-actions"><button class="primary-button" id="createGroup" type="button">Tạo nhóm & gửi 3 lời mời
           →</button></div>
@@ -502,12 +534,12 @@
 
   <dialog id="memberDialog" class="setup-dialog member-dialog" aria-labelledby="memberTitle">
     <div class="dialog-top">
-      <div><span>VIEW HỌC VIÊN · MINH · SAU KHI XÁC NHẬN THÔNG BÁO</span>
+      <div><span>VIEW HỌC VIÊN · LÊ THỊ THÙY TRANG · SAU KHI XÁC NHẬN THÔNG BÁO</span>
         <h2 id="memberTitle">Hồ sơ năng lực phiên Lab</h2>
       </div><button type="button" id="closeMemberDialog" aria-label="Đóng">×</button>
     </div>
     <section class="member-dialog-step active" data-member-step="1">
-      <p class="step-intro"><b>Onboarding của Minh</b> · Chọn kỹ năng và tự đánh giá để AI tham khảo khi nhóm trưởng tạo
+      <p class="step-intro"><b>Onboarding của Thùy Trang</b> · Chọn kỹ năng và tự đánh giá để AI tham khảo khi nhóm trưởng tạo
         bản nháp phân công.</p>
       <div class="profile-note">Bạn chỉ khai báo năng lực; AI không tự giao task. Nhóm trưởng và cả nhóm vẫn xem, điều
         chỉnh trước khi phê duyệt.</div>
@@ -535,15 +567,15 @@
     </section>
   </dialog>
 
-  <aside id="notificationPanel" class="notification-panel" hidden aria-label="Thông báo của Minh">
+  <aside id="notificationPanel" class="notification-panel" hidden aria-label="Thông báo của Thùy Trang">
     <div class="notification-head">
-      <div><span>VIEW HỌC VIÊN · MINH</span>
+      <div><span>VIEW HỌC VIÊN · THÙY TRANG</span>
         <h2>Thông báo</h2>
       </div><button id="closeNotifications" type="button" aria-label="Đóng thông báo">×</button>
     </div>
-    <article class="invite-notification"><span class="member-avatar blue-bg">L</span>
+    <article class="invite-notification"><span class="member-avatar blue-bg">T</span>
       <div><b>Lời mời vào nhóm Sloppers</b>
-        <p>Lan mời bạn tham gia Mini Hackathon AI.</p><small>Vừa xong · Mã nhóm SLOP-3B</small>
+        <p>Trọng mời bạn tham gia Mini Hackathon AI.</p><small>Vừa xong · Mã nhóm SLOP-3B</small>
         <div><button class="secondary-button" id="declineNotification" type="button">Từ chối</button><button
             class="primary-button" id="acceptNotification" type="button">Xác nhận tham gia</button></div>
       </div>
@@ -612,15 +644,15 @@
         <div class="assignment-item" data-task-idx="0">
           <div class="task-info">
             <span class="task-name">Evidence & khảo sát sinh viên <small>Research + Product</small></span>
-            <span class="ai-proposal-chip" id="aiTag-0">🤖 AI đề xuất: Lan (Sở trường Product & Research · Match
+            <span class="ai-proposal-chip" id="aiTag-0">🤖 AI đề xuất: Trọng (Sở trường Product & Research · Match
               95%)</span>
           </div>
           <div class="select-box">
-            <select data-assignment="Lan" data-idx="0">
-              <option selected>Lan</option>
-              <option>Minh</option>
-              <option>An</option>
-              <option>Bình</option>
+            <select data-assignment="Trọng" data-idx="0">
+              <option selected>Trọng</option>
+              <option>Trang</option>
+              <option>Dương</option>
+              <option>Dũng</option>
               <option>Cả nhóm</option>
             </select>
           </div>
@@ -629,14 +661,14 @@
         <div class="assignment-item" data-task-idx="1">
           <div class="task-info">
             <span class="task-name">Chốt Canvas 7 dòng (CP1) <small>Product Owner</small></span>
-            <span class="ai-proposal-chip" id="aiTag-1">🤖 AI đề xuất: Lan (Kinh nghiệm Product Lead · Match 98%)</span>
+            <span class="ai-proposal-chip" id="aiTag-1">🤖 AI đề xuất: Trọng (Kinh nghiệm Product Lead · Match 98%)</span>
           </div>
           <div class="select-box">
-            <select data-assignment="Lan" data-idx="1">
-              <option selected>Lan</option>
-              <option>Minh</option>
-              <option>An</option>
-              <option>Bình</option>
+            <select data-assignment="Trọng" data-idx="1">
+              <option selected>Trọng</option>
+              <option>Trang</option>
+              <option>Dương</option>
+              <option>Dũng</option>
               <option>Cả nhóm</option>
             </select>
           </div>
@@ -645,14 +677,14 @@
         <div class="assignment-item" data-task-idx="2">
           <div class="task-info">
             <span class="task-name">Dựng flow & mockup CP2 <small>Frontend + UI/UX</small></span>
-            <span class="ai-proposal-chip" id="aiTag-2">🤖 AI đề xuất: Minh (Frontend 4★, UI/UX 4★ · Match 96%)</span>
+            <span class="ai-proposal-chip" id="aiTag-2">🤖 AI đề xuất: Trang (Frontend 4★, UI/UX 4★ · Match 96%)</span>
           </div>
           <div class="select-box">
-            <select data-assignment="Minh" data-idx="2">
-              <option>Lan</option>
-              <option selected>Minh</option>
-              <option>An</option>
-              <option>Bình</option>
+            <select data-assignment="Trang" data-idx="2">
+              <option>Trọng</option>
+              <option selected>Trang</option>
+              <option>Dương</option>
+              <option>Dũng</option>
               <option>Cả nhóm</option>
             </select>
           </div>
@@ -661,15 +693,15 @@
         <div class="assignment-item" data-task-idx="3">
           <div class="task-info">
             <span class="task-name">AI assignment & golden set (CP3) <small>AI + Prompt Engineering</small></span>
-            <span class="ai-proposal-chip" id="aiTag-3">🤖 AI đề xuất: An (Prompt Eng 3★, Machine Learning · Match
-              93%)</span>
+            <span class="ai-proposal-chip" id="aiTag-3">🤖 AI đề xuất: Dương (AI / Golden Set 4★ · Match
+              94%)</span>
           </div>
           <div class="select-box">
-            <select data-assignment="An" data-idx="3">
-              <option>Lan</option>
-              <option>Minh</option>
-              <option selected>An</option>
-              <option>Bình</option>
+            <select data-assignment="Dương" data-idx="3">
+              <option>Trọng</option>
+              <option>Trang</option>
+              <option selected>Dương</option>
+              <option>Dũng</option>
               <option>Cả nhóm</option>
             </select>
           </div>
@@ -679,14 +711,14 @@
           <div class="task-info">
             <span class="task-name">Hoàn thiện Spec & submission package <small>Backend + Data
                 Architecture</small></span>
-            <span class="ai-proposal-chip" id="aiTag-4">🤖 AI đề xuất: Bình (Backend 4★, Data · Match 92%)</span>
+            <span class="ai-proposal-chip" id="aiTag-4">🤖 AI đề xuất: Dũng (Backend 4★, Data · Match 92%)</span>
           </div>
           <div class="select-box">
-            <select data-assignment="Bình" data-idx="4">
-              <option>Lan</option>
-              <option>Minh</option>
-              <option>An</option>
-              <option selected>Bình</option>
+            <select data-assignment="Dũng" data-idx="4">
+              <option>Trọng</option>
+              <option>Trang</option>
+              <option>Dương</option>
+              <option selected>Dũng</option>
               <option>Cả nhóm</option>
             </select>
           </div>
@@ -853,30 +885,30 @@
           <div class="flow-step-item">
             <div class="step-badge">1</div>
             <div class="step-text">
-              <strong>👑 Lan (Nhóm trưởng) lập nhóm Sloppers</strong>
+              <strong>👑 Trọng (Nhóm trưởng) lập nhóm Sloppers</strong>
               <p>Mở bài Mini Hackathon → Bấm <i>"＋ Tạo nhóm Lab"</i> → Nhập tên Sloppers và gửi 3 lời mời bằng mã sinh
-                viên.</p>
+                viên (2A202602678, 2A202602676, 2A202602523).</p>
             </div>
-            <button type="button" class="primary-button compact tour-action-btn" data-tour-action="leader">Thử vai Lan
+            <button type="button" class="primary-button compact tour-action-btn" data-tour-action="leader">Thử vai Trọng
               →</button>
           </div>
 
           <div class="flow-step-item">
             <div class="step-badge">2</div>
             <div class="step-text">
-              <strong>👤 Minh (Học viên) xác nhận & Onboarding kỹ năng</strong>
-              <p>Chuyển sang vai Minh → Bấm chuông Thông báo có chấm đỏ → Xác nhận tham gia → Tự đánh giá năng lực
+              <strong>👤 Thùy Trang (Học viên) xác nhận & Onboarding kỹ năng</strong>
+              <p>Chuyển sang vai Trang → Bấm chuông Thông báo có chấm đỏ → Xác nhận tham gia → Tự đánh giá năng lực
                 Frontend (4★) & UI/UX (4★).</p>
             </div>
             <button type="button" class="secondary-button compact tour-action-btn" data-tour-action="member">Thử vai
-              Minh →</button>
+              Trang →</button>
           </div>
 
           <div class="flow-step-item">
             <div class="step-badge">3</div>
             <div class="step-text">
-              <strong>👑 Lan mở phân chia task bằng AI & Phê duyệt</strong>
-              <p>Quay lại vai Lan tại LabSpace → Bấm <i>"✦ Phân chia task AI"</i> → Xem AI gợi ý bản nháp, thử đổi người
+              <strong>👑 Trọng mở phân chia task bằng AI & Phê duyệt</strong>
+              <p>Quay lại vai Trọng tại LabSpace → Bấm <i>"✦ Phân chia task AI"</i> → Xem AI gợi ý bản nháp, thử đổi người
                 phụ trách (Override) → Bấm <b>Phê duyệt</b>!</p>
             </div>
             <button type="button" class="secondary-button compact tour-action-btn" data-tour-action="assign">Xem phân
@@ -922,7 +954,7 @@
         <div class="team-avatar-badge">👥</div>
         <div>
           <strong>Nhóm Sloppers (Mã nhóm: SLOP-3B)</strong>
-          <small id="helpSenderBadge">Người gửi: Lan (Nhóm trưởng) · Mini Hackathon AI</small>
+          <small id="helpSenderBadge">Người gửi: Trọng (Nhóm trưởng) · Mini Hackathon AI</small>
         </div>
       </div>
 
@@ -947,7 +979,7 @@
         <span class="quick-suggest-label">Gợi ý mẫu câu hỏi nhanh:</span>
         <div class="quick-suggest-chips">
           <button type="button" class="quick-chip-btn" onclick="applyQuickQuestion('Nhóm em đang bị vướng tiêu chí đánh giá độ chính xác của Golden Set CP3, mong Coach xem giúp bộ test 20 prompt ạ!')">🎯 Vướng Golden Set CP3</button>
-          <button type="button" class="quick-chip-btn" onclick="applyQuickQuestion('Task dựng Flow CP2 của bạn Minh đang bị blocked do chưa thống nhất luồng Canvas, Coach cho nhóm xin ý kiến với ạ.')">⚠️ Task CP2 bị Blocked</button>
+          <button type="button" class="quick-chip-btn" onclick="applyQuickQuestion('Task dựng Flow CP2 của bạn Trang đang bị blocked do chưa thống nhất luồng Canvas, Coach cho nhóm xin ý kiến với ạ.')">⚠️ Task CP2 bị Blocked</button>
           <button type="button" class="quick-chip-btn" onclick="applyQuickQuestion('Nhóm em cần Coach review trước bản nháp phân công công việc AI xem đã cân bằng khối lượng chưa ạ.')">📋 Review phân công task</button>
         </div>
       </div>
@@ -980,7 +1012,7 @@
           <div class="request-sender-info">
             <span class="request-role-avatar" id="coachReqAvatar">👑</span>
             <div>
-              <strong id="coachReqSenderName">Lan (Nhóm trưởng) · Nhóm Sloppers</strong>
+              <strong id="coachReqSenderName">Trọng (Nhóm trưởng) · Nhóm Sloppers</strong>
               <small id="coachReqTime">Gửi lúc 20:38 · Mã nhóm: SLOP-3B</small>
             </div>
           </div>
@@ -1019,7 +1051,7 @@
           <span class="quick-suggest-label">Gợi ý trả lời nhanh:</span>
           <div class="quick-suggest-chips">
             <button type="button" class="quick-chip-btn" onclick="applyCoachQuickReply('Coach đã xem qua Golden set của nhóm. Các em lưu ý rubric CP3 cần tối thiểu 20 test case có ground truth rõ ràng và chia theo 3 mức độ khó nhé.')">💡 Hướng dẫn Golden set CP3</button>
-            <button type="button" class="quick-chip-btn" onclick="applyCoachQuickReply('Với flow CP2 bị vướng: Bạn Lan và bạn Minh hãy đối chiếu lại với 7 dòng Canvas CP1 đã chốt để thống nhất luồng tương tác chính nhé.')">🛠️ Gỡ blocked Flow CP2</button>
+            <button type="button" class="quick-chip-btn" onclick="applyCoachQuickReply('Với flow CP2 bị vướng: Bạn Trọng và bạn Trang hãy đối chiếu lại với 7 dòng Canvas CP1 đã chốt để thống nhất luồng tương tác chính nhé.')">🛠️ Gỡ blocked Flow CP2</button>
             <button type="button" class="quick-chip-btn" onclick="applyCoachQuickReply('Coach đã review kế hoạch phân công của nhóm Sloppers, độ phủ kỹ năng rất tốt. Nhóm trưởng có thể bấm Phê duyệt để bắt đầu nhé!')">👍 Phê duyệt kế hoạch</button>
           </div>
         </div>

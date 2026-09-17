@@ -18,6 +18,6 @@ Mở `index.html` bằng trình duyệt, hoặc chạy bằng static server tron
 
 ## Ba góc nhìn trong mockup
 
-- **Nhóm trưởng (Lan):** tạo nhóm và gửi lời mời bằng mã học viên. Sau đó chỉ xem số thành viên đã vào nhóm tại LabSpace; không xác nhận thay học viên.
-- **Học viên được mời (Minh):** nhận lời mời trong **Thông báo**, tự xác nhận tham gia, rồi hoàn tất hồ sơ năng lực cho phiên LAB và chờ kế hoạch được duyệt.
+- **Nhóm trưởng (Phạm Hoàng Trọng):** tạo nhóm và gửi lời mời bằng mã học viên. Sau đó chỉ xem số thành viên đã vào nhóm tại LabSpace; không xác nhận thay học viên.
+- **Học viên được mời (Lê Thị Thùy Trang):** nhận lời mời trong **Thông báo**, tự xác nhận tham gia, rồi hoàn tất hồ sơ năng lực cho phiên LAB và chờ kế hoạch được duyệt.
 - **Lab Coach:** chỉ theo dõi tiến độ cấp nhóm, task bị chặn và yêu cầu hỗ trợ; không xem hồ sơ năng lực hoặc hoạt động cá nhân.
