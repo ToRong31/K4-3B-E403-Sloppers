@@ -20,16 +20,16 @@
 | Trình đọc bài Mini Hackathon | ✅ | Đủ chuẩn bị, CP1–CP6 và điều hướng |
 | Trang nộp bài Lab | ✅ | Đã có trạng thái nộp mẫu |
 | App shell và điều hướng theo role | 🟡 | Có route/nav/logout; chưa có notification panel |
-| Workspace nhóm | 🟡 | Có board chính; các flow/dialog chưa hoạt động |
-| Flow Nhóm trưởng | ⚪ | Chưa có tạo nhóm, mời, review và approve plan |
-| Flow Thành viên | ⚪ | Chưa có invitation và khai skill |
+| Workspace nhóm | 🟡 | Có board chính và dialog lập nhóm; AI/help chưa hoạt động |
+| Flow Nhóm trưởng | 🟡 | Đã có tạo nhóm, mời thành viên; còn thiếu review và approve plan |
+| Flow Thành viên | 🟡 | Đã có invitation và khai skill; còn thiếu thao tác task |
 | AI assignment review | ⚪ | Chưa có draft/reason/confidence/override/approve UI |
 | Coach dashboard | 🟡 | Có bảng tổng quan; chưa có chi tiết help request |
-| Notification/help/chat sidebar | ⚪ | Chưa chuyển từ mockup sang React |
+| Notification/help/chat sidebar | 🟡 | Đã có notification lời mời; help/chat chưa chuyển sang React |
 | GitHub double-check và nộp thật | ⚪ | Mới có trang trạng thái nộp tĩnh |
 | Responsive + accessibility toàn hệ thống | 🟡 | Login/Lesson tốt; Workspace/Coach cần hoàn thiện |
 
-**Tiến độ theo module giao diện:** 4 hoàn thiện · 4 một phần · 5 chưa làm.
+**Tiến độ theo module giao diện:** 4 hoàn thiện · 7 một phần · 2 chưa làm.
 
 ---
 
@@ -60,7 +60,7 @@
 - [x] ✅ Badge phân biệt dữ liệu mô phỏng.
 - [x] ✅ Connection indicator cho trạng thái realtime client.
 - [ ] 🟡 Header hiện tại mới bám visual language chung, chưa đối chiếu pixel-by-pixel toàn bộ mockup.
-- [ ] ⚪ Notification bell, unread count và notification drawer.
+- [ ] 🟡 Thành viên đã có nút thông báo, unread count và drawer tại Workspace; chưa dùng chung toàn app.
 - [ ] ⚪ Menu tài khoản/profile mở rộng.
 - [ ] ⚪ Toast thành công/lỗi dùng chung.
 
@@ -123,6 +123,8 @@
 - [x] ✅ Ghi rõ nguồn checklist đang là fixture.
 - [x] ✅ Loading và error/retry state.
 - [x] ✅ Leader/member có CTA khác nhau theo quyền.
+- [x] ✅ Leader mở được dialog lập nhóm trực tiếp từ Workspace.
+- [x] ✅ Sau thao tác demo, tên/mã nhóm và trạng thái thành viên được cập nhật ngay trên UI.
 - [ ] 🟡 CTA AI, copy mã nhóm và yêu cầu Coach chưa hoạt động.
 - [ ] 🟡 Task/checklist đang read-only, chưa có hover/focus/interaction đầy đủ như mockup.
 - [ ] 🟡 Layout tablet/mobile mới ở mức cơ bản.
@@ -133,12 +135,12 @@
 
 ## 7. Flow Nhóm trưởng
 
-- [ ] ⚪ Dialog tạo nhóm theo bài Lab.
-- [ ] ⚪ Form tên nhóm và validation.
-- [ ] ⚪ Dialog mời thành viên bằng mã học viên.
-- [ ] ⚪ Trạng thái resolve mã → tên học viên.
-- [ ] ⚪ Validation mã sai, trùng, chính mình và quá số thành viên.
-- [ ] ⚪ Theo dõi invitation `pending/accepted/declined`.
+- [x] ✅ Dialog tạo nhóm theo bài Lab.
+- [x] ✅ Form tên nhóm và validation.
+- [x] ✅ Dialog mời thành viên bằng mã học viên.
+- [x] ✅ Trạng thái resolve mã → tên học viên.
+- [x] ✅ Validation mã sai, trùng, chính mình và quá số thành viên.
+- [x] ✅ Theo dõi invitation `pending/accepted/declined` trên Workspace; trạng thái sau khi gửi là `pending`.
 - [ ] ⚪ Trạng thái chờ thành viên hoàn tất skill profile.
 - [ ] ⚪ CTA chạy AI draft với loading animation và nút bỏ qua.
 - [ ] ⚪ Màn hình review bản nháp AI.
@@ -148,11 +150,11 @@
 
 ## 8. Flow Thành viên
 
-- [ ] ⚪ Notification lời mời vào nhóm.
-- [ ] ⚪ Accept/decline invitation.
-- [ ] ⚪ Onboarding khai kỹ năng theo Engineering/AI-Data/Product-Design.
-- [ ] ⚪ Slider hoặc lựa chọn level 1–5.
-- [ ] ⚪ Review và xác nhận skill profile.
+- [x] ✅ Notification lời mời vào nhóm.
+- [x] ✅ Accept/decline invitation.
+- [x] ✅ Onboarding khai kỹ năng theo Engineering/AI-Data/Product-Design.
+- [x] ✅ Slider lựa chọn level 1–5 cho từng kỹ năng đã chọn.
+- [x] ✅ Review và xác nhận skill profile.
 - [ ] ⚪ Màn hình chờ leader phê duyệt plan.
 - [ ] ⚪ Xem task được giao.
 - [ ] ⚪ Tick done/reopen task theo quyền.
@@ -189,8 +191,8 @@
 
 ## 11. Notification, help request và chat
 
-- [ ] ⚪ Notification panel theo mockup.
-- [ ] ⚪ Unread count và trạng thái đã đọc.
+- [ ] 🟡 Notification panel lời mời đã bám mockup; các loại thông báo khác chưa có.
+- [x] ✅ Unread count cho lời mời và trạng thái sau accept/decline.
 - [ ] ⚪ Dialog gửi yêu cầu Coach: topic, question, urgent.
 - [ ] ⚪ Trạng thái pending/replied/resolved tại workspace.
 - [ ] ⚪ Chat sidebar nhóm.
@@ -251,4 +253,3 @@ Các mục sau chưa hoàn thành dù một số màn hình đã có dữ liệu
 - [ ] Chạy `npm test`.
 - [ ] Chạy `npm run build`.
 - [ ] Không có console error/warning mới.
-

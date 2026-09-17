@@ -48,10 +48,10 @@ export const workspaceFixture = Object.freeze({
   checklistSource: 'K4–L3B–DAY05–06–MINI–HACKATHON · fixture chưa đồng bộ backend',
   planStatus: 'draft',
   members: [
-    { id: 'm1', name: 'Trọng', role: 'Nhóm trưởng', status: 'accepted', profileReady: true },
-    { id: 'm2', name: 'Trang', role: 'Frontend · UI/UX', status: 'accepted', profileReady: true },
-    { id: 'm3', name: 'Dương', role: 'AI · Prompt', status: 'pending', profileReady: false },
-    { id: 'm4', name: 'Dũng', role: 'Backend · Data', status: 'pending', profileReady: false },
+    { id: 'm1', studentCode: '2A202602765', fullName: 'Phạm Hoàng Trọng', name: 'Trọng', role: 'Nhóm trưởng', className: 'K4-E403', avatar: 'T', color: '#0284c7', status: 'accepted', profileReady: true },
+    { id: 'm2', studentCode: '2A202602678', fullName: 'Lê Thị Thùy Trang', name: 'Trang', role: 'Frontend · UI/UX', className: 'K4-E403', avatar: 'T', color: '#0d9488', status: 'pending', profileReady: false },
+    { id: 'm3', studentCode: '2A202602676', fullName: 'Lâm Hải Dương', name: 'Dương', role: 'AI · Prompt', className: 'K4-E403', avatar: 'D', color: '#7c3aed', status: 'pending', profileReady: false },
+    { id: 'm4', studentCode: '2A202602523', fullName: 'Hoàng Quốc Dũng', name: 'Dũng', role: 'Backend · Data', className: 'K4-E403', avatar: 'D', color: '#ea580c', status: 'pending', profileReady: false },
   ],
   tasks: [
     { id: 't1', category: 'EVIDENCE', title: 'Khảo sát và tổng hợp pain', deliverable: 'Evidence log + quote', owner: 'Trọng', status: 'done' },
