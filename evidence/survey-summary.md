@@ -180,7 +180,7 @@ Theo quy chế Hackathon Day 05-06, tiêu chí đánh giá Bằng chứng (Evide
 | Trạng thái phản hồi | Số lượng (n) | Tỷ lệ (%) | Chi tiết liên hệ / Ghi chú |
 | :--- | :---: | :---: | :--- |
 | **Có thông tin liên hệ trực tiếp** | 4 | 11.1% | Discord ID, Số Zalo, Mã định danh học viên |
-| **Sẵn sàng thử nghiệm (Đồng ý/Góp ý)** | 5 | 13.9% | Xác nhận đồng ý, quote góp ý ẩn danh |
+| **Sẵn sàng thử nghiệm (Đồng ý)** | 5 | 13.9% | Xác nhận sẵn sàng tham gia thử nghiệm |
 | **Không để lại thông tin (Bỏ trống)** | 27 | 75.0% | Câu hỏi không bắt buộc |
 | **Tổng số người có tín hiệu quan tâm MVP** | **9** | **25.0%** | **Tín hiệu chuyển đổi tốt cho giai đoạn CP1-CP4** |
 
@@ -238,45 +238,11 @@ Mối quan hệ giữa thời gian khởi động và thời gian thiệt hại 
 
 ---
 
-## 5. Trích dẫn ý kiến & Tiếng nói người dùng ẩn danh (Voice of Customer)
-
-Toàn bộ thông tin định danh cá nhân (số điện thoại, họ tên đầy đủ) đã được mã hóa và bảo vệ theo nguyên tắc bảo mật. Dưới đây là các trích dẫn và tổng hợp tiếng nói người dùng từ khảo sát:
-
-### 5.1. Nhóm Đội trưởng / Người điều phối (Leader Perspective)
-* **Mã R01 (Leader):** *"Nhóm mất trên 30 phút để thống nhất. Tự nhớ hoặc vừa làm vừa hỏi nên bị trùng việc, bỏ sót phần nộp và task không phù hợp năng lực, mất thêm 15-30 phút sửa lại."*
-* **Mã R02 (Leader):** *"Dù chỉ mất 10 phút chia việc qua chat, nhưng sau đó phải chia lại task giữa chừng và làm trùng việc, hậu quả là phải làm lại toàn bộ và mất thêm trên 30 phút."*
-* **Mã R14 (Leader - Phản hồi thực tế):** *"Gặp phải toàn bộ 8/8 vấn đề: người chưa biết làm gì, trùng việc, sót việc, lệch năng lực, gánh team, chia lại task, mù mờ tiến độ và không biết nộp thiếu gì."* *(Người này phản hồi hóm hỉnh từ chối MVP vì lý do cá nhân với leader nhưng bộc lộ 100% nỗi đau của việc chia task).*
-* **Mã R17 (Leader - Sẵn sàng test MVP):** *"Thời gian thống nhất 15-30 phút, mất thêm thời gian và giảm chất lượng bài vì người làm chưa biết bắt đầu từ đâu. Đã để lại thông tin liên hệ và sẵn sàng test giải pháp."*
-
-### 5.2. Nhóm Thành viên nhận việc (Member Perspective)
-* **Mã R03 (Member):** *"Nhóm cuối cùng vẫn không rõ phải làm gì. Khó biết tiến độ đến đâu, không rõ còn thiếu gì trước khi nộp, và có người bị kẹt nhưng cả nhóm biết quá muộn."*
-* **Mã R07 (Member):** *"Quản lý bằng Google Docs tự tạo nhưng thành viên tự nhận việc nên vẫn bị hai người làm trùng một phần việc, mất oan 15 phút."*
-* **Mã R08 (Member - Sẵn sàng test MVP):** *"Đề bài chỉ đọc README, bị sót việc và mất thêm thời gian. Phản hồi sẵn sàng thử MVP: 'ok'."*
-* **Mã R09 (Member - Sẵn sàng test MVP):** *"Gặp tình trạng có người không biết làm gì, sót việc, phải chia lại task giữa chừng, làm trễ deadline của cả nhóm. Để lại số điện thoại sẵn sàng làm tester."*
-* **Mã R20 (Member):** *"Một người phải làm quá nhiều, người khác thì chưa biết làm gì, task lệch năng lực và đến sát giờ nộp vẫn không biết còn thiếu gì."*
-* **Mã R32 (Member - Sẵn sàng test MVP):** *"Gặp tình trạng bỏ sót việc quan trọng do phân công cảm tính. Để lại lời nhắn: 'Được, sẵn sàng dùng thử kèm SĐT'."*
-
-### 5.3. Bảng tổng hợp các Early Adopters / Willing Users đã ghi nhận
-*(Đã mã hóa thông tin nhạy cảm theo tiêu chuẩn nghiên cứu)*
-
-| Mã phản hồi | Vai trò trong LAB | Vấn đề chính gặp phải | Trạng thái sẵn sàng dùng thử MVP | Kênh liên hệ ghi nhận |
-| :---: | :---: | :--- | :--- | :--- |
-| **R05** | Leader | Trùng việc, sót việc, mất thêm thời gian | Sẵn sàng tham gia test | Discord Handle (`uy***`) |
-| **R08** | Member | Sót việc, mất thêm thời gian | Đồng ý thử nghiệm | Xác nhận qua form (`ok`) |
-| **R09** | Member | Chưa biết làm gì, sót việc, trễ deadline | Rất nhiệt tình tham gia | Số điện thoại Zalo (`0983***747`) |
-| **R14** | Leader | Trải nghiệm toàn bộ 8 điểm nghẽn | Nhận diện pain point tuyệt đối | Trích dẫn định tính |
-| **R15** | Member | Trùng việc, lệch năng lực, làm lại | Xác nhận sẵn sàng | Xác nhận qua form (`Ok`) |
-| **R17** | Leader | Chưa biết làm, lệch năng lực, trễ hạn | Sẵn sàng tham gia test nhóm | Mã học viên (`T092-***`) |
-| **R18** | Member | Khó biết tiến độ, trễ deadline | Đồng ý hỗ trợ | Xác nhận qua form (`có thể`) |
-| **R32** | Member | Sót việc, trễ deadline | Sẵn sàng tham gia test ngay | Số điện thoại Zalo (`0393***834`) |
-
----
-
-## 6. Định hướng giải pháp cho Team E403 - Sloppers (Product Mapping)
+## 5. Định hướng giải pháp cho Team E403 - Sloppers (Product Mapping)
 
 Từ những số liệu và insight định lượng vững chắc trên, sản phẩm của Team Sloppers sẽ tập trung giải quyết bài toán: **"AI Agent Tự Động Bóc Tách Đề Bài & Điều Phối Task Bài LAB"**.
 
-### 6.1. Ánh xạ từ Nỗi đau khảo sát sang Lát cắt tính năng AI (Feature Mapping)
+### 5.1. Ánh xạ từ Nỗi đau khảo sát sang Lát cắt tính năng AI (Feature Mapping)
 
 | Nỗi đau từ Khảo sát (Pain Point) | Số liệu chứng minh | Tính năng AI tương ứng (Product Slice) | Giá trị mang lại |
 | :--- | :---: | :--- | :--- |
@@ -285,7 +251,7 @@ Từ những số liệu và insight định lượng vững chắc trên, sản
 | **Hai hoặc nhiều người làm trùng việc** | **41.7%** nhóm gặp phải | **DAG Dependency & Boundary Mapping**:<br>Xây dựng đồ thị phụ thuộc giữa các task, chỉ rõ file nào do ai phụ trách, cấm đè code. | **Triệt tiêu xung đột và trùng lặp công việc**. |
 | **Có người chưa biết làm gì / Lệch năng lực** | **50.0%** & **25.0%** nhóm gặp phải | **Skill-based Task Allocator**:<br>Gợi ý phân công thông minh dựa trên thế mạnh từng bạn (Data, Prompt, Code, Eval). | **Cân bằng tải nhóm**, tránh tình trạng 1 người gánh team. |
 
-### 6.2. Cam kết chỉ số chất lượng (Target Quality Bar)
+### 5.2. Cam kết chỉ số chất lượng (Target Quality Bar)
 Dựa trên đường cơ sở (Baseline) từ khảo sát:
 - **Baseline hiện tại:** Thời gian thống nhất trung bình 20.5 phút; thời gian lãng phí trung bình 16.8 phút; tỷ lệ lỗi bỏ sót 55.6%.
 - **Mục tiêu sản phẩm MVP:**
