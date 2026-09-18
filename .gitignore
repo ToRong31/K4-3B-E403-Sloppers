@@ -6,6 +6,7 @@
 .env.*
 !.env.example
 !.env.*.example
+.cloudflared/
 AGENTS.md
 IMPLEMENTATION-PLAN.md
 # Python bytecode and caches

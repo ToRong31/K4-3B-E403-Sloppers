@@ -1,3 +1,6 @@
+.env
+.env.*
+!.env.example
 .venv
 __pycache__
 *.pyc
@@ -10,3 +13,8 @@ htmlcov
 .git
 .gitignore
 *.db
+tests
+eval
+docs
+presentation
+examples_data
