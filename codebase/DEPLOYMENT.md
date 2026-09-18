@@ -1,7 +1,7 @@
 # Deploy VLearn LabSpace with Docker, Nginx, and Cloudflare Tunnel
 
 The production stack contains PostgreSQL, FastAPI, an Nginx-served Vite build,
-and an optional Cloudflare Tunnel container. PostgreSQL and FastAPI are not
+and a Cloudflare Tunnel container. PostgreSQL and FastAPI are not
 published on host interfaces. Nginx is available only on `127.0.0.1:18080` for
 local verification; public traffic reaches it through the tunnel network.
 PostgreSQL records and the backend JSON workspace data both use named volumes.
@@ -29,26 +29,16 @@ curl -fsS http://127.0.0.1:18080/api/v1/ready
 
 Open `http://127.0.0.1:18080` on the host to verify the UI.
 
-## 3. Create the Cloudflare Tunnel
+## 3. Cloudflare Tunnel
 
-To let an operator create everything through the Cloudflare API, put an API
-token, the account ID, and the `torome.online` zone ID into `.env.deploy`. The
-token only needs `Account / Cloudflare Tunnel / Edit` and
-`Zone / DNS / Edit`, scoped to the relevant account and zone. A Global API Key
-is not needed. Remove `CLOUDFLARE_API_TOKEN` after the bootstrap succeeds.
+The tunnel `labspace-torome` and its DNS route are already configured. Its
+non-secret ingress configuration is in `cloudflared/config.yml`. The local
+tunnel credential must exist at:
 
-Alternatively, create the tunnel in the dashboard as follows.
+`../.cloudflared/4df41506-15c1-44b3-b6e3-a757f6754eff.json`
 
-In Cloudflare Zero Trust, create a remotely managed tunnel and add this public
-hostname:
-
-- Hostname: `labspace.torome.online`
-- Service type: `HTTP`
-- Service URL: `http://web:80`
-
-Cloudflare creates the DNS record for the hostname when the public hostname is
-saved. Copy the tunnel token (the value after `--token`, not the entire Docker
-command) into `CLOUDFLARE_TUNNEL_TOKEN` in `.env.deploy`.
+Both `.cloudflared/` and `.env.deploy` are ignored by Git. Do not commit or
+share the credential file.
 
 Start the full stack:
 

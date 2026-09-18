@@ -1,0 +1,8 @@
+tunnel: 4df41506-15c1-44b3-b6e3-a757f6754eff
+credentials-file: /etc/cloudflared/credentials.json
+protocol: http2
+
+ingress:
+  - hostname: labspace.torome.online
+    service: http://web:80
+  - service: http_status:404

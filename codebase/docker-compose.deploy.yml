@@ -84,12 +84,13 @@ services:
       - edge
 
   tunnel:
-    image: cloudflare/cloudflared:2025.8.1
+    image: cloudflare/cloudflared:2026.9.1
     restart: unless-stopped
     profiles: ["tunnel"]
-    command: tunnel --no-autoupdate run
-    environment:
-      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:-}
+    command: tunnel --config /etc/cloudflared/config.yml --no-autoupdate run
+    volumes:
+      - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+      - ../.cloudflared/4df41506-15c1-44b3-b6e3-a757f6754eff.json:/etc/cloudflared/credentials.json:ro
     depends_on:
       web:
         condition: service_healthy
