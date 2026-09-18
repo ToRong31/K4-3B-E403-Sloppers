@@ -1,5 +1,5 @@
 {
-  "checklist_id": "6eb81890-e21c-42d2-983e-df5bae13e440",
+  "checklist_id": "d68370c9-6bf3-4dd9-8c57-a9b2db0401f3",
   "lab_id": "K4-L3B-DAY05-06-MINI-HACKATHON",
   "lab_version": 1,
   "status": "pending_review",
@@ -9,7 +9,7 @@
       "checkpoint_order": 1,
       "tasks": [
         {
-          "id": "2636b10f-3b4f-4d9f-8d3f-ec3bdc506e8a",
+          "id": "0e584db1-d32a-4005-bad1-25e8e5e1ae81",
           "task_key": "prepare-task-01",
           "checkpoint_id": "prepare",
           "task_order": 1,
@@ -30,7 +30,7 @@
           "status": "proposed"
         },
         {
-          "id": "0028b4a7-5f52-41fc-89aa-137532172f1d",
+          "id": "5cae9d73-e21d-4b7b-8280-05f59966dbcf",
           "task_key": "prepare-task-02",
           "checkpoint_id": "prepare",
           "task_order": 2,
@@ -41,8 +41,8 @@
             "Nghiệm thu: Truy cập GitHub và tạo một repository mới hoàn toàn ở chế độ công khai, không fork repository đề bài. Đặt tên đúng quy tắc K4-3B-<phòng>-<tên nhóm> (ví dụ hợp lệ: K4-3B-E403-ChamCongAI hoặc K4-3B-E402-DiscordBuddy; phần đầu bắt buộc đúng, phần tên nhóm viết liền không dấu). Chạy git init, commit và push nhánh main ban đầu lên GitHub."
           ],
           "required_skills": [
-            "Engineering",
             "Evaluation",
+            "Engineering",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -55,7 +55,7 @@
           "status": "proposed"
         },
         {
-          "id": "ba6869cd-8515-48e8-8e08-73afbd1a2725",
+          "id": "fa9e1a49-9011-4474-8e0e-ce057cdc8df8",
           "task_key": "prepare-task-03",
           "checkpoint_id": "prepare",
           "task_order": 3,
@@ -67,8 +67,8 @@
           ],
           "required_skills": [
             "Engineering",
-            "Presentation",
             "Evaluation",
+            "Presentation",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -87,7 +87,7 @@
       "checkpoint_order": 2,
       "tasks": [
         {
-          "id": "d0858185-8439-4761-bb36-d73316ad327e",
+          "id": "fb87e078-e7b1-4661-9688-08ff774d07d7",
           "task_key": "cp1-task-04",
           "checkpoint_id": "cp1",
           "task_order": 1,
@@ -99,8 +99,8 @@
           ],
           "required_skills": [
             "Engineering",
-            "Presentation",
             "Evaluation",
+            "Presentation",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -113,7 +113,7 @@
           "status": "proposed"
         },
         {
-          "id": "dbbc892e-94c9-4ea4-8e11-40eee181fa6d",
+          "id": "b5f3411d-ff13-4496-a6c8-2d0b14695d78",
           "task_key": "cp1-task-05",
           "checkpoint_id": "cp1",
           "task_order": 2,
@@ -124,8 +124,8 @@
             "Nghiệm thu: Soạn Canvas đúng scaffold 7 dòng tại mục §1.5 của 02-guide.md: (1) Track + đề (Track A–E và đề cụ thể đã chọn), (2) Job executor (Ai · đang ở đâu · đang làm gì), (3) Pain một câu (Ai – đang làm gì – vướng đâu – hậu quả gì), (4) 1–2 bằng chứng đầu (Số + cách đếm + mã hội thoại/tin nhắn, hoặc khảo sát có số người), (5) Lát cắt MỘT CÂU (1 user · 1 việc · 1 quyết định AI · 1 kết quả), (6) Automation + willing users (AI tự làm đến đâu + lý do + tên willing users ngoài nhóm), (7) Phân công (Mỗi đầu việc một tên cụ thể). Đưa nội dung Canvas vào mục §1 và §2 của spec.md, commit và đẩy lên nhánh chính."
           ],
           "required_skills": [
-            "Engineering",
             "Evaluation",
+            "Engineering",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -138,7 +138,7 @@
           "status": "proposed"
         },
         {
-          "id": "8e106008-3ec1-4370-a74a-0cf7d2dccebe",
+          "id": "86b38cec-8ec0-4b78-8349-9b7d414387f6",
           "task_key": "cp1-task-06",
           "checkpoint_id": "cp1",
           "task_order": 3,
@@ -149,8 +149,8 @@
             "Nghiệm thu: Đội trưởng đại diện nhóm truy cập form CP1, điền họ tên, mã học viên, link repository công khai, nội dung Canvas 7 dòng và danh sách willing users trước 19:30 ngày 17/9. Nhóm bắt buộc điền tên cụ thể của ít nhất 2 người dùng sẵn sàng thử nghiệm ngoài nhóm; đây là điều kiện tiên quyết để nghiệm thu khối điểm R6 tại mốc CP5."
           ],
           "required_skills": [
-            "Engineering",
             "Evaluation",
+            "Engineering",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -169,7 +169,7 @@
       "checkpoint_order": 3,
       "tasks": [
         {
-          "id": "ff9ce350-ed5f-4e19-a599-5ab42bc2947d",
+          "id": "5c4ea161-d0c8-4b83-ab7f-4e2137ad2789",
           "task_key": "cp2-task-07",
           "checkpoint_id": "cp2",
           "task_order": 1,
@@ -180,8 +180,8 @@
             "Nghiệm thu: Thiết kế toàn bộ hành trình người dùng dưới một trong ba hình thức: bản mẫu tương tác dựng trên Figma, Canva hoặc trang tĩnh HTML/CSS/JS; sơ đồ luồng thể hiện rõ các bước nhập liệu, điểm gọi quyết định AI và nhánh xử lý ngoại lệ; hoặc video quay màn hình đi hết một vòng lặp tương tác từ đầu vào đến đầu ra cuối cùng. Xác định mức độ tự động hóa dựa trên cost-of-error (Augment khi sai thì đắt và người quyết định cuối là con người; Conditional cho case chắc và chuyển người với case mơ hồ; Automate khi sai thì rẻ và người dùng tự thấy, tự sửa). Thiết kế bốn đường đi của trải nghiệm theo spec.md §6: happy path, low-confidence, failure/no-grounding và correction. Chọn tối thiểu 4 nguyên tắc HAX/PAIR và ghi rõ áp dụng cụ thể vào đâu trong prototype."
           ],
           "required_skills": [
-            "Presentation",
             "Evaluation",
+            "Presentation",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -194,7 +194,7 @@
           "status": "proposed"
         },
         {
-          "id": "a73c00f8-1303-4ff9-9a48-6e32576f3aa5",
+          "id": "a173a444-c85b-4714-8558-6290d28293e2",
           "task_key": "cp2-task-08",
           "checkpoint_id": "cp2",
           "task_order": 2,
@@ -205,8 +205,8 @@
             "Nghiệm thu: Cập nhật thiết kế vào mục §4 và §6 của spec.md: mức prototype, phần chạy giả lập/chạy thật và bảng bốn nguyên tắc HAX/PAIR. Lưu mã nguồn giao diện hoặc ảnh chụp sơ đồ luồng vào thư mục codebase/, commit và push origin main."
           ],
           "required_skills": [
-            "Engineering",
             "Evaluation",
+            "Engineering",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -219,7 +219,7 @@
           "status": "proposed"
         },
         {
-          "id": "4f8a19ff-2e38-43ed-ba34-de742dac5ec2",
+          "id": "ce669d10-c67e-40fa-83da-db0ac48d7e66",
           "task_key": "cp2-task-09",
           "checkpoint_id": "cp2",
           "task_order": 3,
@@ -249,7 +249,7 @@
       "checkpoint_order": 4,
       "tasks": [
         {
-          "id": "92f8af09-d31d-4412-bb57-9a18a4acb4f1",
+          "id": "0c812625-89b9-48ee-ae64-f54e6e7a262e",
           "task_key": "cp3-task-10",
           "checkpoint_id": "cp3",
           "task_order": 1,
@@ -260,8 +260,8 @@
             "Nghiệm thu: Lập trình module quyết định trung tâm trong codebase/, tích hợp API gọi mô hình AI thật tại mắt xích quyết định trung tâm, tuyệt đối không gán cứng kết quả. Thiết lập cơ chế ghi vết (trace log) rõ ràng cho prompt đầu vào và phản hồi thô của mô hình theo thời gian thực."
           ],
           "required_skills": [
-            "Engineering",
             "Evaluation",
+            "Engineering",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -274,7 +274,7 @@
           "status": "proposed"
         },
         {
-          "id": "ceb17097-5e65-4b97-9339-8b016c06779f",
+          "id": "bd1ece37-b448-4080-85e2-66aa2617dad4",
           "task_key": "cp3-task-11",
           "checkpoint_id": "cp3",
           "task_order": 2,
@@ -298,7 +298,7 @@
           "status": "proposed"
         },
         {
-          "id": "b288b080-ea97-4522-b176-233a60118c03",
+          "id": "20d8d616-14c8-4923-bae2-1c88d8432b2f",
           "task_key": "cp3-task-12",
           "checkpoint_id": "cp3",
           "task_order": 3,
@@ -322,7 +322,7 @@
           "status": "proposed"
         },
         {
-          "id": "76dc4037-25b9-4a61-9e1e-af2d644d69da",
+          "id": "849a39d1-f6a7-4788-bdb1-36e1a8937715",
           "task_key": "cp3-task-13",
           "checkpoint_id": "cp3",
           "task_order": 4,
@@ -334,8 +334,8 @@
           ],
           "required_skills": [
             "Engineering",
-            "Presentation",
             "Evaluation",
+            "Presentation",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -354,7 +354,7 @@
       "checkpoint_order": 5,
       "tasks": [
         {
-          "id": "135c5252-610d-48f2-a9bc-37d303681a8c",
+          "id": "030f5fa5-bc82-48c9-96f2-4ce409e92376",
           "task_key": "cp4-task-14",
           "checkpoint_id": "cp4",
           "task_order": 1,
@@ -378,7 +378,7 @@
           "status": "proposed"
         },
         {
-          "id": "50a96bb5-e3ab-443b-a327-1a4aebe5f033",
+          "id": "4c885884-aa0b-4ae3-91c5-fffdc9636dda",
           "task_key": "cp4-task-15",
           "checkpoint_id": "cp4",
           "task_order": 2,
@@ -402,7 +402,7 @@
           "status": "proposed"
         },
         {
-          "id": "1ef44353-6ef3-4f1a-becd-9a8ec9e4131e",
+          "id": "8570a76d-b360-451e-b022-2ea8f5ac7d23",
           "task_key": "cp4-task-16",
           "checkpoint_id": "cp4",
           "task_order": 3,
@@ -431,7 +431,7 @@
       "checkpoint_order": 6,
       "tasks": [
         {
-          "id": "8d9b47f6-887d-4d51-91c3-86c2826d9ea6",
+          "id": "b2542611-85df-441f-914b-cb4069cf27bd",
           "task_key": "cp5-task-17",
           "checkpoint_id": "cp5",
           "task_order": 1,
@@ -442,8 +442,8 @@
             "Nghiệm thu: Mời ít nhất 2 người ngoài nhóm trải nghiệm trực tiếp prototype, ưu tiên willing users đã khai từ CP1. Mỗi phiên thử kéo dài khoảng 10 phút theo năm nhịp: trấn an người thử, mời tác vụ, quan sát không chỉ dẫn, hỏi sau khi dùng và ghi nguyên văn. Xếp bằng chứng theo 4 tầng (hành vi quan sát được > lời nói trong lúc dùng > giải thích khi được hỏi > dự đoán tương lai). Ghi nhận vào validation/: người thử, task đã giao, quan sát, quote nguyên văn và mức nghiêm trọng. Dựa trên phản hồi, thực hiện 1–2 thay đổi cụ thể trước demo và cập nhật vào §9 Changelog của spec.md."
           ],
           "required_skills": [
-            "Presentation",
             "Evaluation",
+            "Presentation",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -456,7 +456,7 @@
           "status": "proposed"
         },
         {
-          "id": "513d3d18-4885-4365-84e5-903390175d88",
+          "id": "454580e7-4140-410b-b665-759e68193567",
           "task_key": "cp5-task-18",
           "checkpoint_id": "cp5",
           "task_order": 2,
@@ -468,8 +468,8 @@
           ],
           "required_skills": [
             "Engineering",
-            "Presentation",
             "Evaluation",
+            "Presentation",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -482,7 +482,7 @@
           "status": "proposed"
         },
         {
-          "id": "7906bd39-0be1-457c-9d99-3a4c22fe1e63",
+          "id": "4fe947f6-934f-4d2c-b4a5-e0216144aeb2",
           "task_key": "cp5-task-19",
           "checkpoint_id": "cp5",
           "task_order": 3,
@@ -505,7 +505,7 @@
           "status": "proposed"
         },
         {
-          "id": "6c61d406-7830-47b7-8691-19abb9e19cf7",
+          "id": "2a438943-da22-416f-9238-880cce35cd46",
           "task_key": "cp5-task-20",
           "checkpoint_id": "cp5",
           "task_order": 4,
@@ -516,8 +516,8 @@
             "Nghiệm thu: Đội trưởng nộp tệp demo-slides.pdf và liên kết video demo dự phòng qua form CP5 trước 22:30 ngày 18/9. Danh mục nghiệm thu hồ sơ CP5: tệp PDF đúng 6 trang; video demo dự phòng truy cập công khai; validation/ có nhật ký ≥2 người thử kèm quote; §9 Changelog ghi nhận thay đổi; đã dry run có bấm giờ."
           ],
           "required_skills": [
-            "Presentation",
             "Evaluation",
+            "Presentation",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -536,7 +536,7 @@
       "checkpoint_order": 7,
       "tasks": [
         {
-          "id": "c1e7b081-28ca-4cbf-9648-008d96540c79",
+          "id": "8596a6b4-bd83-46af-aa00-46ff1eef4137",
           "task_key": "cp6-task-21",
           "checkpoint_id": "cp6",
           "task_order": 1,
@@ -548,8 +548,8 @@
           ],
           "required_skills": [
             "Engineering",
-            "Presentation",
             "Evaluation",
+            "Presentation",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -562,7 +562,7 @@
           "status": "proposed"
         },
         {
-          "id": "d67c16da-d939-48ea-928d-846bc59e6f7b",
+          "id": "ff2febb7-d3f8-4501-8f3e-fbd7dc820bca",
           "task_key": "cp6-task-22",
           "checkpoint_id": "cp6",
           "task_order": 2,
@@ -573,8 +573,8 @@
             "Nghiệm thu: Bài lab nộp qua hai kênh song song (hoàn thành một kênh không thay thế được kênh còn lại): (1) Form checkpoint CP1–CP5 — đội trưởng đại diện nộp thay cả nhóm (mỗi mốc một phiếu duy nhất, dùng duy nhất một mã học viên đội trưởng cho cả 5 mốc); (2) Link repo GitHub trên VLearn — mọi thành viên đều phải tự nộp (tất cả thành viên nộp cùng một liên kết repository chung của nhóm, đội trưởng không nộp thay được)."
           ],
           "required_skills": [
-            "Engineering",
             "Evaluation",
+            "Engineering",
             "AI"
           ],
           "estimated_effort": "medium",
@@ -587,7 +587,7 @@
           "status": "proposed"
         },
         {
-          "id": "e326ff61-7d8f-4c7b-aaa9-f389d4eedb2d",
+          "id": "55c87f8a-dca3-4370-a293-f577c45029ea",
           "task_key": "cp6-task-23",
           "checkpoint_id": "cp6",
           "task_order": 3,
@@ -598,8 +598,8 @@
             "Nghiệm thu: Tham gia buổi LAB 6 (09:00–13:00 ngày 19/9) tổ chức song song tại hai phòng E403 và E402. Vòng cụm (game đầu tư): mỗi nhóm trình bày 6 phút tại E403 hoặc 7 phút tại E402; mỗi đội có 100 điểm vốn, đội trưởng đại diện xem và đầu tư (không đầu tư vào đội mình, tổng đúng 100). Vòng chung kết phòng: E403 chọn Top 3, E402 chọn Top 2; mỗi đội có 10 phút (7 phút trình bày kèm demo trực tiếp và 3 phút hỏi đáp). Áp dụng quy tắc vibe-coding: giám khảo có quyền hỏi trực tiếp bất kỳ thành viên nào về phần có tên người đó trong bảng phân công và có thể yêu cầu chạy lại một case tại chỗ."
           ],
           "required_skills": [
-            "Presentation",
             "Evaluation",
+            "Presentation",
             "AI"
           ],
           "estimated_effort": "medium",

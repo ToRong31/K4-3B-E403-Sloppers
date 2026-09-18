@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '../../api/createApiClient';
 import { useRealtime } from '../../realtime/useRealtime';
+import { ChatMessageContent } from './ChatMessageContent';
 import { buildPrivateChatRequest } from './privateChatRequest';
 import { createGroupChatDemoMessages, createProgressChatDemoReply } from './progressChatDemo';
 
@@ -38,7 +39,7 @@ function SendIcon() {
   );
 }
 
-export function PrivateProgressChat({ snapshot, user, isMock }) {
+export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
   const { client: realtimeClient, status: realtimeStatus } = useRealtime();
   const [open, setOpen] = useState(true);
   const [activeTab, setActiveTab] = useState('group');
@@ -138,6 +139,7 @@ export function PrivateProgressChat({ snapshot, user, isMock }) {
           user,
           snapshot,
           taskId: selectedTaskId,
+          labId,
         }));
       }
       if (!reply) {
@@ -357,7 +359,11 @@ export function PrivateProgressChat({ snapshot, user, isMock }) {
                   {message.status === 'clarify' ? ' · Cần làm rõ' : ''}
                 </div>
                 <div className={message.role === 'user' ? 'ai-user-bubble' : 'ai-bot-bubble'}>
-                  <p>{message.answer}</p>
+                  {message.role === 'user' ? (
+                    <p>{message.answer}</p>
+                  ) : (
+                    <ChatMessageContent content={message.answer} />
+                  )}
                   <SourceReferences references={message.reference_ids} />
                   {message.suggested_next_action && <em>→ {message.suggested_next_action}</em>}
                 </div>

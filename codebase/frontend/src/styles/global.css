@@ -269,8 +269,22 @@
 .ai-chat-meta { margin-bottom: 3px; color: #64748b; font-size: 10px; }
 .ai-user-bubble, .ai-bot-bubble { padding: 8px 12px; border-radius: 12px; font-size: 12.5px; line-height: 1.48; }
 .ai-user-bubble { border-top-right-radius: 2px; color: #fff; background: #0284c7; box-shadow: 0 2px 6px rgba(2, 132, 199, .25); }
-.ai-bot-bubble { padding: 10px 12px; border: 1px solid #c7d2fe; border-top-left-radius: 2px; color: #1e1b4b; background: #f5f3ff; box-shadow: 0 2px 8px rgba(99, 102, 241, .08); }
-.ai-user-bubble p, .ai-bot-bubble p { margin: 0; white-space: pre-line; }
+.ai-bot-bubble { padding: 10px 14px; border: 1px solid #c7d2fe; border-top-left-radius: 2px; color: #1e1b4b; background: #f5f3ff; box-shadow: 0 2px 8px rgba(99, 102, 241, .08); }
+.ai-user-bubble p { margin: 0; white-space: pre-line; }
+.chat-markdown-body { font-size: 12.5px; line-height: 1.55; color: #1e1b4b; }
+.chat-markdown-body p { margin: 0 0 8px 0; line-height: 1.55; }
+.chat-markdown-body p:last-child { margin-bottom: 0; }
+.chat-ordered-list, .chat-unordered-list { margin: 6px 0 10px 0; padding-left: 18px; }
+.chat-ordered-list { list-style-type: decimal; }
+.chat-unordered-list { list-style-type: disc; }
+.chat-list-item { margin-bottom: 7px; line-height: 1.5; }
+.chat-list-item:last-child { margin-bottom: 0; }
+.chat-item-header { display: inline; font-weight: 600; color: #1e1b4b; }
+.chat-item-body { display: block; margin-top: 2px; color: #334155; font-size: 12px; line-height: 1.45; }
+.chat-markdown-body strong { font-weight: 700; color: #0f172a; }
+.chat-inline-code { padding: 1px 4px; border-radius: 4px; background: #e0e7ff; color: #4338ca; font-family: Consolas, monospace; font-size: 11px; }
+.chat-code-block { margin: 6px 0; padding: 8px 10px; border-radius: 6px; background: #1e1b4b; color: #e0e7ff; font-family: Consolas, monospace; font-size: 11px; overflow-x: auto; }
+.chat-link { color: #2563eb; text-decoration: underline; text-underline-offset: 2px; }
 .ai-bot-bubble em { margin-top: 7px; display: block; color: #5b5b86; font-size: 10.5px; font-style: normal; }
 .ai-chat-references { margin-top: 7px; display: flex; flex-wrap: wrap; gap: 4px; }
 .ai-chat-references span { max-width: 100%; padding: 3px 5px; overflow: hidden; border-radius: 4px; color: #3730a3; background: #e0e7ff; font-family: Consolas, monospace; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 import { apiClient } from '../../api/createApiClient';
 import { useAuth } from '../../auth/useAuth';
@@ -17,8 +18,10 @@ const statusLabel = {
   declined: 'Từ chối',
 };
 
-export function WorkspacePage() {
+export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId } = {}) {
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
   const loader = useCallback(() => apiClient.getWorkspaceSnapshot(), []);
   const { status, data, error, reload } = useAsyncResource(loader);
   const [workspaceData, setWorkspaceData] = useState(null);
@@ -34,6 +37,22 @@ export function WorkspacePage() {
   }, [data]);
 
   const snapshot = workspaceData ?? data;
+  const currentLabId = useMemo(() => {
+    return (
+      propCurrentLabId ||
+      propLabId ||
+      searchParams.get('labId') ||
+      searchParams.get('lab_id') ||
+      location.state?.labId ||
+      location.state?.currentLabId ||
+      snapshot?.labId ||
+      snapshot?.lab_id ||
+      snapshot?.group?.labId ||
+      snapshot?.group?.lab_id ||
+      'K4-L3B-DAY05-06-MINI-HACKATHON'
+    );
+  }, [propCurrentLabId, propLabId, searchParams, location.state, snapshot]);
+
   const directory = useMemo(
     () => (snapshot?.members ?? []).filter((member) => member.studentCode !== user.accountId),
     [snapshot?.members, user.accountId],
@@ -69,14 +88,14 @@ export function WorkspacePage() {
   const handleAnalyzeTask = async () => {
     setIsAnalyzing(true);
     setAnalyzeProgress(10);
-    setAnalyzeLog('1/4: Nạp 7 Checkpoint từ LAB JSON canonical & kiểm tra ref_id…');
+    setAnalyzeLog(`1/4: Nạp dữ liệu bài LAB [${currentLabId}] & kiểm tra ref_id…`);
 
     const steps = [
-      { at: 2000, pct: 28, msg: '2/4: Đang gọi mô hình gpt-5.6-luna qua LangGraph task_analysis…' },
-      { at: 8000, pct: 45, msg: '3/4: LLM đang bóc tách 23 items & xác định deliverables…' },
-      { at: 20000, pct: 65, msg: '3/4: LLM đang trích xuất completion_criteria & reference_ids…' },
-      { at: 40000, pct: 82, msg: '3/4: LLM đang tối ưu hóa dependency graph…' },
-      { at: 65000, pct: 92, msg: '4/4: Kiểm tra 100% requirement coverage & lưu canonical checklist…' },
+      { at: 2000, pct: 28, msg: '2/4: Đang gọi mô hình gpt-4o-mini qua LangGraph task_analysis…' },
+      { at: 6000, pct: 55, msg: '3/4: LLM đang bóc tách items & xác định deliverables…' },
+      { at: 12000, pct: 75, msg: '3/4: LLM đang trích xuất completion_criteria & reference_ids…' },
+      { at: 18000, pct: 88, msg: '3/4: LLM đang tối ưu hóa dependency graph…' },
+      { at: 24000, pct: 94, msg: '4/4: Kiểm tra 100% requirement coverage & lưu canonical checklist…' },
     ];
 
     const timerIds = steps.map((s) =>
@@ -89,10 +108,11 @@ export function WorkspacePage() {
     const clearAllTimers = () => timerIds.forEach(clearTimeout);
 
     try {
+      const isDefaultLab = currentLabId === 'K4-L3B-DAY05-06-MINI-HACKATHON';
       const res = await apiClient.analyzeLab({
-        lab_id: 'K4-L3B-DAY05-06-MINI-HACKATHON',
+        lab_id: currentLabId,
         version: 1,
-        lab_manifest: defaultLabManifest,
+        ...(isDefaultLab ? { lab_manifest: defaultLabManifest } : {}),
       });
       clearAllTimers();
 
@@ -135,7 +155,7 @@ export function WorkspacePage() {
           setWorkspaceData((current) => ({
             ...current,
             tasks: analyzedTasks,
-            checklistSource: `${draft?.lab_id ?? 'K4-L3B-DAY05-06'} · AI Task Analysis (gpt-5.6-luna)`,
+            checklistSource: `${draft?.lab_id ?? currentLabId} · AI Task Analysis (gpt-4o-mini)`,
           }));
           setIsAnalyzing(false);
         }, 400);
@@ -199,11 +219,11 @@ export function WorkspacePage() {
         depends_on: task.depends_on ?? [],
       }));
     } else {
-      payload.lab_id = 'K4-L3B-DAY05-06-MINI-HACKATHON';
+      payload.lab_id = currentLabId;
       payload.version = 1;
     }
     return apiClient.assignTasks(payload);
-  }, [snapshot]);
+  }, [snapshot, currentLabId]);
 
   if (status === 'loading') return <main className="page-shell"><LoadingState label="Đang tải LabSpace…" /></main>;
   if (status === 'error') return <main className="page-shell"><ErrorState message={error.message} onRetry={reload} /></main>;
@@ -220,16 +240,11 @@ export function WorkspacePage() {
       <main className="workspace-shell">
         <header className="workspace-header">
           <div>
-            <p className="breadcrumbs">Lab › K4–L3B–DAY05–06 › Nhóm {snapshot.group.name}</p>
+            <p className="breadcrumbs">Lab › {currentLabId} › Nhóm {snapshot.group.name}</p>
             <h1>LABSPACE · {snapshot.group.name.toUpperCase()}</h1>
             <p><span className="role-tag">VIEW {user.roleLabel.toUpperCase()}</span> Mini Hackathon AI</p>
           </div>
           <div className="workspace-actions">
-            {isLeader && (
-              <button ref={groupDialogTriggerRef} className="primary-button" type="button" onClick={() => setGroupDialogOpen(true)}>
-                ＋ Lập nhóm Lab
-              </button>
-            )}
             {isMember && (
               <MemberInviteFlow
                 currentUser={user}
@@ -384,7 +399,12 @@ export function WorkspacePage() {
         </div>
       </main>
 
-      <PrivateProgressChat snapshot={snapshot} user={user} isMock={snapshot.source === 'mock'} />
+      <PrivateProgressChat
+        snapshot={snapshot}
+        user={user}
+        labId={currentLabId}
+        isMock={snapshot.source === 'mock'}
+      />
 
       {isLeader && (
         <LeaderGroupDialog
