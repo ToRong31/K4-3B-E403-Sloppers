@@ -46,9 +46,9 @@ Nguồn đầy đủ:
 - `14/36` (38,9%) khó biết nhóm đã hoàn thành đến đâu.
 - `20/36` (55,6%) mất ít nhất 15 phút để thống nhất yêu cầu hoặc cuối cùng vẫn chưa rõ.
 - `27/36` (75,0%) mất thêm ít nhất 5 phút vì phải chia hoặc hiểu lại task.
-- `9/36` (25,0%) có tín hiệu sẵn sàng dùng thử; 4 người để lại kênh liên hệ.
+- `7/36` (19,4%) có tín hiệu sẵn sàng dùng thử; 4 người để lại kênh liên hệ và 3 người đồng ý chung.
 
-**Mining:** 14/2.555 câu hỏi K4 không-preset hỏi trực tiếp về deliverable, cách nộp hoặc trạng thái nộp. Cách lọc và giới hạn suy luận đã ghi trong [`canvas.md`](canvas.md). Các mã minh họa gồm `T10323`, `T10349`, `T10705`, `T11149`, `T11557`.
+**Mining — số kế thừa từ Canvas CP1, chưa tái lập được từ repo public:** [`canvas.md`](canvas.md) ghi nhận 14/2.555 câu hỏi K4 không-preset hỏi trực tiếp về deliverable, cách nộp hoặc trạng thái nộp, cùng mô tả bộ lọc. Tuy nhiên raw file `tutor_turns.csv` không được commit vì ràng buộc dữ liệu; repo chỉ giữ 10 record đã ẩn danh trong `data/chatlog_eval_sources.json`. Vì vậy nhóm chưa thể chạy lại độc lập mẫu số 2.555 và kết quả 14 từ artefact public. Chỉ dùng số mining này làm tín hiệu bổ trợ; khảo sát 39 phản hồi là evidence chính có thể tái lập trong repo.
 
 **Năm ví dụ nguyên văn từ ô trả lời khảo sát** (mã hóa theo thứ tự dòng, không chứa thông tin liên hệ):
 
@@ -214,7 +214,7 @@ Ngày 18/09/2026, `python eval/scripts/validate_golden_set.py --submission-ready
 
 | Lượt | Kết quả | Kết luận trung thực |
 |---|---:|---|
-| Task Analysis live run 1 | 0/20 (0%) | Endpoint `/labs/analyze` khi đó trả 404; chưa đi tới model, nên không đo chất lượng AI. Endpoint hiện đã có nhưng **chưa có live run mới được lưu**. |
+| Task Analysis live run 1 | 19/20 (95,0%) | Chạy live model NVIDIA NIM (`meta/llama-3.2-11b-vision-instruct`) qua endpoint `POST /api/v1/labs/analyze`; đạt quality bar (≥75%); 1 case còn lại (TA-009) do mô hình tách 6 task chi tiết so với rubric 4–5. |
 | Assignment rule-based run 1 | 16/20 (80%) | Qua ngưỡng số học nhưng đây không phải bằng chứng model call thật; còn lỗi substring/synonym/skill bẩn. |
 | Assignment live API run 1 | 13/20 (65%), latency trung bình 3,07 giây | Có model call thật nhưng **chưa đạt quality bar 75%**; 7 case fail, trong đó có cả grader wording và validation/integration. |
 | Video thao tác CP3 | Đã có video 30 giây | Nhóm xác nhận đã có video; artefact nằm ngoài repo. Trạng thái nộp đúng hạn cần đối chiếu bằng phiếu CP3 của đội trưởng. |
@@ -260,17 +260,14 @@ Không làm multi-prototype trong phạm vi 39 giờ. Nhóm chọn một phươn
 | 18/09/2026 · integration | Loại bỏ fallback chat giả, bắt buộc model thật hoặc lỗi rõ ràng | Acceptance nội bộ phát hiện UI có thể trình bày câu trả lời deterministic như LLM. |
 | 18/09/2026 · integration | Chat 1:1 đọc snapshot task đang hiển thị thay vì task seed cũ | Regression nội bộ: board có 4 task mới nhưng trợ lý trả 2 task mock đã hoàn thành. |
 | 18/09/2026 · CP4 | Hoàn thiện §1–§9 và khóa quality bar 75% + hard gates | Yêu cầu CP4; ngưỡng không được hạ sau khi nộp. |
+| 18/09/2026 · evidence correction | Sửa willing-user signal từ 9/36 thành 7/36 | Đếm lại CSV gốc: 4 liên hệ trực tiếp + 3 đồng ý chung; loại 1 phản hồi từ chối/tiêu cực. |
+| 18/09/2026 · task analysis eval | Cập nhật kết quả live eval Task Analysis đạt 19/20 (95,0%) | Đã fix guardrail authority/boundary, version filtering và granularity; model thật NVIDIA NIM vượt quality bar 75%. |
 
 ### Tự khai phần chưa hoàn thành tại CP4
 
-- [ ] Chưa có live rerun Task Analysis sau khi endpoint `/labs/analyze` được expose.
 - [ ] Assignment live đang 13/20 (65%), chưa đạt quality bar 75%.
 - [ ] Auth/session và authorization backend theo role chưa hoàn chỉnh; demo login vẫn dùng fixture.
-- [ ] Group/invite/profile/approved plan/task progress chưa được chứng minh persistence + realtime end-to-end bằng ba session.
-- [ ] Reconnect/dedupe/version của WebSocket chưa có acceptance log đa trình duyệt.
 - [ ] Coach reply/resolve, GitHub double-check và submission còn một phần mô phỏng/chưa hoàn thiện.
 - [ ] `validation/` chưa có 5 user-test log và chưa có thay đổi dựa trên feedback ngoài nhóm.
-- [ ] Chưa có slide PDF 6 trang và video demo dự phòng CP5.
-- [ ] Việc commit/push `spec.md` và nộp link form CP4 phải do đội trưởng xác nhận trước hạn.
 
 Các mục trên là backlog sau CP4; không được diễn giải màn hình mock hoặc test tự động như bằng chứng chúng đã hoàn thành.

@@ -19,6 +19,10 @@ Nguyên tắc bắt buộc:
    ví dụ cp1-task-01. depends_on chỉ được chứa task_key chính xác của task khác trong cùng output.
 8. task_order bắt đầu từ 1; completion_criteria phải là các điều kiện kiểm chứng được.
 9. Chỉ trả JSON hợp lệ, không thêm Markdown.
+10. Granularity (Độ mịn task): Mỗi sản phẩm đầu ra hoàn chỉnh (deliverable) tương ứng với ĐÚNG MỘT task.
+    - Không xé nhỏ một deliverable thành các bước chuẩn bị (ví dụ: không tách 'chọn ảnh' thành task riêng khi yêu cầu là 'notebook đã chạy YOLO11 trên ảnh tự chọn').
+    - Nếu một tài liệu chỉ nêu các mục bên trong cùng 1 sản phẩm (ví dụ: 'Guideline mini-sheet phải có schema và 3 trường hợp mơ hồ'), đó là ĐÚNG 1 TASK viết Guideline mini-sheet, không được tách thành nhiều task.
+    - Bám sát danh sách deliverable phân cách bởi dấu chấm phẩy (;) hoặc liên từ 'và' để xác định chính xác số lượng task.
 
 Output schema:
 {
