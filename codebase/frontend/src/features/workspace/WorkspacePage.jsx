@@ -8,7 +8,7 @@ import { useAsyncResource } from '../../hooks/useAsyncResource';
 import { canonicalTasksFixture, defaultLabManifest } from '../../api/mockData';
 import { AssignmentReviewDialog } from '../assignment/AssignmentReviewDialog';
 import { LeaderGroupDialog } from '../group/LeaderGroupDialog';
-import { MemberInviteFlow } from '../profile/MemberInviteFlow';
+import { MemberInviteFlow, MemberSkillProfileDialog } from '../profile/MemberInviteFlow';
 import { PrivateProgressChat } from '../progress/PrivateProgressChat';
 import { LabReferenceBadge } from '../labs/LabReferenceBadge';
 
@@ -175,6 +175,8 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
     }
   };
 
+  const [editingMember, setEditingMember] = useState(null);
+
   const updateCurrentMember = (updates) => {
     setWorkspaceData((current) => current ? {
       ...current,
@@ -186,8 +188,38 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
     updateCurrentMember({ status: invitationStatus, profileReady: false });
   };
 
-  const handleProfileSaved = (skills) => {
-    updateCurrentMember({ status: 'accepted', profileReady: true, skills });
+  const handleProfileSaved = (profileData) => {
+    updateCurrentMember({
+      status: 'accepted',
+      profileReady: true,
+      industry: profileData.industry,
+      skills: profileData.skills,
+      skillLevels: profileData.skillLevels,
+      skillsWithLevel: profileData.skillsWithLevel,
+    });
+  };
+
+  const handleSaveMemberSkills = (profileData) => {
+    if (!editingMember) return;
+    setWorkspaceData((current) => {
+      if (!current) return current;
+      return {
+        ...current,
+        members: current.members.map((m) =>
+          m.id === editingMember.id
+            ? {
+                ...m,
+                industry: profileData.industry,
+                skills: profileData.skills,
+                skillLevels: profileData.skillLevels,
+                skillsWithLevel: profileData.skillsWithLevel,
+                profileReady: true,
+                status: 'accepted',
+              }
+            : m
+        ),
+      };
+    });
   };
 
   const handlePlanApproved = (assignments) => {
@@ -265,10 +297,39 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
             <div className="card-heading"><h2>Thành viên</h2><span>{snapshot.members.filter((m) => m.status === 'accepted').length}/{snapshot.members.length} xác nhận</span></div>
             <ul className="member-list">
               {snapshot.members.map((member) => (
-                <li key={member.id}>
-                  <span className="member-avatar">{member.name[0]}</span>
-                  <div><b>{member.name}</b><small>{member.role}</small></div>
-                  <em className={member.status}>{statusLabel[member.status]}</em>
+                <li key={member.id} className="member-card-item">
+                  <div className="member-item-main">
+                    <span className="member-avatar">{member.name[0]}</span>
+                    <div>
+                      <b>{member.name}</b>
+                      <small>{member.role}</small>
+                    </div>
+                    <em className={member.status}>{statusLabel[member.status]}</em>
+                  </div>
+                  {member.skillsWithLevel && member.skillsWithLevel.length > 0 ? (
+                    <div className="member-skill-tags">
+                      {member.skillsWithLevel.map((item) => (
+                        <span key={item.skill} className="member-skill-badge" title={`${item.skill} · Mức độ ${item.level}/5`}>
+                          {item.skill} <b>{item.level}/5</b>
+                        </span>
+                      ))}
+                    </div>
+                  ) : member.skills && member.skills.length > 0 ? (
+                    <div className="member-skill-tags">
+                      {member.skills.map((skill) => (
+                        <span key={skill} className="member-skill-badge">
+                          {skill} <b>{member.skillLevels?.[skill] ?? 3}/5</b>
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                  <button
+                    type="button"
+                    className="member-edit-skills-btn"
+                    onClick={() => setEditingMember(member)}
+                  >
+                    ✎ Đổi kỹ năng & mức độ (1–5)
+                  </button>
                 </li>
               ))}
             </ul>
@@ -425,6 +486,16 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
           onApprove={handlePlanApproved}
           onGenerateDraft={generateAssignmentDraft}
           onClose={() => setAssignmentDialogOpen(false)}
+        />
+      )}
+
+      {editingMember && (
+        <MemberSkillProfileDialog
+          open={Boolean(editingMember)}
+          member={editingMember}
+          labTitle="K4–L3B–DAY05–06–MINI–HACKATHON"
+          onClose={() => setEditingMember(null)}
+          onSave={handleSaveMemberSkills}
         />
       )}
     </>
