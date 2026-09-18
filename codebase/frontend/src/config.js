@@ -1,4 +1,4 @@
-const dataSource = import.meta.env.VITE_DATA_SOURCE ?? 'mock';
+const dataSource = import.meta.env.VITE_DATA_SOURCE ?? 'http';
 
 export const config = Object.freeze({
   dataSource,
