@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 from src.api.deps import CurrentUser, get_assignment_graph, get_workspace_repository
 from src.infrastructure.database.models import ApprovedPlanRecord
 from src.infrastructure.database.repositories import WorkspaceRepository
+from src.infrastructure.json_store import get_json_store
 from src.services.assignment_workflow import AssignmentWorkflowService
 from src.services.realtime import realtime_hub
 from src.services.workspace import DomainError, WorkspaceService
@@ -315,3 +316,13 @@ async def update_current_group_task(
         return result
     except DomainError as error:
         raise_domain(error)
+
+
+@router.get("/groups/current/chat")
+def get_current_group_chat() -> list[dict[str, Any]]:
+    return get_json_store().get_group_chat_messages()
+
+
+@router.post("/groups/current/chat")
+def send_current_group_chat(payload: dict[str, Any]) -> dict[str, Any]:
+    return get_json_store().add_group_chat_message(payload)

@@ -42,4 +42,22 @@ describe('buildPrivateChatRequest', () => {
 
     expect(request.tasks).toEqual([]);
   });
+
+  it('includes attachment fields and default text when attachment is provided', () => {
+    const request = buildPrivateChatRequest({
+      question: '',
+      user: { accountId: 'student-1', shortName: 'Trọng' },
+      snapshot: { group: { id: 'group-current' }, tasks: [] },
+      attachment: {
+        name: 'design-mockup.png',
+        type: 'image/png',
+        dataUrl: 'data:image/png;base64,iVBORw0KGgo...',
+      },
+    });
+
+    expect(request.attachment_name).toBe('design-mockup.png');
+    expect(request.attachment_type).toBe('image/png');
+    expect(request.attachment_url).toBe('data:image/png;base64,iVBORw0KGgo...');
+    expect(request.message).toBe('[Đính kèm: design-mockup.png]');
+  });
 });

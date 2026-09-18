@@ -99,6 +99,9 @@ class ChatRequest(BaseModel):
     task_id: str | None = None
     tasks: list[dict[str, Any]] = Field(default_factory=list, max_length=100)
     documents: list[dict[str, Any]] | None = None
+    attachment_name: str | None = None
+    attachment_type: str | None = None
+    attachment_url: str | None = None
 
 
 class ChatResponse(BaseModel):
