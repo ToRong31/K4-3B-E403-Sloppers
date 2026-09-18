@@ -4,12 +4,6 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { apiClient } from '../../api/createApiClient';
 import { useAuth } from '../../auth/useAuth';
 import { ErrorState, LoadingState } from '../../components/PageState';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-
-import { apiClient } from '../../api/createApiClient';
-import { useAuth } from '../../auth/useAuth';
-import { ErrorState, LoadingState } from '../../components/PageState';
 import { useAsyncResource } from '../../hooks/useAsyncResource';
 import { canonicalTasksFixture, defaultLabManifest } from '../../api/mockData';
 import { AssignmentReviewDialog } from '../assignment/AssignmentReviewDialog';
