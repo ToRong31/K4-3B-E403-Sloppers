@@ -178,7 +178,13 @@ export function LessonPage() {
               </div>
               {isLeader ? (
                 <p className="lesson-labspace-hint">{createdGroup ? `✓ Nhóm ${createdGroup.code} đã được tạo. ` : ''}Dùng nút <b>“Lập nhóm Lab”</b> trên thanh bài học để mở thao tác ở bất kỳ checkpoint nào.</p>
-              ) : <button className="secondary-button" type="button" onClick={() => navigate('/workspace')}>Mở LabSpace</button>}
+              ) : workspaceSnapshot?.members?.some(
+                (member) => member.studentCode === user.accountId && member.status === 'accepted',
+              ) ? (
+                <button className="secondary-button" type="button" onClick={() => navigate('/workspace')}>Mở LabSpace</button>
+              ) : (
+                <button className="secondary-button" type="button" onClick={() => navigate('/workspace')}>Xem lời mời vào nhóm</button>
+              )}
             </aside>
           )}
           {LessonContent ? <LessonContent /> : <SubmissionPage />}

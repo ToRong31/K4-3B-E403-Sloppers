@@ -167,6 +167,11 @@ def test_leader_creates_group_and_invitations_atomically():
             if item["studentCode"] == "MEMBER-1"
         )
         assert member["status"] == "pending"
+        assert snapshot.json()["tasks"] == []
+        assert member_client.patch(
+            "/api/v1/groups/current/tasks/00000000-0000-0000-0000-000000000000",
+            json={"status": "done"},
+        ).status_code == 403
 
         group_id = created.json()["id"]
         updated = leader_client.patch(

@@ -59,19 +59,37 @@ class WorkspaceService:
         if actor.role != "leader" or group.leader_id != actor.id:
             raise ForbiddenError("Chỉ nhóm trưởng của nhóm mới được thực hiện thao tác này.")
 
-    def current_group(self, actor: UserRecord) -> GroupRecord:
+    def current_group(self, actor: UserRecord, *, accepted: bool = True) -> GroupRecord:
         group = self.repository.get_group_for_user(actor.id)
         if group is None:
             raise NotFoundError("Tài khoản chưa có nhóm LabSpace.")
+        self._require_group_member(group.id, actor, accepted=accepted)
         return group
 
     def snapshot(self, actor: UserRecord, group_id: UUID | None = None) -> dict:
         if actor.role == "coach":
             raise ForbiddenError("Coach dùng dashboard tổng hợp thay vì workspace cá nhân.")
-        group = self.repository.get_group(group_id) if group_id else self.current_group(actor)
+        group = self.repository.get_group(group_id) if group_id else self.current_group(actor, accepted=False)
         if group is None:
             raise NotFoundError("Không tìm thấy nhóm.")
-        self._require_group_member(group.id, actor, accepted=False)
+        member = self._require_group_member(group.id, actor, accepted=False)
+        if member.invitation_status != "accepted":
+            return {
+                "source": "postgres",
+                "version": group.version,
+                "labId": group.lab.slug,
+                "group": {
+                    "id": str(group.id),
+                    "name": group.name,
+                    "code": group.code,
+                    "labId": group.lab.slug,
+                },
+                "checklistSource": f"{group.lab.slug} · v{group.lab.checklist_version}",
+                "planStatus": "draft",
+                "planId": None,
+                "members": [self._member_payload(item) for item in group.members],
+                "tasks": [],
+            }
         plan = self.repository.active_plan(group.id)
         progress_by_task = {item.task_id: item for item in plan.task_progress} if plan else {}
         users_by_id = {member.user_id: member.user for member in group.members}

@@ -341,6 +341,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
   const isLeader = user.role === 'leader';
   const isMember = user.role === 'member';
   const currentMember = snapshot.members.find((member) => member.studentCode === user.accountId);
+  const isPendingMember = isMember && currentMember?.status !== 'accepted';
 
   return (
     <>
@@ -348,7 +349,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
         <header className="workspace-header">
           <div>
             <p className="breadcrumbs">Lab › {currentLabId} › Nhóm {snapshot.group.name}</p>
-            <h1>LABSPACE · {snapshot.group.name.toUpperCase()}</h1>
+            <h1>{isPendingMember ? 'LỜI MỜI LABSPACE' : `LABSPACE · ${snapshot.group.name.toUpperCase()}`}</h1>
             <p><span className="role-tag">VIEW {user.roleLabel.toUpperCase()}</span> Mini Hackathon AI</p>
           </div>
           <div className="workspace-actions">
@@ -363,11 +364,26 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
                 onProfileSaved={handleProfileSaved}
               />
             )}
-            <button className="secondary-button" type="button">Mã nhóm: <b>{snapshot.group.code}</b> ⧉</button>
+            {!isPendingMember && <button className="secondary-button" type="button">Mã nhóm: <b>{snapshot.group.code}</b> ⧉</button>}
             {isLeader && <button className="secondary-button" type="button" onClick={() => setGroupSettingsOpen(true)}>⚙ Quản lý nhóm</button>}
           </div>
         </header>
 
+        {isPendingMember ? (
+          <section className="card pending-workspace-gate" aria-live="polite">
+            <div className="pending-workspace-icon" aria-hidden="true">✉</div>
+            <h2>{currentMember?.status === 'declined' ? 'Bạn đã từ chối lời mời' : 'Bạn chưa thể vào LabSpace'}</h2>
+            <p>
+              {currentMember?.status === 'declined'
+                ? 'Nhóm trưởng có thể gửi một lời mời mới nếu bạn muốn tham gia.'
+                : 'Hãy mở Thông báo để xác nhận lời mời. Chỉ thành viên đã xác nhận mới xem được kế hoạch và tiến độ nhóm.'}
+            </p>
+            <div className="pending-workspace-actions">
+              <button className="secondary-button" type="button" onClick={() => navigate('/labs')}>Quay lại danh sách Lab</button>
+              {currentMember?.status === 'pending' && <span>Đang chờ bạn phản hồi lời mời</span>}
+            </div>
+          </section>
+        ) : (
         <div className="workspace-grid">
           <aside className="card team-panel">
             <div className="card-heading"><h2>Thành viên</h2><span>{snapshot.members.filter((m) => m.status === 'accepted').length}/{snapshot.members.length} xác nhận</span></div>
@@ -540,14 +556,15 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
             <p className="privacy-note">Coach chỉ thấy tiến độ nhóm và yêu cầu hỗ trợ được gửi.</p>
           </aside>
         </div>
+        )}
       </main>
 
-      <PrivateProgressChat
-        snapshot={snapshot}
-        user={user}
-        labId={currentLabId}
-        isMock={snapshot.source === 'mock'}
-      />
+      {!isPendingMember && <PrivateProgressChat
+          snapshot={snapshot}
+          user={user}
+          labId={currentLabId}
+          isMock={snapshot.source === 'mock'}
+        />}
 
       {isLeader && (
         <LeaderGroupDialog
