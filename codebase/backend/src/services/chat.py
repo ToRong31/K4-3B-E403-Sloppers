@@ -1,7 +1,14 @@
+import logging
 from typing import Any
 
 from src.infrastructure.json_store import get_json_store
 from src.models.schemas import ChatRequest, ChatResponse
+
+logger = logging.getLogger(__name__)
+
+
+class ChatModelInvocationError(RuntimeError):
+    """Raised when private chat cannot obtain a real model response."""
 
 
 def _load_default_tasks(group_id: str) -> list[dict[str, Any]]:
@@ -127,17 +134,25 @@ def _load_default_documents(lab_id: str) -> list[dict[str, Any]]:
 
 
 class ChatService:
-    def __init__(self, graph: Any) -> None:
+    def __init__(self, graph: Any, llm: Any = None) -> None:
         self.graph = graph
+        self.llm = llm
 
     def process_message(self, request: ChatRequest) -> ChatResponse:
         group_id = request.group_id or "Sloppers"
         user_id = request.user_id or "Trọng"
         lab_id = request.lab_id or "K4-L3B-DAY05-06-MINI-HACKATHON"
 
-        tasks = request.tasks if request.tasks is not None else _load_default_tasks(group_id)
-        documents = request.documents if request.documents is not None else _load_default_documents(lab_id)
-
+        tasks = (
+            request.tasks
+            if request.tasks is not None
+            else _load_default_tasks(group_id)
+        )
+        documents = (
+            request.documents
+            if request.documents is not None
+            else _load_default_documents(lab_id)
+        )
         state = {
             "user_id": user_id,
             "group_id": group_id,
@@ -148,56 +163,75 @@ class ChatService:
             "tasks": tasks,
             "documents": documents,
         }
-
         result = self.graph.invoke(state)
 
-        answer = result.get("answer", "")
-        status = result.get("status", "ready")
-        task_ids = result.get("task_ids", [])
-        reference_ids = result.get("reference_ids", [])
-        suggested_next_action = result.get("suggested_next_action")
-        data = result.get("data", {})
+        if self.llm is None:
+            raise ChatModelInvocationError("Trợ lý AI chưa được cấu hình.")
 
-        # If clarify on general questions, provide contextual lab knowledge
-        lower_q = request.message.lower()
-        if status == "clarify":
-            if any(k in lower_q for k in ("nộp gì", "cần nộp", "deliverable", "checklist", "danh sách")):
-                answer = (
-                    "**Danh sách 5 Deliverables chính thức của Mini Hackathon Day 5-6:**\n"
-                    "1. **CP1: Canvas 7 dòng** (Định vị bài toán, người dùng, giá trị cốt lõi)\n"
-                    "2. **CP2: Flow & Mockup sản phẩm** (Wireframe tương tác bấm được)\n"
-                    "3. **CP3: Golden Set & AI Rubric** (Tối thiểu 20 prompt test chuẩn + rubric)\n"
-                    "4. **CP4: Evidence Log** (Khảo sát ≥20 học viên + 5 quote trích dẫn nguyên văn)\n"
-                    "5. **CP5: Slide & Demo** (Thuyết trình nghiệm thu cuối ngày)\n\n"
-                    "Hạn chót hoàn thành và nộp repo là trước **17:30 ngày Day 6**!"
+        try:
+            from langchain_core.messages import HumanMessage, SystemMessage
+
+            my_tasks = [
+                task
+                for task in tasks
+                if (task.get("owner_id") or task.get("owner")) == user_id
+            ]
+            task_lines = []
+            for task in tasks:
+                owner = task.get("owner_id") or task.get("owner")
+                task_lines.append(
+                    f"- [{task.get('status', 'todo').upper()}] "
+                    f"{task.get('title')} (Phụ trách: {owner}, "
+                    f"Đầu ra: {task.get('deliverable', 'N/A')})"
                 )
-                status = "ready"
-                reference_ids = ["lab://K4-L3B-DAY05-06/v1/cp1/item-1", "lab://K4-L3B-DAY05-06/v1/cp3/item-1"]
-                suggested_next_action = "Kiểm tra tiến độ từng deliverable bằng cách hỏi 'Tiến độ nhóm thế nào?'."
-            elif any(k in lower_q for k in ("checkpoint 1", "cp1")):
-                answer = (
-                    "**Hướng dẫn Checkpoint 1 (Canvas 7 dòng):**\n"
-                    "- Hoàn thiện 7 dòng định vị sản phẩm theo mẫu quy định.\n"
-                    "- Nhóm trưởng (Trọng) kích hoạt **AI Task Planner** để phân công nhiệm vụ cho Trang, Dương, Dũng.\n"
-                    "- Xác nhận và công khai link repository GitHub của nhóm."
-                )
-                status = "ready"
-                reference_ids = ["lab://K4-L3B-DAY05-06/v1/cp1/item-1"]
-            elif any(k in lower_q for k in ("checkpoint 3", "cp3", "golden set")):
-                answer = (
-                    "**Tiêu chuẩn Checkpoint 3 (Golden Set & AI Rubric):**\n"
-                    "- Xây dựng bộ test tối thiểu **20 prompt test** (bao gồm câu hỏi dễ, khó và câu bẫy edge-case).\n"
-                    "- Tiêu chí rubric: Tính chính xác (≥85%), tuân thủ format, thời gian phản hồi.\n"
-                    "- File kết quả lưu tại `eval/datasets/golden_set_20_cases.jsonl`."
-                )
-                status = "ready"
-                reference_ids = ["lab://K4-L3B-DAY05-06/v1/cp3/item-1"]
+            tasks_summary = "\n".join(task_lines)
+            system_prompt = (
+                "Bạn là Trợ lý Lab AI 1:1 của VLearn LabSpace.\n"
+                "Bạn hỗ trợ học viên trong bài Mini Hackathon Day 5-6.\n\n"
+                "NGỮ CẢNH ĐƯỢC PHÉP:\n"
+                f"- Học viên: {user_id}\n"
+                f"- Nhóm: {group_id}\n"
+                f"- Số task của học viên: {len(my_tasks)}\n"
+                f"- Task của nhóm:\n{tasks_summary}\n\n"
+                "QUY TẮC:\n"
+                "1. Trả lời bằng tiếng Việt, súc tích và thực tế.\n"
+                "2. Chỉ dựa trên ngữ cảnh được cung cấp; không bịa dữ liệu.\n"
+                "3. Không tự đổi owner, trạng thái task hoặc checklist canonical.\n"
+                "4. Nếu thiếu dữ liệu, nói rõ cần bổ sung gì.\n"
+                "5. Không giải hộ toàn bộ bài; chỉ hướng dẫn cách thực hiện."
+            )
+            ai_reply = self.llm.invoke(
+                [
+                    SystemMessage(content=system_prompt),
+                    HumanMessage(content=request.message),
+                ]
+            )
+            llm_text = (
+                ai_reply.content if hasattr(ai_reply, "content") else str(ai_reply)
+            )
+            if isinstance(llm_text, list):
+                llm_text = "".join(str(part) for part in llm_text)
+            if not llm_text or not llm_text.strip():
+                raise ValueError("Model returned an empty response")
+        except Exception as exc:
+            logger.exception("Private chat model invocation failed")
+            raise ChatModelInvocationError(
+                "Không thể nhận phản hồi từ mô hình AI. Vui lòng thử lại."
+            ) from exc
+
+        data = dict(result.get("data", {}))
+        data["answer_source"] = "llm"
+        model_name = getattr(self.llm, "model_name", None) or getattr(
+            self.llm, "model", None
+        )
+        if model_name:
+            data["model"] = str(model_name)
 
         return ChatResponse(
-            status=status,
-            answer=answer,
-            task_ids=task_ids,
-            reference_ids=reference_ids,
-            suggested_next_action=suggested_next_action,
+            status="ready",
+            answer=llm_text.strip(),
+            task_ids=result.get("task_ids", []),
+            reference_ids=result.get("reference_ids", []),
+            suggested_next_action=result.get("suggested_next_action"),
             data=data,
         )

@@ -112,19 +112,22 @@ export function createMockApiClient() {
       });
     },
     sendChatMessage: async (payload) => {
+      let response;
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/chat', {
+        response = await fetch('http://127.0.0.1:8000/api/v1/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
-        if (response.ok) {
-          return await response.json();
-        }
       } catch (err) {
         console.warn('Backend chat API connection error, using local fallback:', err);
+        return null;
       }
-      return null;
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({}));
+        throw new Error(errorBody.detail ?? `Chat API failed (${response.status})`);
+      }
+      return response.json();
     },
     getGroupChatMessages: async () => {
       try {

@@ -1,5 +1,6 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import Any
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,7 +11,11 @@ from src.core.logging import configure_logging
 from src.infrastructure.database import Base, create_database_engine, create_session_factory
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def create_app(
+    settings: Settings | None = None,
+    *,
+    chat_model: Any | None = None,
+) -> FastAPI:
     settings = settings or get_settings()
     configure_logging(settings.app_log_level)
     engine = create_database_engine(settings)
@@ -30,6 +35,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.state.db_engine = engine
     app.state.db_session_factory = create_session_factory(engine)
+    app.state.settings = settings
+    app.state.chat_model = chat_model
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,

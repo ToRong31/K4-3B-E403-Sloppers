@@ -1,13 +1,18 @@
+import logging
 from functools import lru_cache
 from typing import Annotated, Any
 
-from fastapi import Depends, Request
+from fastapi import Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from src.agent.assignment.graph import build_assignment_graph
+from src.agent.progress.graph import build_progress_graph
 from src.infrastructure.database.repositories import AssignmentDraftRepository
 from src.infrastructure.llm.factory import build_chat_model
 from src.services.assignment_drafts import AssignmentDraftService
+from src.services.chat import ChatService
+
+logger = logging.getLogger(__name__)
 
 
 @lru_cache
@@ -17,9 +22,28 @@ def get_assignment_graph() -> Any:
 
 
 @lru_cache
-def get_chat_model() -> Any:
-    """Build only the provider selected by LLM_PROVIDER and reuse it per process."""
-    return build_chat_model()
+def get_progress_graph() -> Any:
+    return build_progress_graph()
+
+
+def get_chat_model(request: Request) -> Any:
+    """Build the selected model once per app using that app's settings."""
+
+    model = request.app.state.chat_model
+    if model is not None:
+        return model
+
+    try:
+        model = build_chat_model(request.app.state.settings)
+    except Exception as exc:
+        logger.exception("Private chat model initialization failed")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Trợ lý AI chưa sẵn sàng. Kiểm tra cấu hình LLM của backend.",
+        ) from exc
+
+    request.app.state.chat_model = model
+    return model
 
 
 def get_db_session(request: Request):
@@ -38,17 +62,8 @@ def get_assignment_draft_service(
     return AssignmentDraftService(graph, AssignmentDraftRepository(session))
 
 
-from src.agent.progress.graph import build_progress_graph
-from src.services.chat import ChatService
-
-
-@lru_cache
-def get_progress_graph() -> Any:
-    return build_progress_graph()
-
-
 def get_chat_service(
     graph: Annotated[Any, Depends(get_progress_graph)],
+    model: Annotated[Any, Depends(get_chat_model)],
 ) -> ChatService:
-    return ChatService(graph)
-
+    return ChatService(graph, llm=model)

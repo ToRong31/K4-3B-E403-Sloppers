@@ -10,7 +10,7 @@ async function request(baseUrl, path, options = {}) {
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
-    throw new Error(errorBody.message ?? `API request failed (${response.status})`);
+    throw new Error(errorBody.detail ?? errorBody.message ?? `API request failed (${response.status})`);
   }
 
   if (response.status === 204) return null;

@@ -1,4 +1,5 @@
 from fastapi.testclient import TestClient
+from langchain_core.messages import AIMessage
 from sqlalchemy import func, select
 
 from src.api.main import create_app
@@ -6,14 +7,35 @@ from src.core.config import Settings
 from src.infrastructure.database.models import AssignmentDraftRecord
 
 
-def make_client() -> TestClient:
+class FakeChatModel:
+    model_name = "fake-chat-model"
+
+    def invoke(self, messages):
+        question = messages[-1].content.casefold()
+        if "tôi cần làm gì" in question:
+            return AIMessage(content="Canvas 7 dòng là task hiện tại của bạn.")
+        if "tiến độ" in question:
+            return AIMessage(content="Nhóm đã xong 2/5 task.")
+        if "cần nộp" in question:
+            return AIMessage(content="CP1: Canvas 7 dòng và các deliverable tiếp theo.")
+        return AIMessage(content="Phản hồi từ mô hình kiểm thử.")
+
+
+class FailingChatModel:
+    model_name = "failing-chat-model"
+
+    def invoke(self, messages):
+        raise TimeoutError("provider timeout")
+
+
+def make_client(chat_model=None) -> TestClient:
     settings = Settings(
         _env_file=None,
         app_debug=True,
         database_url="sqlite+pysqlite:///:memory:",
         database_auto_create=True,
     )
-    return TestClient(create_app(settings))
+    return TestClient(create_app(settings, chat_model=chat_model or FakeChatModel()))
 
 
 def test_health_check() -> None:
@@ -90,6 +112,7 @@ def test_chat_endpoint_my_tasks() -> None:
     data = response.json()
     assert data["status"] == "ready"
     assert "Canvas 7 dòng" in data["answer"]
+    assert data["data"]["answer_source"] == "llm"
 
 
 def test_chat_endpoint_progress() -> None:
@@ -107,6 +130,7 @@ def test_chat_endpoint_progress() -> None:
     data = response.json()
     assert data["status"] == "ready"
     assert "Nhóm đã xong" in data["answer"]
+    assert data["data"]["answer_source"] == "llm"
 
 
 def test_chat_endpoint_deliverables() -> None:
@@ -124,3 +148,21 @@ def test_chat_endpoint_deliverables() -> None:
     data = response.json()
     assert data["status"] == "ready"
     assert "CP1: Canvas 7 dòng" in data["answer"]
+    assert data["data"]["answer_source"] == "llm"
+
+
+def test_chat_endpoint_reports_model_failure() -> None:
+    with make_client(FailingChatModel()) as client:
+        response = client.post(
+            "/api/v1/chat",
+            json={
+                "message": "Xin chào",
+                "user_id": "Trang",
+                "group_id": "Sloppers",
+            },
+        )
+
+    assert response.status_code == 502
+    assert response.json()["detail"] == (
+        "Không thể nhận phản hồi từ mô hình AI. Vui lòng thử lại."
+    )

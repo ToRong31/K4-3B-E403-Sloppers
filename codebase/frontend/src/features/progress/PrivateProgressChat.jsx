@@ -140,6 +140,7 @@ export function PrivateProgressChat({ snapshot, user, isMock }) {
         });
       }
       if (!reply) {
+        if (!isMock) throw new Error('Chat API không trả về phản hồi.');
         reply = createProgressChatDemoReply({
           question: submittedQuestion,
           taskId: selectedTaskId,
@@ -156,17 +157,15 @@ export function PrivateProgressChat({ snapshot, user, isMock }) {
       }]);
     } catch (err) {
       console.error('Chat API error:', err);
-      const fallbackReply = createProgressChatDemoReply({
-        question: submittedQuestion,
-        taskId: selectedTaskId,
-        tasks: snapshot.tasks,
-        user,
-      });
       setMessages((current) => [...current, {
         id: `assistant-${Date.now()}`,
         role: 'assistant',
-        ...fallbackReply,
-        isMock,
+        status: 'error',
+        answer: err instanceof Error
+          ? err.message
+          : 'Không thể kết nối Trợ lý AI. Vui lòng thử lại.',
+        reference_ids: [],
+        isMock: false,
       }]);
     } finally {
       setIsResponding(false);
