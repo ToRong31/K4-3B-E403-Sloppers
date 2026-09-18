@@ -48,7 +48,7 @@ Nguồn đầy đủ:
 - `27/36` (75,0%) mất thêm ít nhất 5 phút vì phải chia hoặc hiểu lại task.
 - `7/36` (19,4%) có tín hiệu sẵn sàng dùng thử; 4 người để lại kênh liên hệ và 3 người đồng ý chung.
 
-**Mining:** 14/2.555 câu hỏi K4 không-preset hỏi trực tiếp về deliverable, cách nộp hoặc trạng thái nộp. Cách lọc và giới hạn suy luận đã ghi trong [`canvas.md`](canvas.md). Các mã minh họa gồm `T10323`, `T10349`, `T10705`, `T11149`, `T11557`.
+**Mining — số kế thừa từ Canvas CP1, chưa tái lập được từ repo public:** [`canvas.md`](canvas.md) ghi nhận 14/2.555 câu hỏi K4 không-preset hỏi trực tiếp về deliverable, cách nộp hoặc trạng thái nộp, cùng mô tả bộ lọc. Tuy nhiên raw file `tutor_turns.csv` không được commit vì ràng buộc dữ liệu; repo chỉ giữ 10 record đã ẩn danh trong `data/chatlog_eval_sources.json`. Vì vậy nhóm chưa thể chạy lại độc lập mẫu số 2.555 và kết quả 14 từ artefact public. Chỉ dùng số mining này làm tín hiệu bổ trợ; khảo sát 39 phản hồi là evidence chính có thể tái lập trong repo.
 
 **Năm ví dụ nguyên văn từ ô trả lời khảo sát** (mã hóa theo thứ tự dòng, không chứa thông tin liên hệ):
 
