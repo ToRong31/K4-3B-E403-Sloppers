@@ -1,7 +1,6 @@
 import logging
 from typing import Any
 
-from src.infrastructure.json_store import get_json_store
 from src.models.schemas import ChatRequest, ChatResponse
 
 logger = logging.getLogger(__name__)
@@ -11,86 +10,16 @@ class ChatModelInvocationError(RuntimeError):
     """Raised when private chat cannot obtain a real model response."""
 
 
-def _load_default_tasks(group_id: str) -> list[dict[str, Any]]:
-    try:
-        tasks = get_json_store().get_workspace().get("tasks", [])
-        if tasks:
-            normalized = []
-            for t in tasks:
-                item = dict(t)
-                item["owner_id"] = t.get("owner_id") or t.get("owner")
-                item["group_id"] = t.get("group_id") or group_id
-                normalized.append(item)
-            return normalized
-    except Exception:
-        pass
-    return [
-        {
-            "id": "task-cp1",
-            "group_id": group_id,
-            "owner_id": "Trọng",
-            "checkpoint_order": 1,
-            "task_order": 1,
-            "title": "Canvas 7 dòng & Kế hoạch sản phẩm",
-            "status": "done",
-            "deliverable": "Canvas 7 dòng và spec sản phẩm VLearn LabSpace",
-            "completion_criteria": ["Đầy đủ 7 dòng", "Chỉ rõ job executor và willing users"],
-            "depends_on": [],
-            "reference_ids": ["lab://K4-L3B-DAY05-06/v1/cp1/item-1"],
-        },
-        {
-            "id": "task-cp2",
-            "group_id": group_id,
-            "owner_id": "Trang",
-            "checkpoint_order": 2,
-            "task_order": 1,
-            "title": "Thiết kế Flow & Mockup giao diện",
-            "status": "done",
-            "deliverable": "Mockup VLearn LabSpace & Discord sidebar",
-            "completion_criteria": ["Giao diện bấm được", "Role switcher và chat sidebar"],
-            "depends_on": ["task-cp1"],
-            "reference_ids": ["lab://K4-L3B-DAY05-06/v1/cp2/item-1"],
-        },
-        {
-            "id": "task-cp3",
-            "group_id": group_id,
-            "owner_id": "Dương",
-            "checkpoint_order": 3,
-            "task_order": 1,
-            "title": "Golden Set Benchmark & AI Rubric",
-            "status": "todo",
-            "deliverable": "eval/datasets/golden_set_20_cases.jsonl",
-            "completion_criteria": ["Tối thiểu 20 test case", "Đủ rubric chấm pass/fail"],
-            "depends_on": ["task-cp1"],
-            "reference_ids": ["lab://K4-L3B-DAY05-06/v1/cp3/item-1"],
-        },
-        {
-            "id": "task-cp4",
-            "group_id": group_id,
-            "owner_id": "Dũng",
-            "checkpoint_order": 4,
-            "task_order": 1,
-            "title": "Evidence Log & Docker Backend",
-            "status": "todo",
-            "deliverable": "evidence/evidence_log_20_users.csv",
-            "completion_criteria": ["Khảo sát tối thiểu 20 học viên", "Evidence quotes thực tế"],
-            "depends_on": ["task-cp2"],
-            "reference_ids": ["lab://K4-L3B-DAY05-06/v1/cp4/item-1"],
-        },
-        {
-            "id": "task-cp5",
-            "group_id": group_id,
-            "owner_id": "Trọng",
-            "checkpoint_order": 5,
-            "task_order": 1,
-            "title": "Slide thuyết trình & Demo cuối ngày",
-            "status": "todo",
-            "deliverable": "presentation/slides.pdf",
-            "completion_criteria": ["Demo thực tế 3 phút", "Slide trình bày trước hội đồng"],
-            "depends_on": ["task-cp1", "task-cp2", "task-cp3", "task-cp4"],
-            "reference_ids": ["lab://K4-L3B-DAY05-06/v1/cp5/item-1"],
-        },
-    ]
+def _normalize_tasks(
+    tasks: list[dict[str, Any]], group_id: str
+) -> list[dict[str, Any]]:
+    normalized = []
+    for source in tasks:
+        task = dict(source)
+        task["owner_id"] = task.get("owner_id") or task.get("owner") or ""
+        task["group_id"] = task.get("group_id") or group_id
+        normalized.append(task)
+    return normalized
 
 
 def _load_default_documents(lab_id: str) -> list[dict[str, Any]]:
@@ -158,11 +87,7 @@ class ChatService:
         user_id = request.user_id or "Trọng"
         lab_id = request.lab_id or "K4-L3B-DAY05-06-MINI-HACKATHON"
 
-        tasks = (
-            request.tasks
-            if request.tasks is not None
-            else _load_default_tasks(group_id)
-        )
+        tasks = _normalize_tasks(request.tasks, group_id)
         documents = (
             request.documents
             if request.documents is not None
@@ -192,14 +117,16 @@ class ChatService:
                 if (task.get("owner_id") or task.get("owner")) == user_id
             ]
             task_lines = []
-            for task in tasks:
-                owner = task.get("owner_id") or task.get("owner")
+            for task in my_tasks:
+                criteria = "; ".join(task.get("completion_criteria", [])) or "chưa có"
+                dependencies = ", ".join(task.get("depends_on", [])) or "không có"
                 task_lines.append(
-                    f"- [{task.get('status', 'todo').upper()}] "
-                    f"{task.get('title')} (Phụ trách: {owner}, "
-                    f"Đầu ra: {task.get('deliverable', 'N/A')})"
+                    f"- [{task.get('status', 'todo').upper()}] {task.get('title')}\n"
+                    f"  Đầu ra: {task.get('deliverable', 'N/A')}\n"
+                    f"  Tiêu chí hoàn thành: {criteria}\n"
+                    f"  Phụ thuộc: {dependencies}"
                 )
-            tasks_summary = "\n".join(task_lines)
+            tasks_summary = "\n".join(task_lines) or "- Chưa có task nào được giao."
             system_prompt = (
                 "Bạn là Trợ lý Lab AI 1:1 của VLearn LabSpace.\n"
                 "Bạn hỗ trợ học viên trong bài Mini Hackathon Day 5-6.\n\n"
@@ -207,7 +134,7 @@ class ChatService:
                 f"- Học viên: {user_id}\n"
                 f"- Nhóm: {group_id}\n"
                 f"- Số task của học viên: {len(my_tasks)}\n"
-                f"- Task của nhóm:\n{tasks_summary}\n\n"
+                f"- Task thực tế được giao cho học viên:\n{tasks_summary}\n\n"
                 "QUY TẮC:\n"
                 "1. Trả lời bằng tiếng Việt, súc tích và thực tế.\n"
                 "2. Chỉ dựa trên ngữ cảnh được cung cấp; không bịa dữ liệu.\n"

@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '../../api/createApiClient';
 import { useRealtime } from '../../realtime/useRealtime';
+import { buildPrivateChatRequest } from './privateChatRequest';
 import { createGroupChatDemoMessages, createProgressChatDemoReply } from './progressChatDemo';
 
 const quickQuestions = [
@@ -132,12 +133,12 @@ export function PrivateProgressChat({ snapshot, user, isMock }) {
     try {
       let reply = null;
       if (apiClient.sendChatMessage) {
-        reply = await apiClient.sendChatMessage({
-          message: submittedQuestion,
-          user_id: user.shortName || user.name || user.accountId,
-          group_id: snapshot.group?.id || 'Nhom-03',
-          task_id: selectedTaskId || undefined,
-        });
+        reply = await apiClient.sendChatMessage(buildPrivateChatRequest({
+          question: submittedQuestion,
+          user,
+          snapshot,
+          taskId: selectedTaskId,
+        }));
       }
       if (!reply) {
         if (!isMock) throw new Error('Chat API không trả về phản hồi.');
@@ -337,7 +338,7 @@ export function PrivateProgressChat({ snapshot, user, isMock }) {
             <button type="button" className="ai-clear-btn" onClick={resetConversation} title="Làm mới cuộc trò chuyện">↻ Mới</button>
           </div>
 
-          {isMock && <div className="chat-identity-banner"><strong>Dữ liệu demo</strong> · Chưa đồng bộ Progress Chat backend</div>}
+          {isMock && <div className="chat-identity-banner"><strong>Ngữ cảnh trực tiếp</strong> · Đọc task hiện tại từ LabSpace</div>}
 
           <div className="ai-quick-prompts-tray">
             <div className="quick-prompts-label">Gợi ý câu hỏi bài Lab 1-chạm:</div>

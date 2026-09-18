@@ -102,12 +102,14 @@ export function WorkspacePage() {
         if (draft?.checkpoints?.length) {
           analyzedTasks = draft.checkpoints.flatMap((cp) =>
             (cp.tasks ?? []).map((t, idx) => ({
+              ...t,
               id: t.id ?? t.task_key ?? `task-${idx + 1}`,
               category: cp.checkpoint_id ? cp.checkpoint_id.toUpperCase() : 'CANONICAL',
-              title: t.title,
-              deliverable: t.deliverable,
-              owner: 'Chưa phân công',
-              status: 'todo',
+              checkpoint_id: t.checkpoint_id ?? cp.checkpoint_id,
+              checkpoint_order: t.checkpoint_order ?? cp.checkpoint_order,
+              task_order: t.task_order ?? idx + 1,
+              owner: t.owner ?? t.owner_id ?? 'Chưa phân công',
+              status: t.status === 'proposed' ? 'todo' : (t.status ?? 'todo'),
             }))
           );
         } else if (draft?.tasks?.length) {

@@ -94,8 +94,10 @@ def classify_intent(state: ProgressState) -> ProgressState:
         term in question
         for term in (
             "tôi cần làm gì",
+            "tôi đang có task",
             "việc của tôi",
             "task của tôi",
+            "task gì",
             "tôi được giao",
             "phần của tôi",
         )

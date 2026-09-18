@@ -84,6 +84,12 @@ def test_get_my_tasks_is_private_and_uses_canonical_order() -> None:
     assert [task["id"] for task in tasks] == ["task-1", "task-2"]
 
 
+def test_natural_question_about_current_tasks_uses_my_tasks_intent() -> None:
+    result = progress_graph.invoke(_state("Hiện tại tôi đang có task gì vậy?"))
+
+    assert result["task_ids"] == ["task-1", "task-2"]
+
+
 def test_lab_search_does_not_cross_lab_or_checkpoint_boundaries() -> None:
     matches = search_lab_context(
         LAB_ID,

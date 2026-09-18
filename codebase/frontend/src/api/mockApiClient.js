@@ -86,13 +86,7 @@ export function createMockApiClient() {
         questions: [],
       }, 400);
     },
-    getWorkspaceSnapshot: async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/groups/current');
-        if (response.ok) return await response.json();
-      } catch {}
-      return wait(workspaceFixture);
-    },
+    getWorkspaceSnapshot: () => wait(workspaceFixture),
     getCoachSnapshot: async () => {
       try {
         const response = await fetch('http://127.0.0.1:8000/api/v1/coach/groups');

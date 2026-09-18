@@ -34,6 +34,18 @@ describe('mockApiClient', () => {
     );
   });
 
+  it('keeps the empty workspace fixture in mock mode', async () => {
+    const fetchSpy = vi.fn();
+    vi.stubGlobal('fetch', fetchSpy);
+    const client = createMockApiClient();
+
+    const snapshot = await client.getWorkspaceSnapshot();
+
+    expect(snapshot.tasks).toEqual([]);
+    expect(snapshot.planStatus).toBe('draft');
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
   it('creates a skill-based draft through the assignTasks client operation', async () => {
     const client = createMockApiClient();
     const draft = await client.assignTasks({
