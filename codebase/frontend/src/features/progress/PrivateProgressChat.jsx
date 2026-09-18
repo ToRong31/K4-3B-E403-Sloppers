@@ -111,6 +111,44 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
     };
   }, [snapshot?.group?.id, user?.accountId, user?.id]);
 
+  // Load AI chat history from backend on mount and whenever active group or user changes
+  useEffect(() => {
+    let ignore = false;
+    async function loadAiHistory() {
+      try {
+        if (apiClient.getAiChatHistory) {
+          const gid = snapshot?.group?.id || snapshot?.groupId || '';
+          const uid = user?.accountId || user?.shortName || user?.name || user?.id || '';
+          const tid = `${gid}:${uid}`;
+          const history = await apiClient.getAiChatHistory({ threadId: tid, userId: uid, groupId: gid });
+          if (!ignore && history && Array.isArray(history) && history.length > 0) {
+            const formatted = history.map((item) => ({
+              id: item.id,
+              role: item.role,
+              answer: item.answer,
+              status: item.status,
+              reference_ids: item.reference_ids || [],
+              task_ids: item.task_ids || [],
+              suggested_next_action: item.suggested_next_action,
+              image: item.image,
+              file: item.file,
+              isMock,
+            }));
+            setMessages(formatted);
+          } else if (!ignore && (!history || history.length === 0)) {
+            setMessages([initialAssistantMessage(isMock)]);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load AI chat history from backend:', err);
+      }
+    }
+    loadAiHistory();
+    return () => {
+      ignore = true;
+    };
+  }, [snapshot?.group?.id, snapshot?.groupId, user?.accountId, user?.shortName, user?.name, user?.id, isMock]);
+
   // Listen to realtime websocket broadcasts
   useEffect(() => {
     if (!realtimeClient?.subscribe) return;
@@ -246,13 +284,24 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
     }
   };
 
-  const resetConversation = () => {
+  const resetConversation = async () => {
     setMessages([initialAssistantMessage(isMock)]);
     setQuestion('');
     setAiAttachment(null);
     if (aiFileInputRef.current) aiFileInputRef.current.value = '';
     if (aiImageInputRef.current) aiImageInputRef.current.value = '';
     window.requestAnimationFrame(() => inputRef.current?.focus());
+
+    try {
+      if (apiClient.clearAiChatHistory) {
+        const gid = snapshot?.group?.id || snapshot?.groupId || '';
+        const uid = user?.accountId || user?.shortName || user?.name || user?.id || '';
+        const tid = `${gid}:${uid}`;
+        await apiClient.clearAiChatHistory({ threadId: tid, userId: uid, groupId: gid });
+      }
+    } catch (err) {
+      console.warn('Could not clear AI chat history on backend:', err);
+    }
   };
 
   const handleSendGroupMessage = async (e) => {

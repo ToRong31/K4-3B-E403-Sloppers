@@ -112,6 +112,24 @@ export function createHttpApiClient({ baseUrl }) {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
+    getAiChatHistory: ({ threadId, userId, groupId } = {}) => {
+      const params = new URLSearchParams();
+      if (threadId) params.set('thread_id', threadId);
+      if (userId) params.set('user_id', userId);
+      if (groupId) params.set('group_id', groupId);
+      const qs = params.toString();
+      return request(baseUrl, `/chat/history${qs ? `?${qs}` : ''}`);
+    },
+    clearAiChatHistory: ({ threadId, userId, groupId } = {}) => {
+      const params = new URLSearchParams();
+      if (threadId) params.set('thread_id', threadId);
+      if (userId) params.set('user_id', userId);
+      if (groupId) params.set('group_id', groupId);
+      const qs = params.toString();
+      return request(baseUrl, `/chat/history${qs ? `?${qs}` : ''}`, {
+        method: 'DELETE',
+      });
+    },
     getGroupChatMessages: (groupId) =>
       request(baseUrl, `/groups/current/chat${groupId ? `?groupId=${encodeURIComponent(groupId)}` : ''}`),
     sendGroupChatMessage: (payload) =>
@@ -126,4 +144,3 @@ export function createHttpApiClient({ baseUrl }) {
       }),
   };
 }
-

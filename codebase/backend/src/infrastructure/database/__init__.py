@@ -1,6 +1,7 @@
 from src.infrastructure.database.base import Base
 import src.infrastructure.database.models  # noqa: F401
 from src.infrastructure.database.models import (  # noqa: F401
+    AIChatMessageRecord,
     AssignmentDraftRecord,
     FileAttachmentRecord,
     GroupChatMessageRecord,
@@ -8,6 +9,7 @@ from src.infrastructure.database.models import (  # noqa: F401
 from src.infrastructure.database.session import create_database_engine, create_session_factory
 
 __all__ = [
+    "AIChatMessageRecord",
     "AssignmentDraftRecord",
     "Base",
     "FileAttachmentRecord",
@@ -15,3 +17,4 @@ __all__ = [
     "create_database_engine",
     "create_session_factory",
 ]
+

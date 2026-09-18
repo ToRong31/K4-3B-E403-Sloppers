@@ -2,10 +2,11 @@ from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import func, or_, select
+from sqlalchemy import delete, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 
 from src.infrastructure.database.models import (
+    AIChatMessageRecord,
     ApprovedPlanRecord,
     AssignmentDraftRecord,
     CanonicalTaskRecord,
@@ -406,4 +407,124 @@ class WorkspaceRepository:
                 }
             result.append(item)
         return result
+
+    def save_ai_chat_message(
+        self,
+        *,
+        thread_id: str,
+        role: str,
+        content: str,
+        user_id: str | None = None,
+        group_id: str | None = None,
+        lab_id: str | None = None,
+        status: str | None = None,
+        suggested_next_action: str | None = None,
+        task_ids: list[str] | None = None,
+        reference_ids: list[str] | None = None,
+        image_url: str | None = None,
+        file_name: str | None = None,
+        file_size: str | None = None,
+        file_type: str | None = None,
+        file_data: str | None = None,
+    ) -> AIChatMessageRecord:
+        record = AIChatMessageRecord(
+            thread_id=thread_id,
+            user_id=user_id,
+            group_id=group_id,
+            lab_id=lab_id,
+            role=role,
+            content=content,
+            status=status,
+            suggested_next_action=suggested_next_action,
+            task_ids=task_ids or [],
+            reference_ids=reference_ids or [],
+            image_url=image_url,
+            file_name=file_name,
+            file_size=file_size,
+            file_type=file_type,
+            file_data=file_data,
+        )
+        self.session.add(record)
+        self.session.commit()
+        self.session.refresh(record)
+        return record
+
+    def list_ai_chat_messages(
+        self,
+        *,
+        thread_id: str | None = None,
+        user_id: str | None = None,
+        group_id: str | None = None,
+        limit: int = 100,
+    ) -> list[dict[str, Any]]:
+        query = select(AIChatMessageRecord)
+        if thread_id:
+            query = query.where(AIChatMessageRecord.thread_id == thread_id)
+        elif user_id and group_id:
+            query = query.where(
+                or_(
+                    AIChatMessageRecord.thread_id == f"{group_id}:{user_id}",
+                    (AIChatMessageRecord.user_id == user_id) & (AIChatMessageRecord.group_id == group_id),
+                )
+            )
+        elif user_id:
+            query = query.where(AIChatMessageRecord.user_id == user_id)
+        elif group_id:
+            query = query.where(AIChatMessageRecord.group_id == group_id)
+
+        query = query.order_by(AIChatMessageRecord.created_at.asc()).limit(limit)
+        records = list(self.session.scalars(query))
+
+        result = []
+        for r in records:
+            item: dict[str, Any] = {
+                "id": str(r.id),
+                "role": r.role,
+                "answer": r.content,
+                "status": r.status,
+                "reference_ids": r.reference_ids or [],
+                "task_ids": r.task_ids or [],
+                "suggested_next_action": r.suggested_next_action,
+                "createdAt": r.created_at.isoformat() if r.created_at else None,
+            }
+            if r.image_url:
+                item["image"] = r.image_url
+            if r.file_name:
+                item["file"] = {
+                    "name": r.file_name,
+                    "size": r.file_size,
+                    "type": r.file_type,
+                    "dataUrl": r.file_data,
+                }
+            result.append(item)
+        return result
+
+    def clear_ai_chat_messages(
+        self,
+        *,
+        thread_id: str | None = None,
+        user_id: str | None = None,
+        group_id: str | None = None,
+    ) -> int:
+        query = delete(AIChatMessageRecord)
+        if thread_id:
+            query = query.where(AIChatMessageRecord.thread_id == thread_id)
+        elif user_id and group_id:
+            query = query.where(
+                or_(
+                    AIChatMessageRecord.thread_id == f"{group_id}:{user_id}",
+                    (AIChatMessageRecord.user_id == user_id) & (AIChatMessageRecord.group_id == group_id),
+                )
+            )
+        elif user_id:
+            query = query.where(AIChatMessageRecord.user_id == user_id)
+        elif group_id:
+            query = query.where(AIChatMessageRecord.group_id == group_id)
+        else:
+            return 0
+
+        res = self.session.execute(query)
+        self.session.commit()
+        return res.rowcount
+
 

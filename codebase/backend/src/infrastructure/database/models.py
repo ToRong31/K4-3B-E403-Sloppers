@@ -307,3 +307,24 @@ class GroupChatMessageRecord(Base, AuditMixin):
     file_type: Mapped[str | None] = mapped_column(String(100), nullable=True)
     file_data: Mapped[str | None] = mapped_column(Text, nullable=True)
 
+
+class AIChatMessageRecord(Base, AuditMixin):
+    __tablename__ = "ai_chat_messages"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    thread_id: Mapped[str] = mapped_column(String(160), index=True)
+    user_id: Mapped[str | None] = mapped_column(String(100), index=True, nullable=True)
+    group_id: Mapped[str | None] = mapped_column(String(100), index=True, nullable=True)
+    lab_id: Mapped[str | None] = mapped_column(String(160), index=True, nullable=True)
+    role: Mapped[str] = mapped_column(String(20), index=True)
+    content: Mapped[str] = mapped_column(Text, default="")
+    status: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    suggested_next_action: Mapped[str | None] = mapped_column(Text, nullable=True)
+    task_ids: Mapped[list[str]] = mapped_column(JSON, default=list)
+    reference_ids: Mapped[list[str]] = mapped_column(JSON, default=list)
+    image_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    file_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    file_size: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    file_type: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    file_data: Mapped[str | None] = mapped_column(Text, nullable=True)
+

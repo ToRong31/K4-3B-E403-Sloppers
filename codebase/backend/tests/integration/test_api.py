@@ -411,3 +411,46 @@ def test_file_upload_and_list_endpoints() -> None:
     files = list_res.json()
     assert any(f.get("filename") == "diagram.png" for f in files)
 
+
+def test_ai_chat_history_persistence_and_clear() -> None:
+    model = CapturingChatModel()
+    with make_client(model) as client:
+        # 1. Send chat message
+        post_res = client.post(
+            "/api/v1/chat",
+            json={
+                "message": "Làm thế nào để chạy kiểm thử backend?",
+                "user_id": "test-user-01",
+                "group_id": "group-test-01",
+                "thread_id": "group-test-01:test-user-01",
+                "attachment_name": "note.txt",
+                "attachment_type": "text/plain",
+                "attachment_url": "data:text/plain;base64,SGVsbG8=",
+                "tasks": [],
+            },
+        )
+        assert post_res.status_code == 200
+
+        # 2. Get history
+        hist_res = client.get("/api/v1/chat/history?thread_id=group-test-01:test-user-01")
+        assert hist_res.status_code == 200
+        history = hist_res.json()
+        assert len(history) >= 2
+        user_msg = next((m for m in history if m["role"] == "user"), None)
+        bot_msg = next((m for m in history if m["role"] == "assistant"), None)
+        assert user_msg is not None
+        assert "Làm thế nào để chạy kiểm thử backend?" in user_msg["answer"]
+        assert user_msg["file"]["name"] == "note.txt"
+        assert bot_msg is not None
+
+        # 3. Clear history
+        del_res = client.delete("/api/v1/chat/history?thread_id=group-test-01:test-user-01")
+        assert del_res.status_code == 200
+        assert del_res.json()["status"] == "cleared"
+
+        # 4. Check history after clear
+        empty_res = client.get("/api/v1/chat/history?thread_id=group-test-01:test-user-01")
+        assert empty_res.status_code == 200
+        assert len(empty_res.json()) == 0
+
+
