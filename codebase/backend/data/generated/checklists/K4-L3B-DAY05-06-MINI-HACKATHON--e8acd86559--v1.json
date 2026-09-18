@@ -1,5 +1,5 @@
 {
-  "checklist_id": "6bca2826-198b-4405-acf1-2fa80416c48b",
+  "checklist_id": "4d0b1026-66ab-45c9-92ad-9563eaae9451",
   "lab_id": "K4-L3B-DAY05-06-MINI-HACKATHON",
   "lab_version": 1,
   "status": "pending_review",
@@ -9,22 +9,22 @@
       "checkpoint_order": 1,
       "tasks": [
         {
-          "id": "161741e6-ccb3-47fd-8f2b-e4c7acb22273",
+          "id": "02dd635a-40bf-4b27-874a-04a31400035d",
           "task_key": "prepare-task-01",
           "checkpoint_id": "prepare",
           "task_order": 1,
-          "title": "Chốt nhân sự và track đề tài",
-          "description": "Chốt nhóm 3–4 người, phân cụm theo bàn, đọc brief chung, khảo sát 5 track trong tracks/README.md và thống nhất một track cùng một đề cụ thể.",
-          "deliverable": "Một quyết định thống nhất về thành viên, track và đề cụ thể của nhóm.",
+          "title": "Chốt đội ngũ, track và đề tài",
+          "description": "Xác nhận nhóm gồm 3–4 người, đọc challenge brief, khảo sát 5 track trong tracks/README.md và thống nhất một track cùng một đề cụ thể.",
+          "deliverable": "Quyết định nhóm, track và đề tài cụ thể được ghi nhận.",
           "completion_criteria": [
-            "Nhóm có 3–4 thành viên.",
-            "Track được chọn thuộc một trong Track A–E.",
-            "Đề cụ thể đã được thống nhất và ghi nhận để dùng trong Canvas/spec.",
-            "Nhóm đã tham chiếu 01-challenge-brief.md và tracks/README.md."
+            "Có danh sách nhóm gồm 3–4 người.",
+            "Đã chọn đúng một track trong Track A–E.",
+            "Đã mô tả một đề tài cụ thể thuộc track đã chọn.",
+            "Quy mô lát cắt được điều chỉnh phù hợp với số thành viên."
           ],
           "required_skills": [
-            "Đọc hiểu yêu cầu",
-            "Phân tích vấn đề",
+            "Đọc và phân tích brief",
+            "Khám phá bài toán",
             "Ra quyết định nhóm"
           ],
           "estimated_effort": "small",
@@ -39,15 +39,14 @@
           "task_key": "prepare-task-02",
           "checkpoint_id": "prepare",
           "task_order": 2,
-          "title": "Khởi tạo GitHub repository công khai",
-          "description": "Tạo repository GitHub mới hoàn toàn ở chế độ public, không fork repo đề bài, đặt tên đúng quy tắc và push commit đầu tiên trên nhánh main.",
-          "deliverable": "Một GitHub repository công khai của nhóm với commit đầu tiên trên nhánh main.",
+          "title": "Khởi tạo repository GitHub công khai",
+          "description": "Tạo repository GitHub mới ở chế độ công khai, không fork repo đề bài, đặt tên đúng quy tắc và commit/push nhánh main ban đầu.",
+          "deliverable": "Repository GitHub công khai của nhóm.",
           "completion_criteria": [
-            "Repository là repository mới và ở chế độ công khai.",
-            "Repository không phải bản fork của repository đề bài.",
-            "Tên repo tuân thủ mẫu K4-3B-<phòng>-<tên nhóm>.",
-            "Đã chạy git init, commit và push nhánh main.",
-            "Có đường dẫn repository có thể truy cập công khai."
+            "Repository là repository mới và ở chế độ public.",
+            "Repository không phải bản fork của repo đề bài.",
+            "Tên repository theo mẫu K4-3B-<phòng>-<tên nhóm>.",
+            "Nhánh main ban đầu đã được commit và push lên GitHub."
           ],
           "required_skills": [
             "Git",
@@ -64,18 +63,18 @@
           "status": "proposed"
         },
         {
-          "id": "fe1f2c51-920a-41ce-9c4b-3adfc9edab05",
+          "id": "65eeb8b7-21e0-4363-b5bf-035cc2bcaef8",
           "task_key": "prepare-task-03",
           "checkpoint_id": "prepare",
           "task_order": 3,
-          "title": "Thiết lập spec.md và README.md",
-          "description": "Sao chép template AI Spec thành spec.md, sao chép README đề bài và điền thành viên, phân công; đồng thời bảo đảm dữ liệu khóa học và dữ liệu trong data/ không bị commit.",
-          "deliverable": "Repository có spec.md và README.md đã thiết lập, không chứa dữ liệu khóa học bị cấm.",
+          "title": "Thiết lập spec.md và README.md ban đầu",
+          "description": "Đưa template AI Spec vào thư mục gốc với tên spec.md, sao chép README.md từ repo đề bài, điền thành viên và phân công, đồng thời loại trừ dữ liệu khóa học bị cấm khỏi repository.",
+          "deliverable": "spec.md và README.md ban đầu trong repository.",
           "completion_criteria": [
-            "03-ai-spec-template.md được sao chép nguyên vẹn và đổi tên thành spec.md ở thư mục gốc.",
-            "README.md từ repo đề bài đã được sao chép và điền đầy đủ thành viên cùng phân công.",
-            "Không commit data pack, chatlog VLearn, tin nhắn Discord đã ẩn danh, transcript, slide bài giảng thật hoặc dữ liệu trong data/.",
-            "Các tệp đã được commit vào repository."
+            "03-ai-spec-template.md được sao chép nguyên vẹn và đổi tên thành spec.md.",
+            "README.md có đầy đủ thành viên và phân công.",
+            "Không commit data pack, chatlog, tin nhắn Discord đã ẩn danh, transcript, slide bài giảng thật hoặc dữ liệu trong data/.",
+            "Hai tệp nằm trong repository đúng vị trí yêu cầu."
           ],
           "required_skills": [
             "Engineering",
@@ -103,14 +102,14 @@
           "task_key": "cp1-task-04",
           "checkpoint_id": "cp1",
           "task_order": 4,
-          "title": "Thu thập và ghi nhật ký bằng chứng số liệu",
-          "description": "Chọn Chuẩn A hoặc Chuẩn B, thu thập bằng chứng theo đúng tiêu chí tương ứng và ghi nhật ký câu hỏi, câu trả lời nguyên văn cùng phương pháp và số liệu vào tệp evidence của nhóm.",
-          "deliverable": "Tệp evidence có bằng chứng đạt Chuẩn A hoặc Chuẩn B và có thể kiểm tra lại.",
+          "title": "Thu thập và ghi nhật ký bằng chứng bài toán",
+          "description": "Thu thập bằng chứng theo Chuẩn A hoặc Chuẩn B, ghi nhật ký câu hỏi, câu trả lời nguyên văn, số liệu thống kê và phương pháp kiểm chứng vào tệp evidence của nhóm.",
+          "deliverable": "Tệp evidence của nhóm đạt Chuẩn A hoặc Chuẩn B.",
           "completion_criteria": [
-            "Nếu dùng Chuẩn A: có khảo sát tối thiểu 20 người, ít nhất 50% xác nhận và log đầy đủ.",
-            "Nếu dùng Chuẩn B: có số đếm rõ ràng, tối thiểu 5 ví dụ nguyên văn và phương pháp đếm kiểm lại được.",
-            "Tệp evidence ghi toàn bộ nhật ký câu hỏi, câu trả lời nguyên văn và các con số thống kê.",
-            "Nguồn dữ liệu được ghi rõ là mining data/ hoặc khảo sát trực tiếp theo chuẩn đã chọn."
+            "Nếu theo Chuẩn A: có khảo sát tối thiểu 20 người, ít nhất 50% xác nhận và log đầy đủ.",
+            "Nếu theo Chuẩn B: có số đếm rõ ràng, tối thiểu 5 ví dụ nguyên văn và phương pháp đếm kiểm lại được.",
+            "Tệp evidence ghi đầy đủ câu hỏi, câu trả lời nguyên văn và số liệu thống kê.",
+            "Nguồn dữ liệu hoặc phạm vi khảo sát được mô tả rõ."
           ],
           "required_skills": [
             "Engineering",
@@ -134,13 +133,12 @@
           "task_order": 5,
           "title": "Soạn Canvas 7 dòng trong spec.md",
           "description": "Hoàn thiện Canvas theo scaffold 7 dòng, đưa nội dung vào §1 và §2 của spec.md, sau đó commit và push lên nhánh chính.",
-          "deliverable": "spec.md chứa Canvas 7 dòng hoàn chỉnh và đã được push lên nhánh chính.",
+          "deliverable": "Canvas 7 dòng được cập nhật trong spec.md.",
           "completion_criteria": [
-            "Canvas có đủ 7 dòng: track và đề; job executor; pain một câu; bằng chứng đầu; lát cắt một câu; automation và willing users; phân công.",
-            "Dòng bằng chứng có số liệu, cách đếm và mã hội thoại/tin nhắn hoặc số người khảo sát.",
-            "Lát cắt có đúng 1 user, 1 việc, 1 quyết định AI và 1 kết quả.",
-            "Có tên cụ thể cho willing users ngoài nhóm và từng đầu việc.",
-            "Canvas được đưa vào đúng mục §1 và §2 của spec.md.",
+            "Canvas có đủ 7 dòng theo scaffold yêu cầu.",
+            "Track và đề cụ thể khớp với quyết định của nhóm.",
+            "Có job executor, pain một câu, bằng chứng đầu, lát cắt một câu, automation và willing users, cùng phân công có tên.",
+            "Canvas nằm trong §1 và §2 của spec.md.",
             "Thay đổi đã được commit và push lên nhánh chính."
           ],
           "required_skills": [
@@ -163,14 +161,14 @@
           "checkpoint_id": "cp1",
           "task_order": 6,
           "title": "Nộp form Checkpoint CP1",
-          "description": "Đội trưởng nộp form CP1 với thông tin nhóm, repository, Canvas 7 dòng và danh sách willing users ngoài nhóm.",
-          "deliverable": "Một phiếu nộp CP1 hoàn chỉnh do đội trưởng gửi.",
+          "description": "Đội trưởng nộp form CP1 với thông tin cá nhân, link repository công khai, Canvas 7 dòng và danh sách willing users.",
+          "deliverable": "Phiếu nộp CP1 hoàn tất.",
           "completion_criteria": [
             "Form có họ tên và mã học viên của đội trưởng.",
-            "Form có link repository công khai.",
-            "Form có nội dung Canvas 7 dòng.",
+            "Form chứa link repository công khai.",
+            "Form chứa đầy đủ Canvas 7 dòng.",
             "Có tên cụ thể của ít nhất 2 willing users ngoài nhóm.",
-            "Phiếu được nộp trước 19:30 ngày 17/9 theo yêu cầu nguồn."
+            "Form được nộp trước 19:30 ngày 17/9."
           ],
           "required_skills": [
             "Evaluation",
@@ -198,15 +196,14 @@
           "checkpoint_id": "cp2",
           "task_order": 7,
           "title": "Dựng prototype tương tác và luồng trải nghiệm",
-          "description": "Dựng bản mẫu tương tác bằng Figma, Canva, HTML/CSS/JS hoặc video; thể hiện luồng nhập liệu, quyết định AI, ngoại lệ, bốn đường đi trải nghiệm và tối thiểu 4 nguyên tắc HAX/PAIR.",
-          "deliverable": "Bản mẫu tương tác hoặc video/sơ đồ luồng có thể kiểm chứng toàn bộ hành trình người dùng.",
+          "description": "Dựng bản mẫu tương tác bằng Figma, Canva, HTML/CSS/JS hoặc video; thể hiện luồng nhập liệu, quyết định AI, ngoại lệ, mức automation, bốn đường đi trải nghiệm và tối thiểu 4 nguyên tắc HAX/PAIR.",
+          "deliverable": "Bản mẫu tương tác và luồng hành trình người dùng có thể kiểm chứng.",
           "completion_criteria": [
-            "Có hành trình từ đầu vào đến đầu ra cuối cùng.",
-            "Sơ đồ hoặc prototype thể hiện các bước nhập liệu, điểm gọi quyết định AI và nhánh ngoại lệ.",
-            "Có đủ happy path, low-confidence, failure/no-grounding và correction.",
-            "Mức automation được chọn và giải thích theo cost-of-error.",
-            "Có tối thiểu 4 nguyên tắc HAX/PAIR và vị trí áp dụng cụ thể trong prototype.",
-            "Luồng có thể được người xem kiểm chứng bằng prototype, sơ đồ hoặc video."
+            "Có một hình thức prototype được chọn và truy cập hoặc xem được.",
+            "Luồng thể hiện nhập liệu, điểm gọi quyết định AI và nhánh ngoại lệ.",
+            "Có happy path, low-confidence, failure/no-grounding và correction.",
+            "Mức automation được giải thích theo cost-of-error.",
+            "Có tối thiểu 4 nguyên tắc HAX/PAIR và vị trí áp dụng cụ thể."
           ],
           "required_skills": [
             "Evaluation",
@@ -215,7 +212,7 @@
           ],
           "estimated_effort": "large",
           "depends_on": [
-            "cp1-task-03"
+            "cp1-task-02"
           ],
           "reference_ids": [
             "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp2/prototype"
@@ -227,14 +224,15 @@
           "task_key": "cp2-task-08",
           "checkpoint_id": "cp2",
           "task_order": 8,
-          "title": "Cập nhật spec.md §4, §6 và codebase",
-          "description": "Ghi thiết kế prototype, mức chạy giả lập/chạy thật và bảng HAX/PAIR vào spec.md; lưu mã nguồn hoặc ảnh sơ đồ vào codebase/, rồi commit và push.",
-          "deliverable": "spec.md được cập nhật ở §4 và §6 cùng thư mục codebase/ chứa tài sản prototype.",
+          "title": "Cập nhật spec.md và lưu codebase prototype",
+          "description": "Ghi thiết kế prototype vào §4 và §6 của spec.md, mô tả phần giả lập/chạy thật, lập bảng HAX/PAIR và lưu mã nguồn hoặc ảnh sơ đồ vào codebase/.",
+          "deliverable": "spec.md được cập nhật và thư mục codebase/ chứa artefact prototype.",
           "completion_criteria": [
-            "§4 và §6 của spec.md mô tả mức prototype và phần chạy giả lập/chạy thật.",
-            "spec.md có bảng bốn nguyên tắc HAX/PAIR.",
-            "codebase/ chứa mã nguồn giao diện hoặc ảnh chụp sơ đồ luồng.",
-            "Các thay đổi đã được commit và push lên origin main."
+            "§4 và §6 của spec.md mô tả đúng prototype.",
+            "Có phân biệt phần chạy giả lập và phần chạy thật.",
+            "Có bảng đối chiếu các nguyên tắc HAX/PAIR.",
+            "codebase/ chứa mã nguồn giao diện hoặc ảnh sơ đồ luồng.",
+            "Thay đổi đã được commit và push lên origin main."
           ],
           "required_skills": [
             "Evaluation",
@@ -256,17 +254,16 @@
           "checkpoint_id": "cp2",
           "task_order": 9,
           "title": "Nộp form Checkpoint CP2",
-          "description": "Đội trưởng nộp liên kết kiểm chứng bản mẫu qua form CP2.",
-          "deliverable": "Một phiếu nộp CP2 có liên kết prototype hoặc tài sản kiểm chứng tương ứng.",
+          "description": "Nộp liên kết kiểm chứng bản mẫu qua form CP2.",
+          "deliverable": "Phiếu nộp CP2 hoàn tất.",
           "completion_criteria": [
-            "Form chứa liên kết có thể kiểm chứng bản mẫu.",
-            "Bản mẫu chứng minh được luồng nghiệp vụ và cách xử lý thao tác người dùng.",
-            "Phiếu được nộp trước 21:00 ngày 17/9 theo yêu cầu nguồn.",
-            "Không tuyên bố mô hình AI chạy thật là điều kiện của CP2."
+            "Form chứa liên kết truy cập hoặc xem bản mẫu.",
+            "Liên kết cho phép kiểm chứng luồng nghiệp vụ và thao tác giao diện.",
+            "Form được nộp trước 21:00 ngày 17/9."
           ],
           "required_skills": [
-            "Điền biểu mẫu",
-            "Kiểm tra quyền truy cập liên kết"
+            "Quản lý submission",
+            "Kiểm tra liên kết"
           ],
           "estimated_effort": "small",
           "depends_on": [
@@ -289,14 +286,14 @@
           "checkpoint_id": "cp3",
           "task_order": 10,
           "title": "Tích hợp module AI thật và trace log",
-          "description": "Lập trình module quyết định trung tâm trong codebase/, gọi API mô hình AI thật tại mắt xích quyết định và ghi trace log thời gian thực cho prompt đầu vào cùng phản hồi thô.",
-          "deliverable": "Prototype có module quyết định trung tâm gọi AI thật và trace log quan sát được.",
+          "description": "Lập trình module quyết định trung tâm trong codebase/, gọi API mô hình AI thật tại mắt xích quyết định và ghi vết prompt đầu vào cùng phản hồi thô theo thời gian thực.",
+          "deliverable": "Module AI thật trong codebase/ kèm cơ chế trace log.",
           "completion_criteria": [
-            "Module quyết định trung tâm nằm trong codebase/.",
             "Mắt xích quyết định trung tâm gọi API mô hình AI thật.",
             "Kết quả không bị gán cứng.",
-            "Trace log ghi được prompt đầu vào và phản hồi thô theo thời gian thực.",
-            "Có thể thực hiện một lần chạy để quan sát luồng gọi AI và log."
+            "Trace log ghi được prompt đầu vào.",
+            "Trace log ghi được phản hồi thô của mô hình theo thời gian thực.",
+            "Module nằm trong codebase/ và có thể chạy kiểm chứng."
           ],
           "required_skills": [
             "Evaluation",
@@ -305,7 +302,7 @@
           ],
           "estimated_effort": "large",
           "depends_on": [
-            "cp2-task-03"
+            "cp2-task-02"
           ],
           "reference_ids": [
             "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp3/live-ai"
@@ -318,20 +315,19 @@
           "checkpoint_id": "cp3",
           "task_order": 11,
           "title": "Xây dựng golden set 20 case",
-          "description": "Tạo tệp .json hoặc .csv trong eval/ gồm tối thiểu 20 case theo taxonomy 4 lớp chỗ khó; tối thiểu 10 case lấy hoặc phát triển từ chatlog thật và có phân loại lỗi từ các lần chạy thử.",
-          "deliverable": "Tệp golden set trong eval/ với tối thiểu 20 case được phân loại.",
+          "description": "Tạo tệp .json hoặc .csv trong eval/ gồm tối thiểu 20 case, phân loại theo 4 lớp chỗ khó; trước đó chạy thử 10–20 input, đọc output và ghi nhận các nhóm lỗi.",
+          "deliverable": "Golden set trong eval/.",
           "completion_criteria": [
-            "Tệp nằm trong eval/ và có định dạng .json hoặc .csv.",
-            "Có tối thiểu 20 case.",
-            "Case bao phủ đủ 4 lớp: nguồn sự thật; mơ hồ/thiếu thông tin; ngoài phạm vi/thẩm quyền; đặc thù domain.",
+            "Tệp có tối thiểu 20 case.",
+            "Case được phân loại đủ 4 lớp: nguồn sự thật, mơ hồ/thiếu thông tin, ngoài phạm vi/thẩm quyền và đặc thù domain.",
             "Ít nhất 10 case lấy hoặc phát triển từ chatlog thật trong data/.",
-            "Trước khi viết case, đã chạy thử 10–20 input qua prototype và đọc từng output.",
-            "Các output thử được ghi theo ba mức dùng được, sửa được, không chấp nhận được; nhóm lỗi được đặt tên và đối chiếu taxonomy."
+            "Có ghi nhận thô các mức dùng được, sửa được và không chấp nhận được từ lần chạy thử.",
+            "Các nhóm lỗi được đặt tên và đối chiếu với 4 lớp chỗ khó."
           ],
           "required_skills": [
-            "Thiết kế dữ liệu kiểm thử",
+            "Thiết kế bộ kiểm thử",
             "Phân loại lỗi",
-            "Đánh giá hệ thống AI"
+            "Xử lý dữ liệu"
           ],
           "estimated_effort": "large",
           "depends_on": [
@@ -348,19 +344,18 @@
           "checkpoint_id": "cp3",
           "task_order": 12,
           "title": "Thực thi kiểm thử đợt 1 và lập bảng số đo",
-          "description": "Chạy golden set hoặc lượt kiểm thử đầu, lưu kết quả trong eval/ và lập thống kê số case đạt, thất bại, tỷ lệ phần trăm cùng phân tích nguyên nhân.",
-          "deliverable": "Tệp kết quả đánh giá đợt 1 trong eval/ có bảng số đo và phân tích nguyên nhân.",
+          "description": "Chạy golden set hoặc lượt kiểm thử đầu, lưu kết quả trong eval/, thống kê case đạt/thất bại, tỷ lệ phần trăm và phân tích nguyên nhân.",
+          "deliverable": "Tệp kết quả và bảng số đo kiểm thử đợt 1 trong eval/.",
           "completion_criteria": [
-            "Kết quả thực thi lượt đầu được lưu trong eval/.",
-            "Có số case đạt và số case thất bại.",
+            "Có log hoặc tệp kết quả thực thi lượt đầu.",
+            "Bảng ghi số case đạt và thất bại.",
             "Có tỷ lệ phần trăm được tính từ số liệu thực tế.",
-            "Có phân tích nguyên nhân cho các lỗi hoặc case thất bại.",
-            "Số liệu có log hoặc dữ liệu chạy kèm để kiểm chứng.",
-            "Báo cáo phản ánh trung thực kết quả, không tuyên bố độ chính xác không có bằng chứng."
+            "Có phân tích nguyên nhân thất bại.",
+            "Số đo có thể đối chiếu với log, không chỉ là tuyên bố không có bằng chứng."
           ],
           "required_skills": [
-            "Chạy đánh giá",
-            "Phân tích thống kê",
+            "Đánh giá mô hình",
+            "Phân tích định lượng",
             "Phân tích nguyên nhân"
           ],
           "estimated_effort": "medium",
@@ -378,13 +373,14 @@
           "checkpoint_id": "cp3",
           "task_order": 13,
           "title": "Quay video thao tác và nộp form CP3",
-          "description": "Quay video màn hình 30 giây thể hiện nhập dữ liệu, gửi yêu cầu và nhận phản hồi AI thật; đẩy mã nguồn, dữ liệu kiểm thử và kết quả đánh giá lên repository rồi nộp form CP3.",
-          "deliverable": "Video thao tác 30 giây, repository đã cập nhật và phiếu nộp CP3.",
+          "description": "Quay video màn hình 30 giây cho thấy nhập dữ liệu, gửi yêu cầu và nhận kết quả AI thật; đẩy mã nguồn, dữ liệu kiểm thử và kết quả đánh giá lên repository; nộp form CP3.",
+          "deliverable": "Video thao tác 30 giây và phiếu nộp CP3.",
           "completion_criteria": [
-            "Video dài 30 giây và thể hiện thao tác trực tiếp từ nhập dữ liệu đến kết quả AI thật.",
+            "Video dài 30 giây và thể hiện thao tác trực tiếp.",
+            "Video cho thấy mô hình AI trả kết quả thật theo thời gian thực.",
             "Mã nguồn, dữ liệu kiểm thử và kết quả đánh giá đã được đẩy lên repository.",
-            "Form CP3 có video thao tác và số đo kiểm thử lượt đầu.",
-            "Phiếu được nộp trước 16:00 ngày 18/9 theo yêu cầu nguồn."
+            "Form CP3 chứa video và số đo kiểm thử lượt đầu.",
+            "Form được nộp trước 16:00 ngày 18/9."
           ],
           "required_skills": [
             "Engineering",
@@ -412,27 +408,31 @@
           "task_key": "cp4-task-14",
           "checkpoint_id": "cp4",
           "task_order": 14,
-          "title": "Hoàn thiện AI Spec §1–§9",
-          "description": "Rà soát và hoàn thiện toàn bộ spec.md theo template, bao gồm evidence, phân tích sản phẩm tương tự, lát cắt, non-goals, HAX/PAIR, taxonomy, journey, quality dimensions, phân công, willing users, validation và changelog.",
-          "deliverable": "spec.md hoàn chỉnh theo cấu trúc §1–§9.",
+          "title": "Hoàn thiện AI Spec và khóa Quality Bar",
+          "description": "Rà soát spec.md theo §1–§9, bổ sung toàn bộ nội dung yêu cầu, ghi công thức quality bar tại §7, nêu rõ phần chưa xử lý và khóa quality bar sau 21:00 ngày 18/9.",
+          "deliverable": "spec.md hoàn chỉnh §1–§9 với quality bar đã khóa.",
           "completion_criteria": [
-            "§1 và §2 có job executor, workflow, core JTBD, problem statement không chứa chữ AI, evidence chuẩn A/B, ít nhất 5 quote nguyên văn và bảng impact.",
-            "§3 và §4 có phân tích ít nhất 2 sản phẩm tương tự, lát cắt một câu, ít nhất 3 non-goals, mức automation và bảng ít nhất 4 nguyên tắc HAX/PAIR.",
-            "§5 và §6 có 4 lớp chỗ khó với tối thiểu 8 kịch bản và đủ 4 đường đi trải nghiệm.",
-            "§7 có chiều chất lượng với định nghĩa kiểm chứng được, liên kết golden set, công thức quality bar và bảng kết quả các lượt chạy.",
-            "§8 và §9 có phân công theo tên, willing users, kế hoạch validation và changelog."
+            "§1–§9 được điền theo template.",
+            "§1–§2 có job executor, workflow, core JTBD, problem statement không chứa chữ AI, evidence chuẩn A/B, ít nhất 5 quote và bảng impact.",
+            "§3–§4 có ít nhất 2 sản phẩm tương tự, lát cắt một câu, ít nhất 3 non-goals, mức automation và tối thiểu 4 nguyên tắc HAX/PAIR.",
+            "§5–§6 có 4 lớp chỗ khó với tối thiểu 8 kịch bản và 4 đường đi trải nghiệm.",
+            "§7 liên kết golden set, có định nghĩa quality dimensions, công thức quality bar và kết quả các lượt chạy.",
+            "§8–§9 có phân công theo tên, willing users, kế hoạch validation và changelog.",
+            "Quality bar có dạng đạt khi ≥ ___% qua bộ và điều kiện cứng, đồng thời nêu chức năng hoặc case chưa xử lý.",
+            "Sau thời điểm khóa, công thức quality bar không bị chỉnh sửa."
           ],
           "required_skills": [
-            "Viết AI specification",
-            "Tổng hợp bằng chứng",
-            "Tài liệu hóa sản phẩm"
+            "Viết đặc tả sản phẩm AI",
+            "Đánh giá chất lượng",
+            "Tài liệu hóa"
           ],
           "estimated_effort": "large",
           "depends_on": [
-            "cp3-task-04"
+            "cp3-task-03"
           ],
           "reference_ids": [
-            "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp4/spec-completion"
+            "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp4/spec-completion",
+            "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp4/quality-bar-freeze"
           ],
           "status": "proposed"
         },
@@ -470,22 +470,22 @@
           "checkpoint_id": "cp4",
           "task_order": 16,
           "title": "Commit spec.md và nộp form CP4",
-          "description": "Commit và push phiên bản spec.md đã chốt, sau đó nộp đường dẫn trực tiếp tới spec.md qua form CP4.",
-          "deliverable": "Phiên bản spec.md đã push và phiếu nộp CP4.",
+          "description": "Commit và push phiên bản spec.md đã chốt, sau đó nộp đường dẫn trực tiếp tới tệp qua form CP4.",
+          "deliverable": "Phiếu nộp CP4 kèm link spec.md đã chốt.",
           "completion_criteria": [
             "spec.md đã được commit và push lên GitHub.",
-            "Đường dẫn trực tiếp tới spec.md có thể truy cập.",
-            "Form CP4 chứa đúng đường dẫn spec.md.",
-            "Phiếu được nộp trước 21:00 ngày 18/9 theo yêu cầu nguồn."
+            "Form chứa đường dẫn trực tiếp tới spec.md.",
+            "Phiên bản được nộp là phiên bản đã khóa quality bar.",
+            "Form được nộp trước 21:00 ngày 18/9."
           ],
           "required_skills": [
             "Git",
-            "Kiểm tra liên kết",
-            "Nộp biểu mẫu"
+            "Quản lý submission",
+            "Kiểm tra phiên bản"
           ],
           "estimated_effort": "small",
           "depends_on": [
-            "cp4-task-02"
+            "cp4-task-01"
           ],
           "reference_ids": [
             "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp4/submission"
@@ -502,17 +502,17 @@
           "id": "b2542611-85df-441f-914b-cb4069cf27bd",
           "task_key": "cp5-task-17",
           "checkpoint_id": "cp5",
-          "task_order": 17,
-          "title": "Thực hiện validation với người dùng ngoài nhóm",
-          "description": "Mời ít nhất 2 người ngoài nhóm dùng prototype khoảng 10 phút theo năm nhịp, ghi nhận quan sát, quote nguyên văn, mức nghiêm trọng và thực hiện 1–2 thay đổi cụ thể trước demo.",
-          "deliverable": "Thư mục validation/ có nhật ký tối thiểu 2 phiên thử và spec.md §9 có changelog thay đổi.",
+          "task_order": 16,
+          "title": "Xác thực prototype với người dùng ngoài nhóm",
+          "description": "Tổ chức phiên thử khoảng 10 phút với ít nhất 2 người ngoài nhóm, ghi nhận quan sát và quote, phân loại bằng chứng, thực hiện 1–2 thay đổi trước demo và cập nhật changelog.",
+          "deliverable": "Hồ sơ validation/ và cập nhật §9 Changelog.",
           "completion_criteria": [
-            "Có ít nhất 2 người dùng ngoài nhóm trải nghiệm trực tiếp prototype.",
-            "Mỗi phiên có người thử, task được giao, quan sát, quote nguyên văn và mức nghiêm trọng.",
-            "Phiên thử thể hiện năm nhịp: trấn an, mời tác vụ, quan sát không chỉ dẫn, hỏi sau khi dùng và ghi nguyên văn.",
-            "Bằng chứng được xếp theo 4 tầng độ tin cậy được nêu trong yêu cầu.",
-            "Có 1–2 thay đổi cụ thể được thực hiện dựa trên phản hồi.",
-            "Các thay đổi được ghi vào §9 Changelog của spec.md."
+            "Có ít nhất 2 người ngoài nhóm tham gia trải nghiệm trực tiếp.",
+            "Mỗi phiên có task, quan sát không chỉ dẫn, quote nguyên văn và mức nghiêm trọng.",
+            "Bằng chứng được xếp theo 4 tầng yêu cầu.",
+            "Có 1–2 thay đổi cụ thể được thực hiện trước demo.",
+            "Các thay đổi được ghi trong §9 Changelog của spec.md.",
+            "Nhật ký được lưu trong validation/."
           ],
           "required_skills": [
             "Evaluation",
@@ -521,7 +521,7 @@
           ],
           "estimated_effort": "large",
           "depends_on": [
-            "cp4-task-03"
+            "cp4-task-01"
           ],
           "reference_ids": [
             "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp5/validation"
@@ -532,18 +532,18 @@
           "id": "454580e7-4140-410b-b665-759e68193567",
           "task_key": "cp5-task-18",
           "checkpoint_id": "cp5",
-          "task_order": 18,
-          "title": "Soạn và xuất bộ slide 6 trang",
-          "description": "Soạn đúng 6 trang theo hướng dẫn, bảo đảm mỗi trang có số liệu, quote có nguồn hoặc kết quả đo, rồi xuất thành demo-slides.pdf ở thư mục gốc.",
-          "deliverable": "Tệp demo-slides.pdf đúng 6 trang tại thư mục gốc repository.",
+          "task_order": 17,
+          "title": "Soạn và xuất bộ slide demo 6 trang",
+          "description": "Soạn đúng 6 trang theo cấu trúc yêu cầu, mỗi trang có số liệu, quote có nguồn hoặc kết quả đo, rồi xuất PDF tên demo-slides.pdf tại thư mục gốc.",
+          "deliverable": "Tệp demo-slides.pdf đúng 6 trang.",
           "completion_criteria": [
             "PDF có đúng 6 trang và tên chính xác demo-slides.pdf.",
-            "Trang 1 có user, job, core JTBD và con số pain.",
+            "Trang 1 có user, job, core JTBD và số liệu pain.",
             "Trang 2 có bảng impact rút gọn của 3 ứng viên.",
-            "Trang 3 có lát cắt, automation theo cost-of-error và demo một case chuẩn cùng một case chỗ khó.",
-            "Trang 4 có tỷ lệ qua golden set, đối chiếu quality bar và failure đáng kể nhất.",
+            "Trang 3 có lát cắt, automation theo cost-of-error và hai case demo.",
+            "Trang 4 có tỷ lệ qua golden set, quality bar và failure đáng kể nhất.",
             "Trang 5 có ít nhất 2 quote nguyên văn kèm tên/vai và thay đổi đã làm.",
-            "Trang 6 có 2–3 việc ưu tiên nếu có thêm 1 tuần.",
+            "Trang 6 có 2–3 việc ưu tiên nếu có thêm một tuần.",
             "Mỗi trang có ít nhất một con số, quote có nguồn hoặc kết quả đo."
           ],
           "required_skills": [
@@ -565,20 +565,20 @@
           "id": "4fe947f6-934f-4d2c-b4a5-e0216144aeb2",
           "task_key": "cp5-task-19",
           "checkpoint_id": "cp5",
-          "task_order": 19,
+          "task_order": 18,
           "title": "Quay video demo dự phòng và dry run",
-          "description": "Quay video dự phòng đúng phần demo sân khấu, thực hiện dry run toàn đội có bấm giờ và push demo-slides.pdf, validation/ cùng spec.md lên GitHub.",
-          "deliverable": "Video demo dự phòng công khai và bằng chứng dry run có bấm giờ.",
+          "description": "Quay video dự phòng đúng phần demo sân khấu, tổ chức dry run toàn đội có bấm giờ và đẩy demo-slides.pdf, validation/ và spec.md lên GitHub.",
+          "deliverable": "Video demo dự phòng và bằng chứng dry run có bấm giờ.",
           "completion_criteria": [
-            "Video ghi đúng phần dự kiến trình diễn trên sân khấu.",
-            "Video có thể truy cập công khai để dùng khi mất mạng.",
+            "Video ghi lại đúng phần demo dự kiến trên sân khấu.",
+            "Video có thể dùng thay thế khi gặp sự cố mạng.",
             "Toàn đội đã thực hiện dry run có bấm giờ.",
             "demo-slides.pdf, validation/ và spec.md đã được đẩy lên GitHub."
           ],
           "required_skills": [
-            "Quay video",
-            "Điều phối trình diễn",
-            "Git"
+            "Quay và trình diễn sản phẩm",
+            "Điều phối nhóm",
+            "Quản lý phiên bản"
           ],
           "estimated_effort": "medium",
           "depends_on": [
@@ -593,17 +593,17 @@
           "id": "2a438943-da22-416f-9238-880cce35cd46",
           "task_key": "cp5-task-20",
           "checkpoint_id": "cp5",
-          "task_order": 20,
+          "task_order": 19,
           "title": "Nộp form Checkpoint CP5",
-          "description": "Đội trưởng nộp PDF và liên kết video dự phòng qua form CP5, kèm hồ sơ validation, changelog và bằng chứng dry run.",
-          "deliverable": "Phiếu nộp CP5 đầy đủ hồ sơ nghiệm thu.",
+          "description": "Đội trưởng nộp demo-slides.pdf và link video demo dự phòng qua form CP5.",
+          "deliverable": "Phiếu nộp CP5 hoàn tất.",
           "completion_criteria": [
-            "Form có tệp demo-slides.pdf đúng 6 trang.",
+            "Form có tệp PDF đúng 6 trang.",
             "Form có liên kết video demo dự phòng truy cập công khai.",
-            "validation/ có nhật ký ít nhất 2 người thử kèm quote.",
+            "validation/ có nhật ký tối thiểu 2 người thử kèm quote.",
             "§9 Changelog ghi nhận thay đổi.",
             "Có bằng chứng dry run có bấm giờ.",
-            "Phiếu được nộp trước 22:30 ngày 18/9 theo yêu cầu nguồn."
+            "Form được nộp trước 22:30 ngày 18/9."
           ],
           "required_skills": [
             "Evaluation",
@@ -629,19 +629,19 @@
           "id": "8596a6b4-bd83-46af-aa00-46ff1eef4137",
           "task_key": "cp6-task-21",
           "checkpoint_id": "cp6",
-          "task_order": 21,
-          "title": "Chuẩn hóa cấu trúc repository nộp bài",
-          "description": "Bảo đảm repository public có đủ README.md, spec.md, demo-slides.pdf, codebase/, eval/, validation/ và reflection/; mỗi thành viên tạo một file reflection cá nhân theo yêu cầu.",
-          "deliverable": "Repository public có cấu trúc chuẩn và đủ reflection của từng thành viên.",
+          "task_order": 20,
+          "title": "Chuẩn hóa cấu trúc repository và reflection",
+          "description": "Hoàn thiện cấu trúc repository nộp bài, bảo đảm các thư mục và tệp bắt buộc tồn tại, đồng thời mỗi thành viên tạo một file reflection cá nhân.",
+          "deliverable": "Repository public có cấu trúc nộp bài chuẩn và reflection của từng thành viên.",
           "completion_criteria": [
             "README.md có bảng thành viên và phân công.",
-            "spec.md là AI Spec §1–§9 với quality bar đã khóa.",
+            "spec.md chứa AI Spec §1–§9 với quality bar đã khóa.",
             "demo-slides.pdf là PDF đúng 6 trang.",
             "codebase/ chứa prototype có gọi AI thật.",
-            "eval/ chứa golden set ít nhất 20 case và bảng kết quả các lượt chạy.",
+            "eval/ chứa golden set tối thiểu 20 case và bảng kết quả.",
             "validation/ chứa nhật ký người ngoài dùng thử.",
             "reflection/ có một file cho mỗi thành viên.",
-            "Mỗi reflection nêu vai trò cá nhân, phần việc trực tiếp phụ trách, cách ứng dụng AI và bài học từ trường hợp thất bại của nhóm."
+            "Mỗi reflection nêu vai trò cá nhân, phần việc phụ trách, cách ứng dụng AI và bài học từ thất bại của nhóm."
           ],
           "required_skills": [
             "Engineering",
@@ -662,16 +662,16 @@
           "id": "ff2febb7-d3f8-4501-8f3e-fbd7dc820bca",
           "task_key": "cp6-task-22",
           "checkpoint_id": "cp6",
-          "task_order": 22,
-          "title": "Hoàn thành hai kênh nộp bài song song",
-          "description": "Đội trưởng hoàn thành các form CP1–CP5 bằng một mã học viên duy nhất; từng thành viên tự nộp cùng một link repository trên VLearn.",
-          "deliverable": "Bằng chứng hoàn tất cả kênh form checkpoint và kênh nộp repository của từng thành viên.",
+          "task_order": 21,
+          "title": "Hoàn thành hai kênh nộp bài",
+          "description": "Đội trưởng hoàn tất các form CP1–CP5 theo quy định đại diện nhóm, đồng thời từng thành viên tự nộp cùng một link repository trên VLearn.",
+          "deliverable": "Hồ sơ nộp bài qua form checkpoint và VLearn.",
           "completion_criteria": [
-            "Đội trưởng đã nộp đủ form CP1–CP5.",
-            "Mỗi checkpoint có một phiếu duy nhất do đội trưởng đại diện nộp.",
-            "Các form CP1–CP5 dùng duy nhất một mã học viên đội trưởng.",
-            "Mọi thành viên đã tự nộp link repository chung trên VLearn.",
-            "Việc đội trưởng nộp form không được dùng để thay thế phần nộp repository của từng thành viên."
+            "Các form CP1–CP5 đã được đội trưởng nộp, mỗi mốc một phiếu.",
+            "Các form CP1–CP5 sử dụng cùng một mã học viên đội trưởng.",
+            "Mọi thành viên tự nộp link repository trên VLearn.",
+            "Tất cả thành viên nộp cùng một link repository.",
+            "Không dùng việc đội trưởng nộp thay để thay thế phần nộp cá nhân trên VLearn."
           ],
           "required_skills": [
             "Evaluation",
@@ -691,17 +691,16 @@
           "id": "55c87f8a-dca3-4370-a293-f577c45029ea",
           "task_key": "cp6-task-23",
           "checkpoint_id": "cp6",
-          "task_order": 23,
+          "task_order": 22,
           "title": "Thuyết trình và thi đấu tại LAB 6",
-          "description": "Tham gia buổi LAB 6, trình bày theo vòng cụm và vòng chung kết nếu được chọn, thực hiện demo trực tiếp và sẵn sàng trả lời hoặc chạy lại case theo phân công.",
-          "deliverable": "Màn trình bày và demo trực tiếp của đội tại LAB 6 theo thời lượng và quy tắc vòng thi.",
+          "description": "Tham gia LAB 6, trình bày theo thời lượng của phòng, thực hiện demo trực tiếp ở vòng chung kết nếu được chọn và tuân thủ quy tắc đầu tư cùng quy tắc giám khảo hỏi bất kỳ thành viên nào.",
+          "deliverable": "Phần trình bày và thi đấu trực tiếp của nhóm tại LAB 6.",
           "completion_criteria": [
-            "Đội tham gia buổi LAB 6 ngày 19/9 trong khung 09:00–13:00.",
+            "Nhóm tham gia buổi LAB 6 ngày 19/9 từ 09:00–13:00.",
             "Vòng cụm được trình bày trong 6 phút tại E403 hoặc 7 phút tại E402.",
-            "Đội trưởng thực hiện quy trình đầu tư theo quy định nếu áp dụng.",
-            "Nếu vào vòng chung kết, đội trình bày 7 phút kèm demo trực tiếp và dành 3 phút hỏi đáp.",
-            "Mỗi thành viên sẵn sàng trả lời về phần có tên mình trong bảng phân công.",
-            "Đội có khả năng chạy lại một case tại chỗ khi giám khảo yêu cầu."
+            "Đội trưởng thực hiện phần đầu tư với 100 điểm, không đầu tư vào đội mình và tổng phân bổ đúng 100.",
+            "Nếu vào chung kết, nhóm thực hiện 7 phút trình bày kèm demo và 3 phút hỏi đáp.",
+            "Thành viên có thể giải thích phần được phân công và chạy lại case khi được yêu cầu."
           ],
           "required_skills": [
             "Evaluation",
