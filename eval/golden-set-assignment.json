@@ -1,0 +1,1195 @@
+{
+  "name": "VLearn LabSpace Assignment Golden Set",
+  "version": "1.0.0",
+  "primary_module": "assignment",
+  "decision_under_test": "Checklist tasks + self-declared member skills -> assignment draft",
+  "cases": [
+    {
+      "id": "AS-001-lab-deliverable-skill-routing",
+      "description": "Phân notebook YOLO và CVAT annotation theo skill phù hợp.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Dương",
+            "skills": [
+              "AI"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Trang",
+            "skills": [
+              "Annotation"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Run AI model YOLO11",
+            "deliverable": "executed notebook"
+          },
+          {
+            "id": "t2",
+            "title": "CVAT Annotation",
+            "deliverable": "10-20 bounding boxes"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 2,
+        "acceptable_owners": {
+          "t1": [
+            "m1"
+          ],
+          "t2": [
+            "m2"
+          ]
+        },
+        "required_gap_substrings": [],
+        "max_load_delta": 0
+      },
+      "taxonomy": "1_source_truth",
+      "frequency": "common",
+      "provenance": {
+        "kind": "chatlog_derived",
+        "chatlog_id": "T10323",
+        "verification": "raw_chatlog_verified",
+        "raw_path": "data/chatlog_eval_sources.json",
+        "derivation_note": "Task/deliverable lấy từ raw chatlog; member và skill profile là biến thể tổng hợp để đo quyết định phân công."
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "exact",
+        "team_size": 2,
+        "task_count": 2
+      }
+    },
+    {
+      "id": "AS-002-object-detection-export-match",
+      "description": "Giao việc export nhãn CVAT/YOLO cho người có skill Annotation.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Trang",
+            "skills": [
+              "Documentation"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Dũng",
+            "skills": [
+              "Annotation"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Annotation export",
+            "deliverable": "CVAT labels in YOLO format"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 1,
+        "acceptable_owners": {
+          "t1": [
+            "m2"
+          ]
+        },
+        "required_gap_substrings": [],
+        "max_load_delta": 1
+      },
+      "taxonomy": "4_domain_specific",
+      "frequency": "common",
+      "provenance": {
+        "kind": "chatlog_derived",
+        "chatlog_id": "T10349",
+        "verification": "raw_chatlog_verified",
+        "raw_path": "data/chatlog_eval_sources.json",
+        "derivation_note": "Task/deliverable lấy từ raw chatlog; member và skill profile là biến thể tổng hợp để đo quyết định phân công."
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "exact",
+        "team_size": 2,
+        "task_count": 1
+      }
+    },
+    {
+      "id": "AS-003-github-case-insensitive",
+      "description": "Matching skill GitHub không phân biệt chữ hoa chữ thường.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Dương",
+            "skills": [
+              "github"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Dũng",
+            "skills": [
+              "backend"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "GITHUB submission",
+            "deliverable": "repository link"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 1,
+        "acceptable_owners": {
+          "t1": [
+            "m1"
+          ]
+        },
+        "required_gap_substrings": [],
+        "max_load_delta": 1
+      },
+      "taxonomy": "1_source_truth",
+      "frequency": "common",
+      "provenance": {
+        "kind": "chatlog_derived",
+        "chatlog_id": "T10705",
+        "verification": "raw_chatlog_verified",
+        "raw_path": "data/chatlog_eval_sources.json",
+        "derivation_note": "Task/deliverable lấy từ raw chatlog; member và skill profile là biến thể tổng hợp để đo quyết định phân công."
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "case_insensitive",
+        "team_size": 2,
+        "task_count": 1
+      }
+    },
+    {
+      "id": "AS-004-repo-link-deliverable-match",
+      "description": "Skill được nhận diện từ deliverable là GitHub fork link.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Trang",
+            "skills": [
+              "Presentation"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Dũng",
+            "skills": [
+              "GitHub"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Submit Lab 1",
+            "deliverable": "GitHub fork link"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 1,
+        "acceptable_owners": {
+          "t1": [
+            "m2"
+          ]
+        },
+        "required_gap_substrings": [],
+        "max_load_delta": 1
+      },
+      "taxonomy": "1_source_truth",
+      "frequency": "common",
+      "provenance": {
+        "kind": "chatlog_derived",
+        "chatlog_id": "T11149",
+        "verification": "raw_chatlog_verified",
+        "raw_path": "data/chatlog_eval_sources.json",
+        "derivation_note": "Task/deliverable lấy từ raw chatlog; member và skill profile là biến thể tổng hợp để đo quyết định phân công."
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "deliverable",
+        "team_size": 2,
+        "task_count": 1
+      }
+    },
+    {
+      "id": "AS-005-submission-troubleshooting-best-owner",
+      "description": "Ưu tiên người khớp cả Git và Testing cho checklist lỗi nộp bài.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Dương",
+            "skills": [
+              "Git",
+              "Testing"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Dũng",
+            "skills": [
+              "Git"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Git Testing submission flow",
+            "deliverable": "submission troubleshooting report"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 1,
+        "acceptable_owners": {
+          "t1": [
+            "m1"
+          ]
+        },
+        "required_gap_substrings": [],
+        "max_load_delta": 1
+      },
+      "taxonomy": "4_domain_specific",
+      "frequency": "common",
+      "provenance": {
+        "kind": "chatlog_derived",
+        "chatlog_id": "T11557",
+        "verification": "raw_chatlog_verified",
+        "raw_path": "data/chatlog_eval_sources.json",
+        "derivation_note": "Task/deliverable lấy từ raw chatlog; member và skill profile là biến thể tổng hợp để đo quyết định phân công."
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "multi_skill",
+        "team_size": 2,
+        "task_count": 1
+      }
+    },
+    {
+      "id": "AS-006-balance-prd-work",
+      "description": "Hai người cùng skill PRD phải được chia đều bốn mục tài liệu.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "An",
+            "skills": [
+              "PRD"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Bình",
+            "skills": [
+              "PRD"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "PRD Problem",
+            "deliverable": "problem section"
+          },
+          {
+            "id": "t2",
+            "title": "PRD Metrics",
+            "deliverable": "metrics section"
+          },
+          {
+            "id": "t3",
+            "title": "PRD Architecture",
+            "deliverable": "architecture section"
+          },
+          {
+            "id": "t4",
+            "title": "PRD Risks",
+            "deliverable": "risk section"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 4,
+        "acceptable_owners": {
+          "t1": [
+            "m1",
+            "m2"
+          ],
+          "t2": [
+            "m1",
+            "m2"
+          ],
+          "t3": [
+            "m1",
+            "m2"
+          ],
+          "t4": [
+            "m1",
+            "m2"
+          ]
+        },
+        "required_gap_substrings": [],
+        "max_load_delta": 0
+      },
+      "taxonomy": "4_domain_specific",
+      "frequency": "common",
+      "provenance": {
+        "kind": "chatlog_derived",
+        "chatlog_id": "T04186",
+        "verification": "raw_chatlog_verified",
+        "raw_path": "data/chatlog_eval_sources.json",
+        "derivation_note": "Task/deliverable lấy từ raw chatlog; member và skill profile là biến thể tổng hợp để đo quyết định phân công."
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "tie",
+        "team_size": 2,
+        "task_count": 4
+      }
+    },
+    {
+      "id": "AS-007-ignore-member-without-git-skill",
+      "description": "Không giao task Git cho thành viên chưa khai skill khi còn người phù hợp.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "An",
+            "skills": []
+          },
+          {
+            "id": "m2",
+            "name": "Dũng",
+            "skills": [
+              "Git"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Git commit contribution",
+            "deliverable": "personal commit hash"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 1,
+        "acceptable_owners": {
+          "t1": [
+            "m2"
+          ]
+        },
+        "required_gap_substrings": [],
+        "max_load_delta": 1
+      },
+      "taxonomy": "3_out_of_scope_authority",
+      "frequency": "common",
+      "provenance": {
+        "kind": "chatlog_derived",
+        "chatlog_id": "T13325",
+        "verification": "raw_chatlog_verified",
+        "raw_path": "data/chatlog_eval_sources.json",
+        "derivation_note": "Task/deliverable lấy từ raw chatlog; member và skill profile là biến thể tổng hợp để đo quyết định phân công."
+      },
+      "grid": {
+        "skill_data": "partial",
+        "match_type": "partial_member_data",
+        "team_size": 2,
+        "task_count": 1
+      }
+    },
+    {
+      "id": "AS-008-clarify-team-without-skills",
+      "description": "Câu hỏi vai trò nhóm nhưng chưa có skill profile phải yêu cầu bổ sung dữ liệu.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "An",
+            "skills": []
+          },
+          {
+            "id": "m2",
+            "name": "Bình",
+            "skills": []
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Optimize system prompt",
+            "deliverable": "system_prompt.md"
+          },
+          {
+            "id": "t2",
+            "title": "Design tools",
+            "deliverable": "tools.yaml"
+          }
+        ]
+      },
+      "expected": {
+        "status": "clarify",
+        "assignment_count": 0,
+        "acceptable_owners": {},
+        "required_gap_substrings": [
+          "khai báo kỹ năng"
+        ],
+        "max_load_delta": 0
+      },
+      "taxonomy": "2_ambiguity_missing_information",
+      "frequency": "common",
+      "provenance": {
+        "kind": "chatlog_derived",
+        "chatlog_id": "T13457",
+        "verification": "raw_chatlog_verified",
+        "raw_path": "data/chatlog_eval_sources.json",
+        "derivation_note": "Task/deliverable lấy từ raw chatlog; member và skill profile là biến thể tổng hợp để đo quyết định phân công."
+      },
+      "grid": {
+        "skill_data": "missing",
+        "match_type": "no_member_skills",
+        "team_size": 2,
+        "task_count": 2
+      }
+    },
+    {
+      "id": "AS-009-unmatched-branch-coordination",
+      "description": "Việc phối hợp branch không khớp skill phải có cảnh báo thay vì bịa năng lực.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Dương",
+            "skills": [
+              "AI"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Dũng",
+            "skills": [
+              "Backend"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Coordinate individual branches and commits",
+            "deliverable": "branch plan"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 1,
+        "acceptable_owners": {
+          "t1": [
+            "m1",
+            "m2"
+          ]
+        },
+        "required_gap_substrings": [
+          "chưa khớp skill"
+        ],
+        "max_load_delta": 1
+      },
+      "taxonomy": "2_ambiguity_missing_information",
+      "frequency": "common",
+      "provenance": {
+        "kind": "chatlog_derived",
+        "chatlog_id": "T13487",
+        "verification": "raw_chatlog_verified",
+        "raw_path": "data/chatlog_eval_sources.json",
+        "derivation_note": "Task/deliverable lấy từ raw chatlog; member và skill profile là biến thể tổng hợp để đo quyết định phân công."
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "no_match",
+        "team_size": 2,
+        "task_count": 1
+      }
+    },
+    {
+      "id": "AS-010-balance-prd-risk-fallback",
+      "description": "Các phần PRD/Risk Matrix chưa khớp skill phải được cân bằng và cảnh báo.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "An",
+            "skills": [
+              "AI"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Bình",
+            "skills": [
+              "Backend"
+            ]
+          },
+          {
+            "id": "m3",
+            "name": "Chi",
+            "skills": [
+              "Research"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Write PRD",
+            "deliverable": "3-5 page document"
+          },
+          {
+            "id": "t2",
+            "title": "Create Risk Matrix",
+            "deliverable": "matrix with at least 5 risks"
+          },
+          {
+            "id": "t3",
+            "title": "Review final document",
+            "deliverable": "review notes"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 3,
+        "acceptable_owners": {
+          "t1": [
+            "m1",
+            "m2",
+            "m3"
+          ],
+          "t2": [
+            "m1",
+            "m2",
+            "m3"
+          ],
+          "t3": [
+            "m1",
+            "m2",
+            "m3"
+          ]
+        },
+        "required_gap_substrings": [
+          "chưa khớp skill"
+        ],
+        "max_load_delta": 0
+      },
+      "taxonomy": "4_domain_specific",
+      "frequency": "edge",
+      "provenance": {
+        "kind": "chatlog_derived",
+        "chatlog_id": "T03496",
+        "verification": "raw_chatlog_verified",
+        "raw_path": "data/chatlog_eval_sources.json",
+        "derivation_note": "Task/deliverable lấy từ raw chatlog; member và skill profile là biến thể tổng hợp để đo quyết định phân công."
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "no_match",
+        "team_size": 3,
+        "task_count": 3
+      }
+    },
+    {
+      "id": "AS-011-mixed-matched-and-unmatched",
+      "description": "Task khớp phải về đúng người; task không khớp phải cảnh báo và cân bằng.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Dương",
+            "skills": [
+              "AI"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Dũng",
+            "skills": [
+              "Backend"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "AI prompt design",
+            "deliverable": "prompt.md"
+          },
+          {
+            "id": "t2",
+            "title": "Record demo",
+            "deliverable": "demo.mp4"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 2,
+        "acceptable_owners": {
+          "t1": [
+            "m1"
+          ],
+          "t2": [
+            "m2"
+          ]
+        },
+        "required_gap_substrings": [
+          "chưa khớp skill"
+        ],
+        "max_load_delta": 0
+      },
+      "taxonomy": "2_ambiguity_missing_information",
+      "frequency": "edge",
+      "provenance": {
+        "kind": "synthetic",
+        "verification": "verified_fixture"
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "mixed",
+        "team_size": 2,
+        "task_count": 2
+      }
+    },
+    {
+      "id": "AS-012-no-false-positive-ai-in-email",
+      "description": "Chuỗi AI nằm trong từ email không được xem là skill AI.",
+      "known_issue": "Matcher đang dùng substring nên nhận nhầm AI trong email.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Dương",
+            "skills": [
+              "AI"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Trang",
+            "skills": [
+              "Communication"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Email communication to participants",
+            "deliverable": "participant email"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 1,
+        "acceptable_owners": {
+          "t1": [
+            "m2"
+          ]
+        },
+        "required_gap_substrings": [],
+        "max_load_delta": 1
+      },
+      "taxonomy": "1_source_truth",
+      "frequency": "edge",
+      "provenance": {
+        "kind": "synthetic",
+        "verification": "verified_fixture"
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "substring_trap",
+        "team_size": 2,
+        "task_count": 1
+      }
+    },
+    {
+      "id": "AS-013-semantic-backend-synonym",
+      "description": "REST endpoint là công việc Backend dù từ Backend không xuất hiện trực tiếp.",
+      "known_issue": "Matcher từ khóa chưa hiểu REST endpoint và FastAPI là Backend.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Trang",
+            "skills": [
+              "Presentation"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Dũng",
+            "skills": [
+              "Backend"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Implement REST endpoint",
+            "deliverable": "FastAPI route"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 1,
+        "acceptable_owners": {
+          "t1": [
+            "m2"
+          ]
+        },
+        "required_gap_substrings": [],
+        "max_load_delta": 1
+      },
+      "taxonomy": "4_domain_specific",
+      "frequency": "edge",
+      "provenance": {
+        "kind": "synthetic",
+        "verification": "verified_fixture"
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "semantic_synonym",
+        "team_size": 2,
+        "task_count": 1
+      }
+    },
+    {
+      "id": "AS-014-grounded-reason-for-match",
+      "description": "Lý do phân công phải nói rõ có skill khớp.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Dũng",
+            "skills": [
+              "Testing"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Testing API",
+            "deliverable": "Testing report"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 1,
+        "acceptable_owners": {
+          "t1": [
+            "m1"
+          ]
+        },
+        "required_gap_substrings": [],
+        "required_reason_substrings": {
+          "t1": [
+            "kỹ năng",
+            "khớp"
+          ]
+        },
+        "max_load_delta": 1
+      },
+      "taxonomy": "1_source_truth",
+      "frequency": "edge",
+      "provenance": {
+        "kind": "synthetic",
+        "verification": "verified_fixture"
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "exact",
+        "team_size": 1,
+        "task_count": 1
+      }
+    },
+    {
+      "id": "AS-015-grounded-reason-for-fallback",
+      "description": "Nếu không khớp skill, lý do phải nói đây là phương án cân bằng tạm thời.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Dương",
+            "skills": [
+              "AI"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Record video",
+            "deliverable": "demo.mp4"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 1,
+        "acceptable_owners": {
+          "t1": [
+            "m1"
+          ]
+        },
+        "required_gap_substrings": [
+          "chưa khớp skill"
+        ],
+        "required_reason_substrings": {
+          "t1": [
+            "chưa có skill khớp",
+            "cân bằng"
+          ]
+        },
+        "max_load_delta": 1
+      },
+      "taxonomy": "3_out_of_scope_authority",
+      "frequency": "edge",
+      "provenance": {
+        "kind": "synthetic",
+        "verification": "verified_fixture"
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "fallback",
+        "team_size": 1,
+        "task_count": 1
+      }
+    },
+    {
+      "id": "AS-016-deterministic-order-balance",
+      "description": "Thứ tự task cố định phải tạo kết quả cân bằng và lặp lại được.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "An",
+            "skills": [
+              "Testing"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Bình",
+            "skills": [
+              "Testing"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Testing API A",
+            "deliverable": "report-a.json"
+          },
+          {
+            "id": "t2",
+            "title": "Testing API B",
+            "deliverable": "report-b.json"
+          },
+          {
+            "id": "t3",
+            "title": "Testing API C",
+            "deliverable": "report-c.json"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 3,
+        "acceptable_owners": {
+          "t1": [
+            "m1",
+            "m2"
+          ],
+          "t2": [
+            "m1",
+            "m2"
+          ],
+          "t3": [
+            "m1",
+            "m2"
+          ]
+        },
+        "required_gap_substrings": [],
+        "max_load_delta": 1
+      },
+      "taxonomy": "4_domain_specific",
+      "frequency": "edge",
+      "provenance": {
+        "kind": "synthetic",
+        "verification": "verified_fixture"
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "tie",
+        "team_size": 2,
+        "task_count": 3
+      }
+    },
+    {
+      "id": "AS-017-owner-must-belong-to-group",
+      "description": "Mọi owner được đề xuất phải là thành viên có thật trong group.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Dương",
+            "skills": [
+              "AI"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Dũng",
+            "skills": [
+              "Backend"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "AI prompt",
+            "deliverable": "prompt.md"
+          },
+          {
+            "id": "t2",
+            "title": "Backend API",
+            "deliverable": "route.py"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 2,
+        "acceptable_owners": {
+          "t1": [
+            "m1"
+          ],
+          "t2": [
+            "m2"
+          ]
+        },
+        "required_gap_substrings": [],
+        "max_load_delta": 0
+      },
+      "taxonomy": "3_out_of_scope_authority",
+      "frequency": "edge",
+      "provenance": {
+        "kind": "synthetic",
+        "verification": "verified_fixture"
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "exact",
+        "team_size": 2,
+        "task_count": 2
+      }
+    },
+    {
+      "id": "AS-018-draft-must-not-auto-confirm",
+      "description": "Hệ thống chỉ được đề xuất draft, không tự xác nhận hoặc persist assignment.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Dương",
+            "skills": [
+              "AI"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "AI analysis",
+            "deliverable": "analysis.json"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 1,
+        "acceptable_owners": {
+          "t1": [
+            "m1"
+          ]
+        },
+        "required_gap_substrings": [],
+        "forbidden_response_fields": [
+          "confirmed",
+          "persisted"
+        ],
+        "max_load_delta": 1
+      },
+      "taxonomy": "3_out_of_scope_authority",
+      "frequency": "rare",
+      "provenance": {
+        "kind": "synthetic",
+        "verification": "verified_fixture"
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "exact",
+        "team_size": 1,
+        "task_count": 1
+      }
+    },
+    {
+      "id": "AS-019-whitespace-skill-is-missing",
+      "description": "Skill chỉ chứa khoảng trắng phải được xem là thiếu dữ liệu và yêu cầu làm rõ.",
+      "known_issue": "Validation đang coi chuỗi skill chỉ có khoảng trắng là dữ liệu hợp lệ.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "An",
+            "skills": [
+              "   "
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Build API",
+            "deliverable": "endpoint"
+          }
+        ]
+      },
+      "expected": {
+        "status": "clarify",
+        "assignment_count": 0,
+        "acceptable_owners": {},
+        "required_gap_substrings": [
+          "khai báo kỹ năng"
+        ],
+        "max_load_delta": 0
+      },
+      "taxonomy": "2_ambiguity_missing_information",
+      "frequency": "rare",
+      "provenance": {
+        "kind": "synthetic",
+        "verification": "verified_fixture"
+      },
+      "grid": {
+        "skill_data": "missing",
+        "match_type": "blank_skill",
+        "team_size": 1,
+        "task_count": 1
+      }
+    },
+    {
+      "id": "AS-020-vietnamese-testing-synonym",
+      "description": "Cụm tiếng Việt kiểm thử và từ test phải ánh xạ tới skill Testing.",
+      "known_issue": "Matcher từ khóa chưa ánh xạ kiểm thử hoặc test sang skill Testing.",
+      "input": {
+        "group_name": "Sloppers",
+        "members": [
+          {
+            "id": "m1",
+            "name": "Trang",
+            "skills": [
+              "Presentation"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Dũng",
+            "skills": [
+              "Testing"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Viết bộ kiểm thử API",
+            "deliverable": "báo cáo test"
+          }
+        ]
+      },
+      "expected": {
+        "status": "ready",
+        "assignment_count": 1,
+        "acceptable_owners": {
+          "t1": [
+            "m2"
+          ]
+        },
+        "required_gap_substrings": [],
+        "max_load_delta": 1
+      },
+      "taxonomy": "4_domain_specific",
+      "frequency": "rare",
+      "provenance": {
+        "kind": "synthetic",
+        "verification": "verified_fixture"
+      },
+      "grid": {
+        "skill_data": "complete",
+        "match_type": "cross_language_synonym",
+        "team_size": 2,
+        "task_count": 1
+      }
+    }
+  ]
+}
