@@ -1,4 +1,4 @@
-import { coachFixture, demoAccounts, labFixture, workspaceFixture } from './mockData';
+import { canonicalTasksFixture, coachFixture, demoAccounts, labFixture, workspaceFixture } from './mockData';
 
 const SESSION_KEY = 'vlearn-labspace.mock-session';
 
@@ -33,11 +33,11 @@ export function createMockApiClient() {
         checklist_draft: {
           lab_id: payload?.lab_id ?? payload?.lab_manifest?.lab_id ?? 'K4-L3B-DAY05-06-MINI-HACKATHON',
           version: '1.0.0',
-          tasks: workspaceFixture.tasks,
+          tasks: canonicalTasksFixture,
         },
         gaps: [],
         questions: [],
-      }),
+      }, 400),
     getWorkspaceSnapshot: () => wait(workspaceFixture),
     getCoachSnapshot: () => wait(coachFixture),
   };

@@ -4,6 +4,7 @@ import { apiClient } from '../../api/createApiClient';
 import { useAuth } from '../../auth/useAuth';
 import { ErrorState, LoadingState } from '../../components/PageState';
 import { useAsyncResource } from '../../hooks/useAsyncResource';
+import { canonicalTasksFixture, defaultLabManifest } from '../../api/mockData';
 import { AssignmentReviewDialog } from '../assignment/AssignmentReviewDialog';
 import { LeaderGroupDialog } from '../group/LeaderGroupDialog';
 import { MemberInviteFlow } from '../profile/MemberInviteFlow';
@@ -22,6 +23,7 @@ export function WorkspacePage() {
   const [assignmentDialogOpen, setAssignmentDialogOpen] = useState(false);
   const [groupDialogOpen, setGroupDialogOpen] = useState(false);
   const groupDialogTriggerRef = useRef(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   useEffect(() => {
     if (data) setWorkspaceData(data);
@@ -53,8 +55,55 @@ export function WorkspacePage() {
         ...current,
         group: { ...current.group, name: group.name, code: group.code },
         members: leader ? [leader, ...invitedMembers] : invitedMembers,
+        tasks: [],
+        checklistSource: 'Chưa phân tích checklist từ bài Lab',
+        planStatus: 'draft',
       };
     });
+  };
+
+  const handleAnalyzeTask = async () => {
+    setIsAnalyzing(true);
+    try {
+      const res = await apiClient.analyzeLab({
+        lab_id: 'K4-L3B-DAY05-06-MINI-HACKATHON',
+        lab_manifest: defaultLabManifest,
+      });
+      if (res && res.status === 'ready') {
+        const draft = res.checklist_draft;
+        let analyzedTasks = [];
+        if (draft?.checkpoints?.length) {
+          analyzedTasks = draft.checkpoints.flatMap((cp) =>
+            (cp.tasks ?? []).map((t, idx) => ({
+              id: t.id ?? t.task_key ?? `task-${idx + 1}`,
+              category: cp.checkpoint_id ? cp.checkpoint_id.toUpperCase() : 'CANONICAL',
+              title: t.title,
+              deliverable: t.deliverable,
+              owner: 'Chưa phân công',
+              status: 'todo',
+            }))
+          );
+        } else if (draft?.tasks?.length) {
+          analyzedTasks = draft.tasks.map((t) => ({
+            ...t,
+            owner: t.owner ?? 'Chưa phân công',
+            status: t.status ?? 'todo',
+          }));
+        }
+        if (analyzedTasks.length === 0) {
+          analyzedTasks = canonicalTasksFixture;
+        }
+        setWorkspaceData((current) => ({
+          ...current,
+          tasks: analyzedTasks,
+          checklistSource: `${draft?.lab_id ?? 'K4-L3B-DAY05-06'} · AI Task Analysis (ChecklistDraft Ready)`,
+        }));
+      }
+    } catch (err) {
+      console.error('Lỗi khi phân tích bài Lab:', err);
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const updateCurrentMember = (updates) => {
@@ -84,8 +133,9 @@ export function WorkspacePage() {
   if (status === 'loading') return <main className="page-shell"><LoadingState label="Đang tải LabSpace…" /></main>;
   if (status === 'error') return <main className="page-shell"><ErrorState message={error.message} onRetry={reload} /></main>;
 
-  const completed = snapshot.tasks.filter((task) => task.status === 'done').length;
-  const progress = Math.round((completed / snapshot.tasks.length) * 100);
+  const completed = (snapshot?.tasks ?? []).filter((task) => task.status === 'done').length;
+  const totalTasks = snapshot?.tasks?.length ?? 0;
+  const progress = totalTasks > 0 ? Math.round((completed / totalTasks) * 100) : 0;
   const isLeader = user.role === 'leader';
   const isMember = user.role === 'member';
   const currentMember = snapshot.members.find((member) => member.studentCode === user.accountId);
@@ -132,9 +182,48 @@ export function WorkspacePage() {
                 </li>
               ))}
             </ul>
-            <button className="primary-button full" type="button" disabled={!isLeader} onClick={() => isLeader && setAssignmentDialogOpen(true)}>
-              ✦ {isLeader ? 'Tạo bản nháp phân công AI' : 'Chờ nhóm trưởng phân công'}
-            </button>
+            {snapshot.tasks.length === 0 ? (
+              <>
+                <button
+                  className="primary-button full"
+                  type="button"
+                  disabled={!isLeader || isAnalyzing}
+                  onClick={handleAnalyzeTask}
+                >
+                  {isAnalyzing ? '⏳ Đang phân tích bài Lab…' : '✦ Phân tích Task (AI)'}
+                </button>
+                <button
+                  className="secondary-button full"
+                  type="button"
+                  style={{ marginTop: '8px' }}
+                  disabled={true}
+                >
+                  ✦ Chờ có checklist để phân công AI
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="primary-button full"
+                  type="button"
+                  disabled={!isLeader}
+                  onClick={() => isLeader && setAssignmentDialogOpen(true)}
+                >
+                  ✦ {isLeader ? 'Tạo bản nháp phân công AI' : 'Chờ nhóm trưởng phân công'}
+                </button>
+                {isLeader && (
+                  <button
+                    className="secondary-button full"
+                    type="button"
+                    style={{ marginTop: '8px' }}
+                    disabled={isAnalyzing}
+                    onClick={handleAnalyzeTask}
+                  >
+                    {isAnalyzing ? '⏳ Đang phân tích lại…' : '↻ Phân tích lại Task'}
+                  </button>
+                )}
+              </>
+            )}
             {!isLeader && <p className="permission-note">🔒 Chỉ nhóm trưởng có quyền tạo và phê duyệt kế hoạch.</p>}
             <div className="source-note"><b>Nguồn checklist</b><p>{snapshot.checklistSource}</p></div>
           </aside>
@@ -146,13 +235,35 @@ export function WorkspacePage() {
             </div>
             <div className="overall-progress"><i style={{ width: `${progress}%` }} /></div>
             <div className="task-list">
-              {snapshot.tasks.map((task) => (
-                <article className={`task ${task.status}`} key={task.id}>
-                  <span className={`task-check ${task.status === 'done' ? 'checked' : ''}`}>{task.status === 'done' ? '✓' : ''}</span>
-                  <div className="task-main"><span className="task-tag">{task.category}</span><h3>{task.title}</h3><p>Deliverable: {task.deliverable}</p></div>
-                  <div className="task-owner"><span className="member-avatar">{task.owner[0]}</span><div><b>{task.owner}</b><small>{task.status}</small></div></div>
-                </article>
-              ))}
+              {snapshot.tasks.length === 0 ? (
+                <div style={{ padding: '40px 16px', textAlign: 'center', color: '#64748b' }}>
+                  <div style={{ fontSize: '32px', marginBottom: '8px' }}>📋</div>
+                  <b style={{ display: 'block', fontSize: '15px', color: '#1e293b', marginBottom: '6px' }}>
+                    Chưa có checklist đầu việc
+                  </b>
+                  <p style={{ fontSize: '13px', maxWidth: '380px', margin: '0 auto 16px', lineHeight: 1.5 }}>
+                    Nhóm vừa được tạo. Hãy bấm <b>“Phân tích Task”</b> để AI đọc đề bài và bóc tách các đầu việc canonical.
+                  </p>
+                  {isLeader && (
+                    <button
+                      className="primary-button"
+                      type="button"
+                      disabled={isAnalyzing}
+                      onClick={handleAnalyzeTask}
+                    >
+                      {isAnalyzing ? '⏳ Đang gọi AI phân tích bài Lab…' : '✦ Phân tích Task ngay'}
+                    </button>
+                  )}
+                </div>
+              ) : (
+                snapshot.tasks.map((task) => (
+                  <article className={`task ${task.status}`} key={task.id}>
+                    <span className={`task-check ${task.status === 'done' ? 'checked' : ''}`}>{task.status === 'done' ? '✓' : ''}</span>
+                    <div className="task-main"><span className="task-tag">{task.category}</span><h3>{task.title}</h3><p>Deliverable: {task.deliverable}</p></div>
+                    <div className="task-owner"><span className="member-avatar">{task.owner[0]}</span><div><b>{task.owner}</b><small>{task.status}</small></div></div>
+                  </article>
+                ))
+              )}
             </div>
           </section>
 
@@ -160,7 +271,11 @@ export function WorkspacePage() {
             <div className="ready-score"><div className="progress-ring">{progress}%</div><h2>Tiến độ nhóm</h2><p>{completed}/{snapshot.tasks.length} task hoàn thành</p></div>
             <div className="deliverable-list">
               <h3>Deliverable trong fixture</h3>
-              {snapshot.tasks.map((task) => <label key={task.id}><input type="checkbox" checked={task.status === 'done'} readOnly /> {task.deliverable}</label>)}
+              {snapshot.tasks.length === 0 ? (
+                <p style={{ fontSize: '12px', color: '#94a3b8', fontStyle: 'italic', margin: '8px 0' }}>Chưa có deliverable nào.</p>
+              ) : (
+                snapshot.tasks.map((task) => <label key={task.id}><input type="checkbox" checked={task.status === 'done'} readOnly /> {task.deliverable}</label>)
+              )}
             </div>
             <button className="danger-outline full" type="button">☝ Yêu cầu Coach hỗ trợ</button>
             <p className="privacy-note">Coach chỉ thấy tiến độ nhóm và yêu cầu hỗ trợ được gửi.</p>
