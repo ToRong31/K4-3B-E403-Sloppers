@@ -1,4 +1,4 @@
-import { coachFixture, demoAccounts, labFixture, workspaceFixture } from './mockData';
+import { canonicalTasksFixture, coachFixture, demoAccounts, labFixture, workspaceFixture } from './mockData';
 
 const SESSION_KEY = 'vlearn-labspace.mock-session';
 
@@ -27,17 +27,33 @@ export function createMockApiClient() {
     },
     getDemoAccounts: () => wait(demoAccounts, 60),
     getLabs: () => wait([labFixture]),
-    analyzeLab: (payload) =>
-      wait({
+    analyzeLab: async (payload) => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/labs/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.status === 'ready' && data.checklist_draft) {
+            return data;
+          }
+        }
+      } catch {
+        // Fallback to local wait if backend is unreachable
+      }
+      return wait({
         status: 'ready',
         checklist_draft: {
           lab_id: payload?.lab_id ?? payload?.lab_manifest?.lab_id ?? 'K4-L3B-DAY05-06-MINI-HACKATHON',
           version: '1.0.0',
-          tasks: workspaceFixture.tasks,
+          tasks: canonicalTasksFixture,
         },
         gaps: [],
         questions: [],
-      }),
+      }, 400);
+    },
     getWorkspaceSnapshot: () => wait(workspaceFixture),
     getCoachSnapshot: () => wait(coachFixture),
   };

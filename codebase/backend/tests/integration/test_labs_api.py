@@ -79,3 +79,4 @@ def test_analyze_lab_endpoint_missing_reference_clarify() -> None:
     body = response.json()
     assert body["status"] == "clarify"
     assert body["gaps"]
+

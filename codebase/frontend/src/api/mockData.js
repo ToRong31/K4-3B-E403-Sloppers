@@ -42,10 +42,67 @@ export const labFixture = Object.freeze({
   updatedAt: 'Bài Lab mẫu đã được tải lên',
 });
 
+export const canonicalTasksFixture = Object.freeze([
+  { id: 't1', category: 'EVIDENCE', title: 'Khảo sát và tổng hợp pain', deliverable: 'Evidence log + quote', owner: 'Chưa phân công', status: 'todo' },
+  { id: 't2', category: 'PRODUCT', title: 'Chốt Canvas 7 dòng', deliverable: 'canvas.md', owner: 'Chưa phân công', status: 'todo' },
+  { id: 't3', category: 'UI / FLOW', title: 'Dựng flow tương tác', deliverable: 'Mockup bấm được', owner: 'Chưa phân công', status: 'todo' },
+  { id: 't4', category: 'AI / EVAL', title: 'AI assignment + golden set', deliverable: 'Model call + ≥20 case', owner: 'Chưa phân công', status: 'todo' },
+  { id: 't5', category: 'SUBMISSION', title: 'Hoàn thiện spec và gói nộp', deliverable: 'Spec + slide + video', owner: 'Chưa phân công', status: 'todo' },
+]);
+
+export const defaultLabManifest = Object.freeze({
+  lab_id: 'K4-L3B-DAY05-06-MINI-HACKATHON',
+  version: 1,
+  title: 'Mini Hackathon AI',
+  checkpoints: [
+    {
+      checkpoint_id: 'cp1',
+      checkpoint_order: 1,
+      title: 'Canvas và repo',
+      items: [
+        {
+          item_id: 'cp1-item-1',
+          item_order: 1,
+          source_type: 'deliverable',
+          title: 'Canvas 7 dòng',
+          content: 'Hoàn thành Canvas 7 dòng và nộp link repo công khai.',
+          ref_id: 'lab://K4-L3B-DAY05-06/v1/cp1/item-1',
+          is_required: true,
+        },
+      ],
+    },
+    {
+      checkpoint_id: 'cp3',
+      checkpoint_order: 3,
+      title: 'Video thao tác và số đo',
+      items: [
+        {
+          item_id: 'cp3-item-1',
+          item_order: 1,
+          source_type: 'requirement',
+          title: 'Golden set',
+          content: 'Chuẩn bị ít nhất 20 câu thử và ghi lại số case đạt chuẩn.',
+          ref_id: 'lab://K4-L3B-DAY05-06/v1/cp3/item-1',
+          is_required: true,
+        },
+        {
+          item_id: 'cp3-item-2',
+          item_order: 2,
+          source_type: 'deliverable',
+          title: 'Video thao tác',
+          content: 'Quay video thao tác sản phẩm khoảng 30 giây.',
+          ref_id: 'lab://K4-L3B-DAY05-06/v1/cp3/item-2',
+          is_required: true,
+        },
+      ],
+    },
+  ],
+});
+
 export const workspaceFixture = Object.freeze({
   source: 'mock',
   group: { id: 'group-sloppers', name: 'Sloppers', code: 'SLOP-3B' },
-  checklistSource: 'K4–L3B–DAY05–06–MINI–HACKATHON · fixture chưa đồng bộ backend',
+  checklistSource: 'Chưa phân tích checklist từ bài Lab',
   planStatus: 'draft',
   members: [
     { id: 'm1', studentCode: '2A202602765', fullName: 'Phạm Hoàng Trọng', name: 'Trọng', role: 'Nhóm trưởng', className: 'K4-E403', avatar: 'T', color: '#0284c7', status: 'accepted', profileReady: true },
@@ -53,13 +110,7 @@ export const workspaceFixture = Object.freeze({
     { id: 'm3', studentCode: '2A202602676', fullName: 'Lâm Hải Dương', name: 'Dương', role: 'AI · Prompt', className: 'K4-E403', avatar: 'D', color: '#7c3aed', status: 'pending', profileReady: false },
     { id: 'm4', studentCode: '2A202602523', fullName: 'Hoàng Quốc Dũng', name: 'Dũng', role: 'Backend · Data', className: 'K4-E403', avatar: 'D', color: '#ea580c', status: 'pending', profileReady: false },
   ],
-  tasks: [
-    { id: 't1', category: 'EVIDENCE', title: 'Khảo sát và tổng hợp pain', deliverable: 'Evidence log + quote', owner: 'Trọng', status: 'done' },
-    { id: 't2', category: 'PRODUCT', title: 'Chốt Canvas 7 dòng', deliverable: 'canvas.md', owner: 'Trọng', status: 'done' },
-    { id: 't3', category: 'UI / FLOW', title: 'Dựng flow tương tác', deliverable: 'Mockup bấm được', owner: 'Trang', status: 'doing' },
-    { id: 't4', category: 'AI / EVAL', title: 'AI assignment + golden set', deliverable: 'Model call + ≥20 case', owner: 'Dương', status: 'todo' },
-    { id: 't5', category: 'SUBMISSION', title: 'Hoàn thiện spec và gói nộp', deliverable: 'Spec + slide + video', owner: 'Dũng', status: 'todo' },
-  ],
+  tasks: [],
 });
 
 export const coachFixture = Object.freeze({

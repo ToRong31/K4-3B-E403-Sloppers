@@ -30,3 +30,4 @@ def analyze_lab_endpoint(
         gaps=result.get("gaps", []),
         questions=result.get("questions", []),
     )
+
