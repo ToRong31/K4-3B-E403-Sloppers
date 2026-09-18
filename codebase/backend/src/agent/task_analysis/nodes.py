@@ -49,26 +49,33 @@ def load_lab(state: TaskAnalysisState) -> TaskAnalysisState:
         lab_id = state.get("lab_id", "unknown-lab")
         lab_version = state.get("lab_version", 1)
         lab_title = state.get("lab_title", "")
+        grouped_cps: dict[str, list[dict[str, Any]]] = {}
+        for idx, doc in enumerate(documents):
+            cp_id = doc.get("checkpoint_id") or "cp1"
+            if cp_id not in grouped_cps:
+                grouped_cps[cp_id] = []
+            grouped_cps[cp_id].append(
+                {
+                    "item_id": doc.get("item_id") or f"item-{idx + 1}",
+                    "item_order": doc.get("item_order", idx + 1),
+                    "source_type": doc.get("source_type", "requirement"),
+                    "title": doc.get("title", f"Requirement {idx + 1}"),
+                    "content": doc.get("content", ""),
+                    "ref_id": doc.get("ref_id", ""),
+                    "is_required": doc.get("is_required", True),
+                    "checkpoint_id": cp_id,
+                }
+            )
         checkpoints = [
             {
-                "checkpoint_id": "cp1",
-                "checkpoint_order": 1,
-                "title": "Checkpoint 1",
-                "items": [
-                    {
-                        "item_id": f"item-{idx + 1}",
-                        "item_order": idx + 1,
-                        "source_type": doc.get("source_type", "requirement"),
-                        "title": doc.get("title", f"Requirement {idx + 1}"),
-                        "content": doc.get("content", ""),
-                        "ref_id": doc.get("ref_id", ""),
-                        "is_required": doc.get("is_required", True),
-                    }
-                    for idx, doc in enumerate(documents)
-                ],
+                "checkpoint_id": cp_id,
+                "checkpoint_order": cp_idx + 1,
+                "title": f"Checkpoint {cp_id}",
+                "items": items_list,
             }
+            for cp_idx, (cp_id, items_list) in enumerate(grouped_cps.items())
         ]
-        items = [dict(it, checkpoint_id="cp1") for it in checkpoints[0]["items"]]
+        items = [it for cp in checkpoints for it in cp["items"]]
     else:
         return {
             "status": "clarify",
@@ -176,6 +183,7 @@ def prepare_model_request(state: TaskAnalysisState) -> TaskAnalysisState:
 def analyze_each_checkpoint(state: TaskAnalysisState) -> TaskAnalysisState:
     """Analyze checkpoints to extract concrete tasks with deliverable and completion criteria."""
     checkpoints = state.get("checkpoints", [])
+    items = state.get("items", [])
     model_request = state.get("model_request", {})
 
     model = state.get("model")
@@ -205,18 +213,36 @@ def analyze_each_checkpoint(state: TaskAnalysisState) -> TaskAnalysisState:
 
     if model is not None:
         try:
-            prompt_text = f"{model_request.get('system', '')}\n\n{model_request.get('user', '')}"
-            response = model.invoke(prompt_text)
+            import re
+            from langchain_core.messages import HumanMessage, SystemMessage
+
+            sys_prompt = (
+                model_request.get("system")
+                or TASK_ANALYSIS_SYSTEM_PROMPT
+            ) + "\nBẮT BUỘC: Chỉ xuất duy nhất một khối JSON hợp lệ theo đúng schema trên. Không viết thêm lời chào hay giải thích gì bên ngoài JSON."
+            user_prompt = model_request.get("user") or build_task_analysis_prompt(
+                {
+                    "lab_id": state.get("lab_id"),
+                    "lab_version": state.get("lab_version", 1),
+                    "title": state.get("lab_title", ""),
+                    "checkpoints": checkpoints,
+                }
+            )
+            messages = [
+                SystemMessage(content=sys_prompt),
+                HumanMessage(content=user_prompt),
+            ]
+            response = model.invoke(messages)
             content = getattr(response, "content", str(response))
-            # Try parsing JSON from model
             cleaned = content.strip()
-            if cleaned.startswith("```json"):
-                cleaned = cleaned[7:]
-            if cleaned.startswith("```"):
-                cleaned = cleaned[3:]
-            if cleaned.endswith("```"):
-                cleaned = cleaned[:-3]
-            model_output_json = json.loads(cleaned.strip())
+            json_match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", cleaned)
+            if json_match:
+                cleaned = json_match.group(1).strip()
+            elif "{" in cleaned and "}" in cleaned:
+                start = cleaned.find("{")
+                end = cleaned.rfind("}") + 1
+                cleaned = cleaned[start:end].strip()
+            model_output_json = json.loads(cleaned)
         except Exception as exc:
             logger.exception("Task-analysis LLM invocation or parsing failed")
             if state.get("use_llm"):
@@ -244,20 +270,23 @@ def analyze_each_checkpoint(state: TaskAnalysisState) -> TaskAnalysisState:
                 cp_id = pt.get("checkpoint_id") or (
                     checkpoints[0].get("checkpoint_id") if checkpoints else "cp1"
                 )
+                ref_ids = pt.get("reference_ids", [])
+                if not ref_ids and items:
+                    ref_ids = [items[min(idx, len(items) - 1)].get("ref_id")]
                 tasks.append(
                     {
                         "task_key": pt.get("task_key") or f"{cp_id}-task-{idx + 1:02d}",
                         "checkpoint_id": cp_id,
                         "task_order": pt.get("task_order", idx + 1),
-                        "title": pt.get("title", ""),
-                        "description": pt.get("description", ""),
-                        "deliverable": pt.get("deliverable", ""),
+                        "title": pt.get("title") or pt.get("deliverable") or f"Task {idx + 1}",
+                        "description": pt.get("description") or pt.get("title") or pt.get("deliverable") or f"Nhiệm vụ {idx + 1}",
+                        "deliverable": pt.get("deliverable") or pt.get("title") or f"Deliverable {idx + 1}",
                         "completion_criteria": pt.get("completion_criteria")
                         or ["Hoàn thành theo tiêu chuẩn bài Lab"],
                         "required_skills": pt.get("required_skills", []),
                         "estimated_effort": pt.get("estimated_effort", "medium"),
                         "depends_on": pt.get("depends_on", []),
-                        "reference_ids": pt.get("reference_ids", []),
+                        "reference_ids": ref_ids,
                     }
                 )
             return {"analyzed_tasks": tasks, "status": "tasks_analyzed"}

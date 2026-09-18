@@ -1,5 +1,5 @@
 {
-  "checklist_id": "8d542fa1-6308-470b-9e4b-68d0a574d78f",
+  "checklist_id": "dc21689b-74f0-4a5f-a93d-fe9ec890a203",
   "lab_id": "lab-101",
   "lab_version": 1,
   "status": "pending_review",
@@ -9,7 +9,7 @@
       "checkpoint_order": 1,
       "tasks": [
         {
-          "id": "fc333107-3c70-4488-b842-004059f8228f",
+          "id": "561f5d5b-8d71-4eac-8238-f98d42d59fc7",
           "task_key": "cp1-task-01",
           "checkpoint_id": "cp1",
           "task_order": 1,
