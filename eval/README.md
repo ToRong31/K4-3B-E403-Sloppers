@@ -40,16 +40,20 @@ Lệnh đầu kiểm tra số case và coverage. Lệnh thứ hai còn yêu cầ
 
 Không được đổi `verification` thành `raw_chatlog_verified` nếu chưa mở raw chatlog và kiểm tra nội dung. Mỗi case đã xác minh phải có `raw_path` trỏ đến file tồn tại trong repository.
 
-## Chạy Task Analysis
+## Chạy hai live API eval
 
 Khởi động API có endpoint AI thật, sau đó:
 
 ```powershell
-$env:EVAL_TARGET_URL="http://127.0.0.1:8000/api/v1/labs/analyze"
 python eval/scripts/run_live_eval.py
 ```
 
-Runner ghi request/response thô và kết quả rule-based vào `eval/results/`.
+Lệnh trên chạy tuần tự:
+
+1. Task Analysis qua `/api/v1/labs/analyze`;
+2. Assignment qua `/api/v1/assignments/assign_tasks`.
+
+Có thể override URL bằng `EVAL_TARGET_URL` và `EVAL_ASSIGNMENT_TARGET_URL`. Runner ghi request/response API thô và CSV kết quả riêng cho từng module vào `eval/results/`.
 
 ## Chạy Assignment
 

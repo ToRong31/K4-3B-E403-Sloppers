@@ -27,3 +27,4 @@ htmlcov/
 *.sqlite
 *.sqlite3
 raw_chatlog
+data/generated/

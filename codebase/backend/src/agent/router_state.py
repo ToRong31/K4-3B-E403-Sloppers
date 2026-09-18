@@ -5,6 +5,9 @@ class RouterState(TypedDict, total=False):
     """Minimal shared contract between the parent graph and its subgraphs."""
 
     operation: str
+    use_llm: bool
+    mode: str
+    lab_version: int
     user_id: str
     group_id: str
     lab_id: str
@@ -29,3 +32,4 @@ class RouterState(TypedDict, total=False):
     model_request: dict[str, Any]
     response: dict[str, Any]
     references: list[str]
+    error: str | None

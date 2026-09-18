@@ -20,3 +20,4 @@ class TaskAnalysisState(TypedDict, total=False):
     checklist_draft: dict[str, Any]
     error: str | None
     mode: str
+    use_llm: bool

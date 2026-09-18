@@ -5,6 +5,36 @@ const SESSION_KEY = 'vlearn-labspace.mock-session';
 const wait = (value, delay = 180) =>
   new Promise((resolve) => window.setTimeout(() => resolve(structuredClone(value)), delay));
 
+function createAssignmentDraft({ group_name, members, tasks }) {
+  const eligibleMembers = members.filter((member) => member.skills?.length);
+  if (!eligibleMembers.length) {
+    return { status: 'clarify', assignments: [], gaps: ['Ít nhất một thành viên cần khai báo kỹ năng trước khi phân công.'] };
+  }
+
+  const workload = Object.fromEntries(eligibleMembers.map((member) => [member.id, 0]));
+  let hasGap = false;
+  const assignments = tasks.map((task) => {
+    const taskText = `${task.title} ${task.deliverable}`.toLocaleLowerCase();
+    const candidates = eligibleMembers.map((member) => ({
+      member,
+      matchedSkills: member.skills.filter((skill) => taskText.includes(skill.toLocaleLowerCase())),
+    }));
+    candidates.sort((left, right) => right.matchedSkills.length - left.matchedSkills.length || workload[left.member.id] - workload[right.member.id]);
+    const winner = candidates[0];
+    workload[winner.member.id] += 1;
+    const matched = winner.matchedSkills.length > 0;
+    hasGap ||= !matched;
+    return {
+      task_id: task.id,
+      owner_id: winner.member.id,
+      matched_skills: winner.matchedSkills,
+      reason: matched ? `Kỹ năng tự khai phù hợp: ${winner.matchedSkills.join(', ')}.` : 'Chưa có skill khớp trực tiếp; tạm cân bằng số task trong nhóm.',
+      confidence: matched ? 'high' : 'low',
+    };
+  });
+  return { status: 'ready', assignments, gaps: hasGap ? ['Có task chưa khớp skill; nhóm cần kiểm tra trước khi xác nhận.'] : [] };
+}
+
 export function createMockApiClient() {
   return {
     source: 'mock',
@@ -56,5 +86,6 @@ export function createMockApiClient() {
     },
     getWorkspaceSnapshot: () => wait(workspaceFixture),
     getCoachSnapshot: () => wait(coachFixture),
+    assignTasks: (payload) => wait(createAssignmentDraft(payload), 420),
   };
 }

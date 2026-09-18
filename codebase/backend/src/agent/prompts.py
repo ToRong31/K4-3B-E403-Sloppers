@@ -15,18 +15,25 @@ Nguyên tắc bắt buộc:
 4. Không giải bài thay học viên và không đưa đáp án chuyên môn hoàn chỉnh.
 5. Nếu nguồn mâu thuẫn hoặc thiếu dữ liệu cần thiết, trả status="clarify" và nêu questions.
 6. Task phải có đầu ra quan sát được; tránh task mơ hồ như "làm bài" hoặc "nghiên cứu thêm".
-7. Chỉ trả JSON hợp lệ, không thêm Markdown.
+7. Mỗi task phải có task_key duy nhất theo mẫu <checkpoint_id>-task-<số thứ tự 2 chữ số>,
+   ví dụ cp1-task-01. depends_on chỉ được chứa task_key chính xác của task khác trong cùng output.
+8. task_order bắt đầu từ 1; completion_criteria phải là các điều kiện kiểm chứng được.
+9. Chỉ trả JSON hợp lệ, không thêm Markdown.
 
 Output schema:
 {
   "status": "ready | clarify",
   "tasks": [
     {
+      "task_key": "cp1-task-01",
+      "task_order": 1,
       "title": "string",
       "description": "string",
       "deliverable": "string",
+      "completion_criteria": ["string"],
       "required_skills": ["string"],
-      "depends_on": ["temporary_task_key"],
+      "estimated_effort": "small | medium | large",
+      "depends_on": ["task_key tồn tại trong tasks"],
       "checkpoint_id": "string | null",
       "reference_ids": ["ref_id"]
     }
@@ -59,6 +66,7 @@ Output schema:
     {
       "task_id": "uuid",
       "owner_id": "uuid",
+      "matched_skills": ["skill tự khai khớp trực tiếp"],
       "reason": "lý do ngắn dựa trên skill/workload",
       "confidence": "high | medium | low"
     }

@@ -9,6 +9,7 @@ ROOT = Path(__file__).parents[1]
 DATASET = ROOT / "golden-set-task-analysis.json"
 RESULTS = ROOT / "results" / "task-analysis-run-1.csv"
 RAW_LOG = ROOT / "results" / "task-analysis-run-1-raw.jsonl"
+DIAGNOSTICS_LOG = ROOT / "results" / "task-analysis-run-1-diagnostics.md"
 
 
 def flatten_tasks(response: dict) -> list[dict]:
@@ -82,14 +83,16 @@ def classify_error(exc: Exception) -> str:
     return "runner_error"
 
 
-def main() -> None:
-    target_url = os.environ.get("EVAL_TARGET_URL")
-    if not target_url:
-        raise SystemExit("Set EVAL_TARGET_URL to the live Task Analysis endpoint")
+def run_task_analysis_eval() -> None:
+    target_url = os.environ.get(
+        "EVAL_TARGET_URL",
+        "http://127.0.0.1:8000/api/v1/labs/analyze",
+    )
 
     cases = json.loads(DATASET.read_text(encoding="utf-8"))["cases"]
     rows = []
     raw_lines = []
+    diagnostics = ["# Task Analysis live-eval diagnostics", ""]
     for case in cases:
         try:
             response = call_target(target_url, case["input"])
@@ -113,6 +116,17 @@ def main() -> None:
                 ensure_ascii=False,
             )
         )
+        model_error = response.get("error", "")
+        if model_error:
+            diagnostics.extend(
+                [
+                    f"## {case['id']}",
+                    "",
+                    f"- Model error: `{model_error}`",
+                    f"- API status: `{response.get('status', 'error')}`",
+                    "",
+                ]
+            )
         rows.append(
             {
                 "case_id": case["id"],
@@ -124,12 +138,15 @@ def main() -> None:
                 "automated_pass": result["passed"],
                 "human_rating": "not_scored",
                 "error_category": error_category,
-                "notes": error,
+                "notes": error or model_error,
             }
         )
         print(f"{'PASS' if result['passed'] else 'FAIL'} | {case['id']}")
 
     RAW_LOG.write_text("\n".join(raw_lines) + "\n", encoding="utf-8")
+    if len(diagnostics) == 2:
+        diagnostics.append("Không có model error từ API.")
+    DIAGNOSTICS_LOG.write_text("\n".join(diagnostics) + "\n", encoding="utf-8")
     with RESULTS.open("w", newline="", encoding="utf-8-sig") as file:
         writer = csv.DictWriter(file, fieldnames=rows[0].keys())
         writer.writeheader()
@@ -137,6 +154,18 @@ def main() -> None:
 
     passed = sum(row["automated_pass"] for row in rows)
     print(f"\nResult: {passed}/{len(rows)} passed ({passed / len(rows):.1%})")
+
+
+def main() -> None:
+    try:
+        from eval.scripts.run_assignment_live_eval import run_assignment_eval
+    except ModuleNotFoundError:
+        from run_assignment_live_eval import run_assignment_eval
+
+    print("=== Task Analysis live API eval ===")
+    run_task_analysis_eval()
+    print("\n=== Assignment live API eval ===")
+    run_assignment_eval()
 
 
 if __name__ == "__main__":

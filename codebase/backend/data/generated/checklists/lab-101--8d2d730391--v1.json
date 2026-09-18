@@ -1,0 +1,35 @@
+{
+  "checklist_id": "8d542fa1-6308-470b-9e4b-68d0a574d78f",
+  "lab_id": "lab-101",
+  "lab_version": 1,
+  "status": "pending_review",
+  "checkpoints": [
+    {
+      "checkpoint_id": "cp1",
+      "checkpoint_order": 1,
+      "tasks": [
+        {
+          "id": "fc333107-3c70-4488-b842-004059f8228f",
+          "task_key": "cp1-task-01",
+          "checkpoint_id": "cp1",
+          "task_order": 1,
+          "title": "Canvas",
+          "description": "Hoàn thành Canvas",
+          "deliverable": "Deliverable cho Canvas",
+          "completion_criteria": [
+            "Nghiệm thu: Hoàn thành Canvas"
+          ],
+          "required_skills": [
+            "Engineering"
+          ],
+          "estimated_effort": "medium",
+          "depends_on": [],
+          "reference_ids": [
+            "lab://lab-101/v1/cp1/it1"
+          ],
+          "status": "proposed"
+        }
+      ]
+    }
+  ]
+}

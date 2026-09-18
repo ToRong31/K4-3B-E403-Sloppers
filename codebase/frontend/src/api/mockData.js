@@ -105,10 +105,10 @@ export const workspaceFixture = Object.freeze({
   checklistSource: 'Chưa phân tích checklist từ bài Lab',
   planStatus: 'draft',
   members: [
-    { id: 'm1', studentCode: '2A202602765', fullName: 'Phạm Hoàng Trọng', name: 'Trọng', role: 'Nhóm trưởng', className: 'K4-E403', avatar: 'T', color: '#0284c7', status: 'accepted', profileReady: true },
-    { id: 'm2', studentCode: '2A202602678', fullName: 'Lê Thị Thùy Trang', name: 'Trang', role: 'Frontend · UI/UX', className: 'K4-E403', avatar: 'T', color: '#0d9488', status: 'pending', profileReady: false },
-    { id: 'm3', studentCode: '2A202602676', fullName: 'Lâm Hải Dương', name: 'Dương', role: 'AI · Prompt', className: 'K4-E403', avatar: 'D', color: '#7c3aed', status: 'pending', profileReady: false },
-    { id: 'm4', studentCode: '2A202602523', fullName: 'Hoàng Quốc Dũng', name: 'Dũng', role: 'Backend · Data', className: 'K4-E403', avatar: 'D', color: '#ea580c', status: 'pending', profileReady: false },
+    { id: 'm1', studentCode: '2A202602765', fullName: 'Phạm Hoàng Trọng', name: 'Trọng', role: 'Nhóm trưởng', className: 'K4-E403', avatar: 'T', color: '#0284c7', status: 'accepted', profileReady: true, skills: ['Research', 'Product'] },
+    { id: 'm2', studentCode: '2A202602678', fullName: 'Lê Thị Thùy Trang', name: 'Trang', role: 'Frontend · UI/UX', className: 'K4-E403', avatar: 'T', color: '#0d9488', status: 'pending', profileReady: false, skills: ['UI', 'Flow', 'Frontend'] },
+    { id: 'm3', studentCode: '2A202602676', fullName: 'Lâm Hải Dương', name: 'Dương', role: 'AI · Prompt', className: 'K4-E403', avatar: 'D', color: '#7c3aed', status: 'pending', profileReady: false, skills: ['AI', 'Evaluation'] },
+    { id: 'm4', studentCode: '2A202602523', fullName: 'Hoàng Quốc Dũng', name: 'Dũng', role: 'Backend · Data', className: 'K4-E403', avatar: 'D', color: '#ea580c', status: 'pending', profileReady: false, skills: ['Backend', 'Data'] },
   ],
   tasks: [],
 });

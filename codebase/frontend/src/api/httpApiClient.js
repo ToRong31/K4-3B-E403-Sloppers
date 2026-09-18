@@ -35,6 +35,10 @@ export function createHttpApiClient({ baseUrl }) {
       }),
     getWorkspaceSnapshot: () => request(baseUrl, '/groups/current'),
     getCoachSnapshot: () => request(baseUrl, '/coach/groups'),
+    assignTasks: (payload) => request(baseUrl, '/assignments/assign_tasks', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
   };
 }
 
