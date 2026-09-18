@@ -4,6 +4,12 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { apiClient } from '../../api/createApiClient';
 import { useAuth } from '../../auth/useAuth';
 import { ErrorState, LoadingState } from '../../components/PageState';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+
+import { apiClient } from '../../api/createApiClient';
+import { useAuth } from '../../auth/useAuth';
+import { ErrorState, LoadingState } from '../../components/PageState';
 import { useAsyncResource } from '../../hooks/useAsyncResource';
 import { canonicalTasksFixture, defaultLabManifest } from '../../api/mockData';
 import { AssignmentReviewDialog } from '../assignment/AssignmentReviewDialog';
@@ -12,6 +18,7 @@ import { GroupSettingsDialog } from '../group/GroupSettingsDialog';
 import { MemberInviteFlow, MemberSkillProfileDialog } from '../profile/MemberInviteFlow';
 import { PrivateProgressChat } from '../progress/PrivateProgressChat';
 import { LabReferenceBadge } from '../labs/LabReferenceBadge';
+import { CoachHelpDialog } from '../coach/CoachHelpDialog';
 import { useRealtime } from '../../realtime/useRealtime';
 
 const statusLabel = {
@@ -32,6 +39,8 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
   const [assignmentDialogOpen, setAssignmentDialogOpen] = useState(false);
   const [groupDialogOpen, setGroupDialogOpen] = useState(false);
   const [groupSettingsOpen, setGroupSettingsOpen] = useState(false);
+  const [coachHelpOpen, setCoachHelpOpen] = useState(false);
+  const [supportRequests, setSupportRequests] = useState([]);
   const groupDialogTriggerRef = useRef(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analyzeProgress, setAnalyzeProgress] = useState(0);
@@ -52,8 +61,40 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
       if (event.type !== 'chat.message_sent') {
         apiClient.getWorkspaceSnapshot().then(setWorkspaceData).catch(() => undefined);
       }
+      if (
+        event.type === 'help_request.created' ||
+        event.type === 'help_request.replied' ||
+        event.type === 'help_request.resolved'
+      ) {
+        if (apiClient.getSupportRequests) {
+          apiClient.getSupportRequests().then((reqs) => {
+            if (reqs && Array.isArray(reqs)) setSupportRequests(reqs);
+          }).catch(() => undefined);
+        }
+      }
     });
   }, [realtimeClient]);
+
+  // Load support requests on mount & group change
+  useEffect(() => {
+    let ignore = false;
+    async function loadSupportRequests() {
+      try {
+        if (apiClient.getSupportRequests) {
+          const reqs = await apiClient.getSupportRequests();
+          if (!ignore && reqs && Array.isArray(reqs)) {
+            setSupportRequests(reqs);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load support requests:', err);
+      }
+    }
+    loadSupportRequests();
+    return () => {
+      ignore = true;
+    };
+  }, [data?.group?.id, workspaceData?.group?.id]);
 
   const snapshot = workspaceData ?? data;
   const currentLabId = useMemo(() => {
@@ -552,7 +593,29 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
                 snapshot.tasks.map((task) => <label key={task.id}><input type="checkbox" checked={task.status === 'done'} readOnly /> {task.deliverable}</label>)
               )}
             </div>
-            <button className="danger-outline full" type="button">☝ Yêu cầu Coach hỗ trợ</button>
+            {(() => {
+              const pending = supportRequests.find((r) => r.status === 'pending');
+              const resolved = supportRequests.filter((r) => r.status === 'resolved').pop();
+              let label = '☝ Yêu cầu Coach hỗ trợ';
+              let btnClass = 'danger-outline full';
+              if (pending) {
+                label = '⏳ Đang chờ Coach hỗ trợ (1 yêu cầu)';
+                btnClass = 'danger-outline full pending-request';
+              } else if (resolved) {
+                label = '✓ Coach đã giải đáp · Gửi yêu cầu mới';
+                btnClass = 'secondary-button full resolved-request';
+              }
+              return (
+                <button
+                  id="requestCoach"
+                  className={btnClass}
+                  type="button"
+                  onClick={() => setCoachHelpOpen(true)}
+                >
+                  {label}
+                </button>
+              );
+            })()}
             <p className="privacy-note">Coach chỉ thấy tiến độ nhóm và yêu cầu hỗ trợ được gửi.</p>
           </aside>
         </div>
@@ -609,6 +672,18 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
           onSave={handleProfileSaved}
         />
       )}
+
+      <CoachHelpDialog
+        open={coachHelpOpen}
+        onClose={() => setCoachHelpOpen(false)}
+        group={snapshot?.group}
+        user={user}
+        supportRequests={supportRequests}
+        onCreated={(newReq) => {
+          setSupportRequests((prev) => [...prev, newReq]);
+        }}
+        apiClient={apiClient}
+      />
     </>
   );
 }
