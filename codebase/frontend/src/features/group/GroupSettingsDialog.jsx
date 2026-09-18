@@ -66,7 +66,7 @@ export function GroupSettingsDialog({
   };
 
   return (
-    <dialog ref={dialogRef} open={open} className="group-settings-dialog" onClose={onClose} onCancel={onClose}>
+    <dialog ref={dialogRef} className="group-settings-dialog" onClose={onClose} onCancel={onClose}>
       <header className="group-dialog-header">
         <div>
           <span>LABSPACE · QUẢN LÝ NHÓM</span>
