@@ -28,6 +28,11 @@ export function createHttpApiClient({ baseUrl }) {
     logout: () => request(baseUrl, '/auth/logout', { method: 'POST' }),
     getSession: () => request(baseUrl, '/auth/me'),
     getLabs: () => request(baseUrl, '/labs'),
+    analyzeLab: (payload) =>
+      request(baseUrl, '/labs/analyze', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
     getWorkspaceSnapshot: () => request(baseUrl, '/groups/current'),
     getCoachSnapshot: () => request(baseUrl, '/coach/groups'),
   };

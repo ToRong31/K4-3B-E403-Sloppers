@@ -1,4 +1,3 @@
-import pytest
 
 from src.agent.task_analysis.tools import (
     build_checklist_draft_object,
@@ -8,7 +7,6 @@ from src.agent.task_analysis.tools import (
     validate_lab_sources,
     validate_task_draft_items,
 )
-from src.models.lab import LabCheckpoint, LabItem, LabManifest, LabSourceType
 from src.models.tasks import ChecklistDraft
 
 
@@ -212,4 +210,3 @@ def test_build_checklist_draft_object() -> None:
     assert len(validated.checkpoints) == 2
     assert validated.checkpoints[0].tasks[0].task_key == "cp1-task-01"
     assert validated.checkpoints[1].tasks[0].task_key == "cp2-task-01"
-

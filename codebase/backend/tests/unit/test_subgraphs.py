@@ -43,6 +43,41 @@ def test_parent_router_dispatches_to_assignment_subgraph() -> None:
     assert result["assignments"][0]["owner_id"] == "m1"
 
 
+def test_parent_router_dispatches_to_task_analysis_subgraph() -> None:
+    result = router_graph.invoke(
+        {
+            "operation": "analyze_lab",
+            "lab_manifest": {
+                "lab_id": "lab-test",
+                "version": 1,
+                "title": "Lab Test",
+                "checkpoints": [
+                    {
+                        "checkpoint_id": "cp1",
+                        "checkpoint_order": 1,
+                        "title": "CP 1",
+                        "items": [
+                            {
+                                "item_id": "it1",
+                                "item_order": 1,
+                                "source_type": "deliverable",
+                                "title": "Spec",
+                                "content": "Spec deliverable",
+                                "ref_id": "lab://lab-test/v1/cp1/it1",
+                                "is_required": True,
+                            }
+                        ],
+                    }
+                ],
+            },
+        }
+    )
+
+    assert result["status"] == "ready"
+    assert "checklist_draft" in result
+    assert result["checklist_draft"]["lab_id"] == "lab-test"
+
+
 def test_parent_router_rejects_unknown_operation() -> None:
     result = router_graph.invoke({"operation": "do_everything"})
 
