@@ -7,8 +7,8 @@ from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).parents[1]
 DATASET = ROOT / "golden-set-task-analysis.json"
-RESULTS = ROOT / "results" / "run-1.csv"
-RAW_LOG = ROOT / "results" / "run-1-raw.jsonl"
+RESULTS = ROOT / "results" / "task-analysis-run-1.csv"
+RAW_LOG = ROOT / "results" / "task-analysis-run-1-raw.jsonl"
 
 
 def flatten_tasks(response: dict) -> list[dict]:
@@ -30,7 +30,9 @@ def grade(case: dict, response: dict) -> dict:
         for document in case["input"].get("documents", [])
         if document.get("ref_id")
     }
-    output_refs = {reference for task in tasks for reference in task.get("reference_ids", [])}
+    output_refs = {
+        reference for task in tasks for reference in task.get("reference_ids", [])
+    }
     required_refs = set(expected["required_reference_ids"])
     schema_valid = (
         all(
