@@ -30,4 +30,10 @@ describe('member skill profile', () => {
   it('uses level 3 when a selected skill has not been rated yet', () => {
     expect(buildSkillProfile(['Backend'], {})).toEqual([{ skill: 'Backend', level: 3 }]);
   });
+
+  it('exports MemberSkillProfileDialog as a reusable component', async () => {
+    const mod = await import('./MemberInviteFlow');
+    expect(mod.MemberSkillProfileDialog).toBeDefined();
+  });
 });
+
