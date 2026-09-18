@@ -6,6 +6,7 @@ import { ErrorState, LoadingState } from '../../components/PageState';
 import { useAsyncResource } from '../../hooks/useAsyncResource';
 import { LeaderGroupDialog } from '../group/LeaderGroupDialog';
 import { MemberInviteFlow } from '../profile/MemberInviteFlow';
+import { PrivateProgressChat } from '../progress/PrivateProgressChat';
 
 const statusLabel = {
   accepted: 'Đã vào',
@@ -89,6 +90,7 @@ export function WorkspacePage() {
             <p><span className="role-tag">VIEW {user.roleLabel.toUpperCase()}</span> Mini Hackathon AI</p>
           </div>
           <div className="workspace-actions">
+            <PrivateProgressChat snapshot={snapshot} user={user} isMock={snapshot.source === 'mock'} />
             {isLeader && (
               <button ref={groupDialogTriggerRef} className="primary-button" type="button" onClick={() => setGroupDialogOpen(true)}>
                 ＋ Lập nhóm Lab

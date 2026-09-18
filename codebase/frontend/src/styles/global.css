@@ -184,6 +184,57 @@
 .deliverable-list label { font-size: 12px; color: #42566e; }
 .workspace-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
 
+/* Private Progress Assistant: mirrors the approved right-side Lab AI panel. */
+.progress-chat-launcher { white-space: nowrap; }
+.progress-chat-scrim { position: fixed; z-index: 28; inset: 0; border: 0; background: rgba(16, 39, 61, .22); cursor: default; }
+.private-progress-chat { position: fixed; z-index: 29; top: 0; right: 0; bottom: 0; width: min(390px, calc(100vw - 34px)); display: grid; grid-template-rows: auto auto auto auto minmax(0, 1fr) auto; border-left: 1px solid #c8d6e2; color: #263a4e; background: #fff; box-shadow: -16px 0 38px rgba(15, 47, 76, .2); transform: translateX(104%); transition: transform .2s ease; }
+.private-progress-chat.open { transform: translateX(0); }
+.progress-chat-header { min-height: 72px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; color: #fff; background: linear-gradient(120deg, #0e4f89, #176fa9); }
+.progress-chat-header span { display: block; margin-bottom: 4px; color: #d7efff; font-size: 9px; font-weight: 850; letter-spacing: .1em; }
+.progress-chat-header h2 { margin: 0; font-size: 18px; letter-spacing: -.02em; }
+.progress-chat-header h2 i { margin-left: 6px; padding: 3px 6px; border: 1px solid rgba(255, 255, 255, .36); border-radius: 999px; color: #dff3ff; font-size: 9px; font-style: normal; letter-spacing: .05em; vertical-align: 3px; }
+.progress-chat-header > button { width: 31px; height: 31px; border: 1px solid rgba(255, 255, 255, .4); border-radius: 8px; color: #fff; background: rgba(255, 255, 255, .1); cursor: pointer; font-size: 21px; line-height: 1; }
+.progress-chat-context { min-height: 65px; padding: 11px 14px; display: grid; grid-template-columns: 35px 1fr auto; align-items: center; gap: 9px; border-bottom: 1px solid #dce7ef; }
+.progress-chat-bot-avatar { width: 33px; height: 33px; display: grid; place-items: center; border-radius: 50%; color: #fff; background: #1977b5; font-size: 17px; }
+.progress-chat-context b, .progress-chat-context small { display: block; }
+.progress-chat-context b { color: #1d405f; font-size: 12px; }
+.progress-chat-context small { margin-top: 3px; color: #72859a; font-size: 10px; }
+.progress-chat-context button { padding: 6px 7px; border: 1px solid #cbd9e4; border-radius: 6px; color: #176098; background: #fff; cursor: pointer; font-size: 10px; font-weight: 750; }
+.progress-chat-demo-note { margin: 0; padding: 6px 14px; color: #9a6204; background: #fff9e8; border-bottom: 1px solid #f3dfa6; font-size: 10px; font-weight: 700; }
+.progress-chat-quick-prompts { padding: 10px 12px; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid #e1e9f0; }
+.progress-chat-quick-prompts button { padding: 5px 8px; border: 1px solid #c7d9e8; border-radius: 999px; color: #1d5f91; background: #f4f9fd; cursor: pointer; font-size: 10px; font-weight: 700; }
+.progress-chat-quick-prompts button:hover { border-color: #76add3; background: #e7f3fc; }
+.progress-chat-task-context { padding: 8px 12px 9px; display: grid; grid-template-columns: 82px 1fr; align-items: center; gap: 7px; color: #60758a; background: #fbfdff; border-bottom: 1px solid #e1e9f0; font-size: 10px; font-weight: 750; }
+.progress-chat-task-context select { min-width: 0; height: 29px; padding: 0 7px; border: 1px solid #cad8e4; border-radius: 6px; color: #314d67; background: #fff; font: inherit; font-size: 10px; }
+.progress-chat-messages { min-height: 0; padding: 13px; display: flex; flex-direction: column; gap: 11px; overflow-y: auto; background: #f8fbfd; }
+.progress-chat-message { max-width: 91%; display: grid; gap: 4px; }
+.progress-chat-message small { color: #75889a; font-size: 9px; font-weight: 750; }
+.progress-chat-message p { margin: 0; padding: 9px 10px; border: 1px solid #d6e2eb; border-radius: 3px 10px 10px; color: #2a4258; background: #fff; font-size: 12px; line-height: 1.45; white-space: pre-line; }
+.progress-chat-message.user { align-self: flex-end; }
+.progress-chat-message.user small { text-align: right; }
+.progress-chat-message.user p { border-color: #17669f; border-radius: 10px 3px 10px 10px; color: #fff; background: #17669f; }
+.progress-chat-message em { color: #5d7488; font-size: 10px; font-style: normal; line-height: 1.35; }
+.progress-chat-references { display: flex; flex-wrap: wrap; gap: 4px; }
+.progress-chat-references span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; padding: 3px 5px; border-radius: 4px; color: #14669e; background: #e8f4fc; font-family: Consolas, monospace; font-size: 9px; white-space: nowrap; }
+.progress-chat-typing { align-self: flex-start; display: flex; align-items: center; gap: 4px; padding: 8px 10px; border: 1px solid #d6e2eb; border-radius: 10px; background: #fff; }
+.progress-chat-typing i { width: 5px; height: 5px; border-radius: 50%; background: #5d89ab; animation: progress-chat-pulse .7s infinite alternate; }
+.progress-chat-typing i:nth-child(2) { animation-delay: .2s; }.progress-chat-typing i:nth-child(3) { animation-delay: .4s; }
+@keyframes progress-chat-pulse { to { opacity: .3; transform: translateY(-2px); } }
+.progress-chat-form { padding: 10px 12px; display: grid; grid-template-columns: 1fr 38px; gap: 7px; border-top: 1px solid #dce6ee; background: #fff; }
+.progress-chat-form input { min-width: 0; height: 38px; padding: 0 10px; border: 1px solid #bfcfdd; border-radius: 8px; color: #29445d; font: inherit; font-size: 12px; outline: none; }
+.progress-chat-form input:focus { border-color: #287db5; box-shadow: 0 0 0 3px rgba(40, 125, 181, .12); }
+.progress-chat-form .primary-button { min-width: 38px; padding: 0; font-size: 18px; }
+
+@media (max-width: 760px) {
+  .progress-chat-scrim { background: rgba(16, 39, 61, .32); }
+  .private-progress-chat { width: min(390px, calc(100vw - 16px)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .private-progress-chat { transition: none; }
+  .progress-chat-typing i { animation: none; }
+}
+
 .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .group-setup-dialog { width: min(780px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); padding: 0; overflow: hidden auto; border: 0; border-radius: 15px; color: #23364a; background: #fff; box-shadow: 0 28px 70px rgba(12, 35, 57, .26); }
 .group-setup-dialog::backdrop { background: rgba(17, 38, 57, .52); backdrop-filter: blur(2px); }

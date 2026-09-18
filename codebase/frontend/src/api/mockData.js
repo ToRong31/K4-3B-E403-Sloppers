@@ -54,11 +54,11 @@ export const workspaceFixture = Object.freeze({
     { id: 'm4', studentCode: '2A202602523', fullName: 'Hoàng Quốc Dũng', name: 'Dũng', role: 'Backend · Data', className: 'K4-E403', avatar: 'D', color: '#ea580c', status: 'pending', profileReady: false },
   ],
   tasks: [
-    { id: 't1', category: 'EVIDENCE', title: 'Khảo sát và tổng hợp pain', deliverable: 'Evidence log + quote', owner: 'Trọng', status: 'done' },
-    { id: 't2', category: 'PRODUCT', title: 'Chốt Canvas 7 dòng', deliverable: 'canvas.md', owner: 'Trọng', status: 'done' },
-    { id: 't3', category: 'UI / FLOW', title: 'Dựng flow tương tác', deliverable: 'Mockup bấm được', owner: 'Trang', status: 'doing' },
-    { id: 't4', category: 'AI / EVAL', title: 'AI assignment + golden set', deliverable: 'Model call + ≥20 case', owner: 'Dương', status: 'todo' },
-    { id: 't5', category: 'SUBMISSION', title: 'Hoàn thiện spec và gói nộp', deliverable: 'Spec + slide + video', owner: 'Dũng', status: 'todo' },
+    { id: 't1', category: 'EVIDENCE', title: 'Khảo sát và tổng hợp pain', deliverable: 'Evidence log + quote', owner: 'Trọng', status: 'done', completion_criteria: ['Có quote và cách đếm'], depends_on: [], reference_ids: ['fixture://lab/cp1/evidence'] },
+    { id: 't2', category: 'PRODUCT', title: 'Chốt Canvas 7 dòng', deliverable: 'canvas.md', owner: 'Trọng', status: 'done', completion_criteria: ['Đủ 7 dòng Canvas'], depends_on: ['t1'], reference_ids: ['fixture://lab/cp1/canvas'] },
+    { id: 't3', category: 'UI / FLOW', title: 'Dựng flow tương tác', deliverable: 'Mockup bấm được', owner: 'Trang', status: 'doing', completion_criteria: ['Luồng thao tác được bấm từ đầu đến cuối'], depends_on: ['t2'], reference_ids: ['fixture://lab/cp2/flow'] },
+    { id: 't4', category: 'AI / EVAL', title: 'AI assignment + golden set', deliverable: 'Model call + ≥20 case', owner: 'Dương', status: 'todo', completion_criteria: ['Có model call và ít nhất 20 case'], depends_on: ['t2'], reference_ids: ['fixture://lab/cp3/golden-set'] },
+    { id: 't5', category: 'SUBMISSION', title: 'Hoàn thiện spec và gói nộp', deliverable: 'Spec + slide + video', owner: 'Dũng', status: 'todo', completion_criteria: ['Có spec, slide và video'], depends_on: ['t3', 't4'], reference_ids: ['fixture://lab/cp4/submission'] },
   ],
 });
 
