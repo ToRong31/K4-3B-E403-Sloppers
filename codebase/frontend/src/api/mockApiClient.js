@@ -5,7 +5,7 @@ const SESSION_KEY = 'vlearn-labspace.mock-session';
 const wait = (value, delay = 180) =>
   new Promise((resolve) => window.setTimeout(() => resolve(structuredClone(value)), delay));
 
-function createAssignmentDraft({ group_name, members, tasks }) {
+function createAssignmentDraft({ members, tasks }) {
   const eligibleMembers = members.filter((member) => member.skills?.length);
   if (!eligibleMembers.length) {
     return { status: 'clarify', assignments: [], gaps: ['Ít nhất một thành viên cần khai báo kỹ năng trước khi phân công.'] };
@@ -56,7 +56,13 @@ export function createMockApiClient() {
       return wait({ user }, 80);
     },
     getDemoAccounts: () => wait(demoAccounts, 60),
-    getLabs: () => wait([labFixture]),
+    getLabs: async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/labs');
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait([labFixture]);
+    },
     analyzeLab: async (payload) => {
       try {
         const response = await fetch('http://127.0.0.1:8000/api/v1/labs/analyze', {
@@ -66,13 +72,9 @@ export function createMockApiClient() {
         });
         if (response.ok) {
           const data = await response.json();
-          if (data && data.status === 'ready' && data.checklist_draft) {
-            return data;
-          }
+          if (data?.status === 'ready' && data.checklist_draft) return data;
         }
-      } catch {
-        // Fallback to local wait if backend is unreachable
-      }
+      } catch {}
       return wait({
         status: 'ready',
         checklist_draft: {
@@ -84,8 +86,121 @@ export function createMockApiClient() {
         questions: [],
       }, 400);
     },
-    getWorkspaceSnapshot: () => wait(workspaceFixture),
-    getCoachSnapshot: () => wait(coachFixture),
+    getWorkspaceSnapshot: async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/groups/current');
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait(workspaceFixture);
+    },
+    getCoachSnapshot: async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/coach/groups');
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait(coachFixture);
+    },
     assignTasks: (payload) => wait(createAssignmentDraft(payload), 420),
+    updateTask: async (taskId, updates) => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/v1/groups/current/tasks/${taskId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        });
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait({ id: taskId, ...updates });
+    },
+    approvePlan: async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/groups/current/plan/approve', { method: 'POST' });
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait({ status: 'approved' });
+    },
+    getSupportRequests: async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/coach/support-requests');
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait([]);
+    },
+    createSupportRequest: async (payload) => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/coach/support-requests', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait({ id: `req-${Date.now()}`, ...payload, status: 'pending' });
+    },
+    resolveSupportRequest: async (requestId, responseText) => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/v1/coach/support-requests/${requestId}/resolve`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ response: responseText }),
+        });
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait({ id: requestId, response: responseText, status: 'resolved' });
+    },
+    checkGithubSubmission: async (repoUrl) => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/submissions/check-github', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ repo_url: repoUrl }),
+        });
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait({ valid: true, repo_url: repoUrl, summary: 'AI Double Check hoàn tất: Đầy đủ các tệp bàn giao bắt buộc.' });
+    },
+    sendChatMessage: async (payload) => {
+      let response;
+      try {
+        response = await fetch('http://127.0.0.1:8000/api/v1/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      } catch (error) {
+        console.warn('Backend chat API connection error, using local fallback:', error);
+        return null;
+      }
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({}));
+        throw new Error(errorBody.detail ?? `Chat API failed (${response.status})`);
+      }
+      return response.json();
+    },
+    getGroupChatMessages: async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/groups/current/chat');
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait([
+        { id: 'msg-init-1', author: 'Phạm Hoàng Trọng', shortName: 'Trọng', initial: 'T', role: 'Nhóm trưởng', isLeader: true, time: '10:00', text: 'Mọi người kiểm tra lại task và tiêu chí hoàn thành trước khi bắt đầu nhé.' },
+        { id: 'msg-init-2', author: 'Lê Thị Thùy Trang', shortName: 'Trang', initial: 'T', role: 'Frontend · UI/UX', isLeader: false, time: '10:05', text: 'Mình đang tiến hành dựng flow tương tác cho mockup rồi nhé.' },
+      ]);
+    },
+    sendGroupChatMessage: async (payload) => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/groups/current/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait({
+        id: `msg-${Date.now()}`,
+        time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
+        ...payload,
+      });
+    },
   };
 }

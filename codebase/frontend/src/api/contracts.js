@@ -16,6 +16,7 @@ export const realtimeEventTypes = Object.freeze([
   'help_request.created',
   'help_request.replied',
   'help_request.resolved',
+  'chat.message_sent',
 ]);
 
 export function isRealtimeEnvelope(value) {

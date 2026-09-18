@@ -6,6 +6,7 @@ from src.core.config import LLMProvider, Settings, get_settings
 from src.infrastructure.llm.anthropic import build_anthropic_model
 from src.infrastructure.llm.errors import LLMConfigurationError
 from src.infrastructure.llm.gemini import build_gemini_model
+from src.infrastructure.llm.nvidia import build_nvidia_model
 from src.infrastructure.llm.openai import build_openai_model
 
 ModelBuilder = Callable[[Settings], BaseChatModel]
@@ -14,6 +15,7 @@ PROVIDER_BUILDERS: dict[LLMProvider, ModelBuilder] = {
     LLMProvider.OPENAI: build_openai_model,
     LLMProvider.ANTHROPIC: build_anthropic_model,
     LLMProvider.GEMINI: build_gemini_model,
+    LLMProvider.NVIDIA: build_nvidia_model,
 }
 
 
@@ -26,6 +28,7 @@ def build_chat_model(settings: Settings | None = None) -> BaseChatModel:
             LLMProvider.OPENAI: "OPENAI_API_KEY",
             LLMProvider.ANTHROPIC: "ANTHROPIC_API_KEY",
             LLMProvider.GEMINI: "GOOGLE_API_KEY",
+            LLMProvider.NVIDIA: "NVIDIA_API_KEY",
         }[settings.llm_provider]
         raise LLMConfigurationError(
             f"{key_name} is required when LLM_PROVIDER={settings.llm_provider.value}"

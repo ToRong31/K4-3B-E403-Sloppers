@@ -5,12 +5,18 @@ from fastapi import APIRouter, Depends
 
 from src.api.deps import get_checklist_store, get_router_graph
 from src.infrastructure.checklist_store import ChecklistStore
+from src.infrastructure.json_store import get_json_store
 from src.models.schemas import TaskAnalysisRequest, TaskAnalysisResponse
 
 router = APIRouter(prefix="/labs", tags=["labs"])
 RouterDep = Annotated[Any, Depends(get_router_graph)]
 ChecklistStoreDep = Annotated[ChecklistStore, Depends(get_checklist_store)]
 logger = logging.getLogger(__name__)
+
+
+@router.get("")
+def list_labs() -> list[dict[str, Any]]:
+    return get_json_store().get_labs()
 
 
 @router.post("/analyze", response_model=TaskAnalysisResponse)
@@ -40,8 +46,6 @@ def analyze_lab_endpoint(
             saved_path = checklist_store.save(checklist_draft)
             logger.info("Canonical checklist saved | path=%s", saved_path)
         else:
-            # A test double or malformed internal result may omit canonical metadata.
-            # Do not turn an otherwise serializable API response into an unhandled 500.
             logger.warning("Ready checklist was not persisted because metadata is missing")
     return TaskAnalysisResponse(
         status=result.get("status", "clarify"),
@@ -51,4 +55,3 @@ def analyze_lab_endpoint(
         questions=result.get("questions", []),
         error=result.get("error"),
     )
-

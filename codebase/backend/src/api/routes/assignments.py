@@ -2,13 +2,21 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from src.api.deps import get_checklist_store, get_router_graph
+from src.api.deps import (
+    get_assignment_draft_service,
+    get_checklist_store,
+    get_router_graph,
+)
 from src.infrastructure.checklist_store import ChecklistNotFoundError, ChecklistStore
 from src.models.schemas import AssignmentDraftRequest, AssignmentDraftResponse
+from src.services.assignment_drafts import AssignmentDraftService
 
 router = APIRouter(prefix="/assignments", tags=["assignments"])
 GraphDep = Annotated[Any, Depends(get_router_graph)]
 ChecklistStoreDep = Annotated[ChecklistStore, Depends(get_checklist_store)]
+AssignmentServiceDep = Annotated[
+    AssignmentDraftService, Depends(get_assignment_draft_service)
+]
 
 
 def _tasks_from_checklist(checklist: dict[str, Any]) -> list[dict[str, Any]]:
@@ -49,12 +57,14 @@ def assign_tasks(
     return AssignmentDraftResponse.model_validate(result)
 
 
-# Keep the first prototype route working while clients migrate to the explicit
-# operation endpoint above.
 @router.post("/draft", response_model=AssignmentDraftResponse, deprecated=True)
 def create_assignment_draft(
     payload: AssignmentDraftRequest,
     graph: GraphDep,
     checklist_store: ChecklistStoreDep,
+    service: AssignmentServiceDep,
 ) -> AssignmentDraftResponse:
-    return assign_tasks(payload, graph, checklist_store)
+    """Keep legacy persistence for inline tasks and support canonical lab tasks."""
+    if payload.lab_id:
+        return assign_tasks(payload, graph, checklist_store)
+    return service.create(payload)

@@ -83,3 +83,28 @@ class TaskAnalysisResponse(BaseModel):
 class HealthResponse(BaseModel):
     status: str
     service: str
+
+
+class ReadinessResponse(BaseModel):
+    status: str
+    database: str
+
+
+class ChatRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=2000)
+    user_id: str = Field(default="member-1")
+    group_id: str = Field(default="Sloppers")
+    thread_id: str = Field(default="thread-1")
+    lab_id: str = Field(default="K4-L3B-DAY05-06-MINI-HACKATHON")
+    task_id: str | None = None
+    tasks: list[dict[str, Any]] | None = None
+    documents: list[dict[str, Any]] | None = None
+
+
+class ChatResponse(BaseModel):
+    status: str
+    answer: str
+    task_ids: list[str] = Field(default_factory=list)
+    reference_ids: list[str] = Field(default_factory=list)
+    suggested_next_action: str | None = None
+    data: dict[str, Any] = Field(default_factory=dict)

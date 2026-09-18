@@ -18,10 +18,14 @@ def test_task_analysis_prepares_grounded_model_request() -> None:
 def test_progress_subgraph_reads_fresh_task_state() -> None:
     result = progress_graph.invoke(
         {
+            "user_id": "m1",
+            "group_id": "g1",
+            "lab_id": "lab-1",
+            "thread_id": "thread-1",
             "question": "Tiến độ nhóm còn bao nhiêu?",
             "tasks": [
-                {"id": "t1", "status": "done", "owner_id": "m1"},
-                {"id": "t2", "status": "todo", "owner_id": "m2"},
+                {"id": "t1", "status": "done", "owner_id": "m1", "group_id": "g1"},
+                {"id": "t2", "status": "todo", "owner_id": "m2", "group_id": "g1"},
             ],
         }
     )

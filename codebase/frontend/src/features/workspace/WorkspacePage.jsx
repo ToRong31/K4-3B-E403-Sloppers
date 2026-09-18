@@ -8,6 +8,7 @@ import { canonicalTasksFixture, defaultLabManifest } from '../../api/mockData';
 import { AssignmentReviewDialog } from '../assignment/AssignmentReviewDialog';
 import { LeaderGroupDialog } from '../group/LeaderGroupDialog';
 import { MemberInviteFlow } from '../profile/MemberInviteFlow';
+import { PrivateProgressChat } from '../progress/PrivateProgressChat';
 
 const statusLabel = {
   accepted: 'Đã vào',
@@ -346,6 +347,8 @@ export function WorkspacePage() {
           </aside>
         </div>
       </main>
+
+      <PrivateProgressChat snapshot={snapshot} user={user} isMock={snapshot.source === 'mock'} />
 
       {isLeader && (
         <LeaderGroupDialog

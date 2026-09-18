@@ -1,5 +1,4 @@
 from enum import StrEnum
-from functools import lru_cache
 
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -9,6 +8,7 @@ class LLMProvider(StrEnum):
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
     GEMINI = "gemini"
+    NVIDIA = "nvidia"
 
 
 class Settings(BaseSettings):
@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     app_log_level: str = "INFO"
     app_cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:8000"
 
+    database_url: str = "sqlite+pysqlite:///./vlearn_labspace.db"
+    database_echo: bool = False
+    database_auto_create: bool = False
+
     llm_provider: LLMProvider = LLMProvider.OPENAI
     llm_model: str = ""
     llm_temperature: float = Field(default=0, ge=0, le=2)
@@ -28,6 +32,8 @@ class Settings(BaseSettings):
     openai_api_key: SecretStr | None = None
     anthropic_api_key: SecretStr | None = None
     google_api_key: SecretStr | None = None
+    nvidia_api_key: SecretStr | None = None
+    nvidia_base_url: str = "https://integrate.api.nvidia.com/v1"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
@@ -37,13 +43,16 @@ class Settings(BaseSettings):
 
     @property
     def selected_api_key(self) -> SecretStr | None:
-        return {
+        selected = {
             LLMProvider.OPENAI: self.openai_api_key,
             LLMProvider.ANTHROPIC: self.anthropic_api_key,
             LLMProvider.GEMINI: self.google_api_key,
+            LLMProvider.NVIDIA: self.nvidia_api_key,
         }[self.llm_provider]
+        if selected is None or not selected.get_secret_value().strip():
+            return None
+        return selected
 
 
-@lru_cache
 def get_settings() -> Settings:
-    return Settings()
+    return Settings(_env_file=".env")

@@ -28,10 +28,13 @@ export function createWebSocketClient({ url }) {
             listeners.forEach((listener) => listener(payload));
           }
         } catch {
-          // Invalid events are ignored; server/client contract tests should catch them.
+          // Invalid events are ignored
         }
       });
-      socket.addEventListener('error', () => reject(new Error('Không thể kết nối realtime.')));
+      socket.addEventListener('error', () => {
+        notifyStatus('offline');
+        resolve({ status: 'offline' });
+      });
       socket.addEventListener('close', () => {
         notifyStatus('offline');
         if (closedByUser) return;
@@ -61,10 +64,20 @@ export function createWebSocketClient({ url }) {
       return () => statusListeners.delete(listener);
     },
     publish(event) {
-      if (socket?.readyState !== WebSocket.OPEN) {
-        throw new Error('Realtime chưa kết nối.');
+      const envelope = isRealtimeEnvelope(event)
+        ? event
+        : {
+            event_id: crypto.randomUUID?.() ?? `evt-${Date.now()}`,
+            occurred_at: new Date().toISOString(),
+            version: 1,
+            scope_id: 'group-sloppers',
+            ...event,
+          };
+      if (socket?.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify(envelope));
+      } else {
+        listeners.forEach((listener) => listener(envelope));
       }
-      socket.send(JSON.stringify(event));
     },
   };
 }
