@@ -89,14 +89,15 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [previewImage]);
 
-  // Load chat history from backend on mount
+  // Load chat history from backend on mount and whenever active group or user changes
   useEffect(() => {
     let ignore = false;
     async function loadHistory() {
       try {
         if (apiClient.getGroupChatMessages) {
-          const history = await apiClient.getGroupChatMessages();
-          if (!ignore && history?.length) {
+          const gid = snapshot?.group?.id;
+          const history = await apiClient.getGroupChatMessages(gid);
+          if (!ignore && history && Array.isArray(history)) {
             setGroupChatMessages(history);
           }
         }
@@ -108,7 +109,7 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [snapshot?.group?.id, user?.accountId, user?.id]);
 
   // Listen to realtime websocket broadcasts
   useEffect(() => {

@@ -112,7 +112,8 @@ export function createHttpApiClient({ baseUrl }) {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
-    getGroupChatMessages: () => request(baseUrl, '/groups/current/chat'),
+    getGroupChatMessages: (groupId) =>
+      request(baseUrl, `/groups/current/chat${groupId ? `?groupId=${encodeURIComponent(groupId)}` : ''}`),
     sendGroupChatMessage: (payload) =>
       request(baseUrl, '/groups/current/chat', {
         method: 'POST',

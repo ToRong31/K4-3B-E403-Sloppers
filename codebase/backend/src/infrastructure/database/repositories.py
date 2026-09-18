@@ -358,14 +358,28 @@ class WorkspaceRepository:
         self.session.refresh(record)
         return record
 
-    def list_group_chat_messages(self, group_id: str) -> list[dict[str, Any]]:
+    def list_group_chat_messages(
+        self, group_id: str | None = None, group_ids: list[str] | set[str] | None = None
+    ) -> list[dict[str, Any]]:
+        target_ids: set[str] = set()
+        if group_id:
+            target_ids.add(str(group_id))
+        if group_ids:
+            target_ids.update(str(g) for g in group_ids)
+
+        query = select(GroupChatMessageRecord)
+        if target_ids:
+            query = query.where(GroupChatMessageRecord.group_id.in_(target_ids))
         records = list(
-            self.session.scalars(
-                select(GroupChatMessageRecord)
-                .where(GroupChatMessageRecord.group_id == group_id)
-                .order_by(GroupChatMessageRecord.created_at.asc())
-            )
+            self.session.scalars(query.order_by(GroupChatMessageRecord.created_at.asc()))
         )
+        if not records and target_ids:
+            # If no messages found for specific target IDs, fallback to returning all messages
+            records = list(
+                self.session.scalars(
+                    select(GroupChatMessageRecord).order_by(GroupChatMessageRecord.created_at.asc())
+                )
+            )
         result = []
         for r in records:
             item: dict[str, Any] = {

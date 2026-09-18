@@ -2,14 +2,15 @@ from datetime import UTC, datetime
 from typing import Annotated, Any, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
 from src.api.deps import CurrentUser, get_assignment_graph, get_workspace_repository
 from src.infrastructure.database.models import ApprovedPlanRecord
-from src.infrastructure.database.repositories import WorkspaceRepository
+from src.infrastructure.database.repositories import AuthRepository, WorkspaceRepository
 from src.infrastructure.json_store import get_json_store
 from src.services.assignment_workflow import AssignmentWorkflowService
+from src.services.auth import AuthService
 from src.services.realtime import realtime_hub
 from src.services.workspace import DomainError, WorkspaceService
 
@@ -329,18 +330,63 @@ class FileUploadPayload(BaseModel):
     is_image: bool = False
 
 
+def _resolve_user_group(request: Request) -> Any | None:
+    try:
+        settings = request.app.state.settings
+        token = request.cookies.get(settings.session_cookie_name)
+        if token:
+            session_factory = request.app.state.db_session_factory
+            with session_factory() as session:
+                auth = AuthService(AuthRepository(session), settings.session_ttl_hours)
+                user = auth.authenticate(token).user
+                return WorkspaceRepository(session).get_group_for_user(user.id)
+    except Exception:
+        pass
+    return None
+
+
 @router.get("/groups/current/chat")
-def get_current_group_chat(repo: WorkspaceRepo) -> list[dict[str, Any]]:
-    db_messages = repo.list_group_chat_messages("group-sloppers")
+def get_current_group_chat(
+    repo: WorkspaceRepo,
+    request: Request,
+    groupId: str | None = None,
+    group_id: str | None = None,
+) -> list[dict[str, Any]]:
+    target_ids: set[str] = set()
+    param_id = groupId or group_id
+    if param_id:
+        target_ids.add(str(param_id))
+
+    group = _resolve_user_group(request)
+    if group:
+        target_ids.add(str(group.id))
+        if group.code:
+            target_ids.add(group.code)
+            target_ids.add(group.code.lower())
+
+    db_messages = repo.list_group_chat_messages(group_ids=target_ids if target_ids else None)
     if db_messages:
         return db_messages
+
+    # Check json store for matching target_ids
+    for gid in target_ids:
+        store_msgs = get_json_store().get_group_chat_messages(gid)
+        if store_msgs:
+            return store_msgs
+
     return get_json_store().get_group_chat_messages()
 
 
 @router.post("/groups/current/chat")
 async def send_current_group_chat(
-    payload: dict[str, Any], repo: WorkspaceRepo
+    payload: dict[str, Any], repo: WorkspaceRepo, request: Request
 ) -> dict[str, Any]:
+    # Resolve real groupId if not provided
+    if not payload.get("groupId") or payload.get("groupId") == "group-sloppers":
+        group = _resolve_user_group(request)
+        if group:
+            payload["groupId"] = str(group.id)
+
     # Persist to database
     saved_record = repo.save_group_chat_message(payload)
     # Sync with json store for backward-compatibility
@@ -365,13 +411,19 @@ async def send_current_group_chat(
 
 
 @router.post("/files/upload")
-def upload_file_to_db(payload: FileUploadPayload, repo: WorkspaceRepo) -> dict[str, Any]:
+def upload_file_to_db(payload: FileUploadPayload, repo: WorkspaceRepo, request: Request) -> dict[str, Any]:
+    target_group_id = payload.group_id
+    if not target_group_id or target_group_id == "group-sloppers":
+        group = _resolve_user_group(request)
+        if group:
+            target_group_id = str(group.id)
+
     record = repo.save_file_attachment(
         filename=payload.filename,
         content_type=payload.content_type,
         file_url=payload.file_url,
         size_bytes=payload.size_bytes,
-        group_id=payload.group_id or "group-sloppers",
+        group_id=target_group_id or "group-sloppers",
         channel=payload.channel,
         is_image=payload.is_image,
     )
@@ -388,8 +440,22 @@ def upload_file_to_db(payload: FileUploadPayload, repo: WorkspaceRepo) -> dict[s
 
 
 @router.get("/groups/current/files")
-def list_current_group_files(repo: WorkspaceRepo) -> list[dict[str, Any]]:
-    attachments = repo.list_file_attachments(group_id="group-sloppers")
+def list_current_group_files(
+    repo: WorkspaceRepo,
+    request: Request,
+    groupId: str | None = None,
+    group_id: str | None = None,
+) -> list[dict[str, Any]]:
+    target_id = groupId or group_id
+    if not target_id:
+        group = _resolve_user_group(request)
+        if group:
+            target_id = str(group.id)
+
+    attachments = repo.list_file_attachments(group_id=target_id)
+    if not attachments and target_id:
+        attachments = repo.list_file_attachments()
+
     return [
         {
             "id": str(att.id),
@@ -403,4 +469,5 @@ def list_current_group_files(repo: WorkspaceRepo) -> list[dict[str, Any]]:
         }
         for att in attachments
     ]
+
 
