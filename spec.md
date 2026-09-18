@@ -269,6 +269,5 @@ Không làm multi-prototype trong phạm vi 39 giờ. Nhóm chọn một phươn
 - [ ] Auth/session và authorization backend theo role chưa hoàn chỉnh; demo login vẫn dùng fixture.
 - [ ] Coach reply/resolve, GitHub double-check và submission còn một phần mô phỏng/chưa hoàn thiện.
 - [ ] `validation/` chưa có 5 user-test log và chưa có thay đổi dựa trên feedback ngoài nhóm.
-- [ ] Việc commit/push `spec.md` và nộp link form CP4 phải do đội trưởng xác nhận trước hạn.
 
 Các mục trên là backlog sau CP4; không được diễn giải màn hình mock hoặc test tự động như bằng chứng chúng đã hoàn thành.
