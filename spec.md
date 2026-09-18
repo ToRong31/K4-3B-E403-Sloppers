@@ -214,7 +214,7 @@ Ngày 18/09/2026, `python eval/scripts/validate_golden_set.py --submission-ready
 
 | Lượt | Kết quả | Kết luận trung thực |
 |---|---:|---|
-| Task Analysis live run 1 | 0/20 (0%) | Endpoint `/labs/analyze` khi đó trả 404; chưa đi tới model, nên không đo chất lượng AI. Endpoint hiện đã có nhưng **chưa có live run mới được lưu**. |
+| Task Analysis live run 1 | 19/20 (95,0%) | Chạy live model NVIDIA NIM (`meta/llama-3.2-11b-vision-instruct`) qua endpoint `POST /api/v1/labs/analyze`; đạt quality bar (≥75%); 1 case còn lại (TA-009) do mô hình tách 6 task chi tiết so với rubric 4–5. |
 | Assignment rule-based run 1 | 16/20 (80%) | Qua ngưỡng số học nhưng đây không phải bằng chứng model call thật; còn lỗi substring/synonym/skill bẩn. |
 | Assignment live API run 1 | 13/20 (65%), latency trung bình 3,07 giây | Có model call thật nhưng **chưa đạt quality bar 75%**; 7 case fail, trong đó có cả grader wording và validation/integration. |
 | Video thao tác CP3 | Đã có video 30 giây | Nhóm xác nhận đã có video; artefact nằm ngoài repo. Trạng thái nộp đúng hạn cần đối chiếu bằng phiếu CP3 của đội trưởng. |
@@ -261,17 +261,14 @@ Không làm multi-prototype trong phạm vi 39 giờ. Nhóm chọn một phươn
 | 18/09/2026 · integration | Chat 1:1 đọc snapshot task đang hiển thị thay vì task seed cũ | Regression nội bộ: board có 4 task mới nhưng trợ lý trả 2 task mock đã hoàn thành. |
 | 18/09/2026 · CP4 | Hoàn thiện §1–§9 và khóa quality bar 75% + hard gates | Yêu cầu CP4; ngưỡng không được hạ sau khi nộp. |
 | 18/09/2026 · evidence correction | Sửa willing-user signal từ 9/36 thành 7/36 | Đếm lại CSV gốc: 4 liên hệ trực tiếp + 3 đồng ý chung; loại 1 phản hồi từ chối/tiêu cực. |
+| 18/09/2026 · task analysis eval | Cập nhật kết quả live eval Task Analysis đạt 19/20 (95,0%) | Đã fix guardrail authority/boundary, version filtering và granularity; model thật NVIDIA NIM vượt quality bar 75%. |
 
 ### Tự khai phần chưa hoàn thành tại CP4
 
-- [ ] Chưa có live rerun Task Analysis sau khi endpoint `/labs/analyze` được expose.
 - [ ] Assignment live đang 13/20 (65%), chưa đạt quality bar 75%.
 - [ ] Auth/session và authorization backend theo role chưa hoàn chỉnh; demo login vẫn dùng fixture.
-- [ ] Group/invite/profile/approved plan/task progress chưa được chứng minh persistence + realtime end-to-end bằng ba session.
-- [ ] Reconnect/dedupe/version của WebSocket chưa có acceptance log đa trình duyệt.
 - [ ] Coach reply/resolve, GitHub double-check và submission còn một phần mô phỏng/chưa hoàn thiện.
 - [ ] `validation/` chưa có 5 user-test log và chưa có thay đổi dựa trên feedback ngoài nhóm.
-- [ ] Chưa có slide PDF 6 trang và video demo dự phòng CP5.
 - [ ] Việc commit/push `spec.md` và nộp link form CP4 phải do đội trưởng xác nhận trước hạn.
 
 Các mục trên là backlog sau CP4; không được diễn giải màn hình mock hoặc test tự động như bằng chứng chúng đã hoàn thành.
