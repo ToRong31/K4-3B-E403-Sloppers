@@ -434,6 +434,20 @@
       "time": "14:47",
       "text": "oke tôi là Trang",
       "createdAt": "2026-09-18T07:47:09.782476+00:00"
+    },
+    {
+      "id": "msg-1789722271983-7idk",
+      "groupId": "group-sloppers",
+      "senderId": "user-leader-trong",
+      "senderCode": "2A202602765",
+      "author": "Phạm Hoàng Trọng",
+      "shortName": "Trọng",
+      "initial": "T",
+      "role": "Nhóm trưởng",
+      "isLeader": true,
+      "time": "16:04",
+      "text": "oke chào Trang nhé",
+      "createdAt": "2026-09-18T09:04:31.992044+00:00"
     }
   ]
 }
