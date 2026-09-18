@@ -2,6 +2,23 @@
 
 Swagger UI: `http://localhost:8000/docs`.
 
+## `POST /api/v1/labs/analyze`
+
+Client có thể gửi đầy đủ `lab_manifest` hoặc `documents` như trước. Với LAB được bundle
+trong backend, chỉ cần gửi `lab_id` và `version`; API sẽ đọc manifest JSON tương ứng ở
+`data/labs/`. Ví dụ:
+
+```json
+{
+  "lab_id": "K4-L3B-DAY05-06-MINI-HACKATHON",
+  "version": 1
+}
+```
+
+Manifest `K4-L3B-DAY05-06-MINI-HACKATHON` được chuyển từ nội dung giảng dạy tại
+`frontend/src/features/lesson/labContent.jsx`. Nếu không có JSON khớp `lab_id/version`,
+API trả `404` thay vì tạo task từ dữ liệu rỗng.
+
 ## `POST /api/v1/assignments/assign_tasks`
 
 Nhận tên nhóm, thành viên + skill tự khai và canonical task. Trả:

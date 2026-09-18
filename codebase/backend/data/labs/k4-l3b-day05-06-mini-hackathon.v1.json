@@ -1,0 +1,205 @@
+{
+  "lab_id": "K4-L3B-DAY05-06-MINI-HACKATHON",
+  "version": 1,
+  "title": "Lab 05–06 — AI Product Hackathon: SPEC → Prototype → Demo",
+  "checkpoints": [
+    {
+      "checkpoint_id": "prepare",
+      "checkpoint_order": 1,
+      "title": "Chuẩn bị đội ngũ, chọn track và khởi tạo repository",
+      "items": [
+        {
+          "item_id": "prepare-repository",
+          "item_order": 1,
+          "source_type": "requirement",
+          "title": "Chọn track và tạo repository công khai",
+          "content": "Cả nhóm đọc challenge brief và tracks README, thống nhất một track cùng một đề cụ thể. Tạo repository GitHub mới hoàn toàn ở chế độ public, không fork repository đề bài, đặt tên K4-3B-<phòng>-<tên nhóm>.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/prepare/repository",
+          "is_required": true
+        },
+        {
+          "item_id": "prepare-initial-files",
+          "item_order": 2,
+          "source_type": "deliverable",
+          "title": "Khởi tạo tệp dự án bắt buộc",
+          "content": "Sao chép 03-ai-spec-template.md thành spec.md ở thư mục gốc, hoàn thiện README.md với thành viên và phân công, rồi tạo ít nhất một commit ban đầu. Không commit data pack, chatlog VLearn, Discord, transcript hoặc slide bài giảng.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/prepare/initial-files",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "checkpoint_id": "cp1",
+      "checkpoint_order": 2,
+      "title": "Khám phá bài toán, thu thập bằng chứng và chốt Canvas 7 dòng",
+      "due_at": "2026-09-17T19:30:00+07:00",
+      "items": [
+        {
+          "item_id": "cp1-evidence",
+          "item_order": 1,
+          "source_type": "requirement",
+          "title": "Thu thập bằng chứng cho bài toán",
+          "content": "Khai thác data/ của repo đề bài hoặc khảo sát trực tiếp tối thiểu 20 học viên ngoài nhóm. Lưu nhật ký câu hỏi, câu trả lời nguyên văn và số liệu vào evidence. Bằng chứng đạt chuẩn A là ít nhất 20 người với ít nhất 50% xác nhận; chuẩn B cần số đếm rõ ràng, tối thiểu 5 ví dụ nguyên văn và phương pháp đếm kiểm lại được.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp1/evidence",
+          "is_required": true
+        },
+        {
+          "item_id": "cp1-canvas",
+          "item_order": 2,
+          "source_type": "deliverable",
+          "title": "Hoàn thiện Canvas 7 dòng và nộp CP1",
+          "content": "Soạn Canvas đúng scaffold 7 dòng tại 02-guide.md §1.5: track + đề, job executor, pain, bằng chứng, lát cắt một câu, automation + willing users và phân công. Đưa Canvas vào §1 và §2 của spec.md, commit lên main. Đội trưởng nộp form CP1 gồm link repo công khai, Canvas và danh sách willing users trước 19:30 ngày 17/9. Có ít nhất 2 willing users ngoài nhóm.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp1/canvas",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "checkpoint_id": "cp2",
+      "checkpoint_order": 3,
+      "title": "Thiết kế luồng trải nghiệm và dựng bản mẫu tương tác",
+      "due_at": "2026-09-17T21:00:00+07:00",
+      "items": [
+        {
+          "item_id": "cp2-prototype",
+          "item_order": 1,
+          "source_type": "deliverable",
+          "title": "Dựng bản mẫu và luồng trải nghiệm",
+          "content": "Thiết kế hành trình người dùng bằng Figma, Canva, HTML/CSS/JS, sơ đồ luồng hoặc video. Thể hiện input, điểm gọi quyết định AI và nhánh xử lý ngoại lệ. Thiết kế đủ happy path, low-confidence, failure/no-grounding và correction; chọn ít nhất 4 nguyên tắc HAX/PAIR áp dụng vào prototype.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp2/prototype",
+          "is_required": true
+        },
+        {
+          "item_id": "cp2-submission",
+          "item_order": 2,
+          "source_type": "requirement",
+          "title": "Cập nhật Spec và nộp CP2",
+          "content": "Cập nhật spec.md §4 và §6 với mức prototype, phần giả lập/chạy thật và bảng nguyên tắc HAX/PAIR. Lưu code hoặc ảnh sơ đồ vào codebase/, commit lên repository. Đội trưởng nộp link kiểm chứng prototype qua form CP2 trước 21:00 ngày 17/9.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp2/submission",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "checkpoint_id": "cp3",
+      "checkpoint_order": 4,
+      "title": "Xây dựng prototype AI thật và đo lường kiểm thử sơ bộ",
+      "due_at": "2026-09-18T16:00:00+07:00",
+      "items": [
+        {
+          "item_id": "cp3-live-ai",
+          "item_order": 1,
+          "source_type": "requirement",
+          "title": "Tích hợp AI thật và trace log",
+          "content": "Lập trình module quyết định trung tâm trong codebase/, tích hợp ít nhất một API gọi mô hình AI thật. Thiết lập ghi vết rõ ràng cho prompt đầu vào và phản hồi thô; không được gán cứng kết quả AI.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp3/live-ai",
+          "is_required": true
+        },
+        {
+          "item_id": "cp3-eval",
+          "item_order": 2,
+          "source_type": "deliverable",
+          "title": "Tạo golden set và báo cáo đo lường",
+          "content": "Tạo eval/ dạng JSON hoặc CSV có ít nhất 20 test case theo taxonomy bốn lớp chỗ khó; ít nhất 10 case lấy hoặc phát triển từ chatlog thật trong data/. Chạy prototype, lưu kết quả, thống kê case đạt, thất bại, tỷ lệ phần trăm và nguyên nhân.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp3/eval",
+          "is_required": true
+        },
+        {
+          "item_id": "cp3-video-submission",
+          "item_order": 3,
+          "source_type": "deliverable",
+          "title": "Quay video thao tác và nộp CP3",
+          "content": "Quay video màn hình khoảng 30 giây: nhập dữ liệu, hệ thống gửi yêu cầu và mô hình AI trả kết quả thật. Đẩy code, eval data và kết quả lên repository. Đội trưởng nộp video cùng số đo lượt đầu qua form CP3 trước 16:00 ngày 18/9.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp3/video-submission",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "checkpoint_id": "cp4",
+      "checkpoint_order": 5,
+      "title": "Hoàn thiện tài liệu AI Spec và khóa ngưỡng chất lượng",
+      "due_at": "2026-09-18T21:00:00+07:00",
+      "items": [
+        {
+          "item_id": "cp4-spec",
+          "item_order": 1,
+          "source_type": "deliverable",
+          "title": "Hoàn thiện AI Spec §1–§9",
+          "content": "Rà soát spec.md §1–§9: evidence chuẩn A/B có ít nhất 5 quote và impact; ít nhất 2 sản phẩm tương tự, một lát cắt, 3 non-goals, automation, ít nhất 4 nguyên tắc HAX/PAIR; 8 kịch bản bốn lớp chỗ khó và bốn đường trải nghiệm; golden set, quality bar, kết quả chạy; phân công, willing users, validation và changelog.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp4/spec",
+          "is_required": true
+        },
+        {
+          "item_id": "cp4-quality-bar",
+          "item_order": 2,
+          "source_type": "requirement",
+          "title": "Khóa quality bar và nộp CP4",
+          "content": "Ghi công thức quality bar tại §7 theo mẫu Đạt khi ≥ ___% qua bộ, và điều kiện cứng. Tự khai case chưa xử lý, commit phiên bản chốt spec.md trước 21:00 ngày 18/9. Đội trưởng nộp link trực tiếp tới spec.md qua form CP4; sau hạn quality bar không được chỉnh sửa.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp4/quality-bar",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "checkpoint_id": "cp5",
+      "checkpoint_order": 6,
+      "title": "Xác thực người dùng ngoài nhóm, xuất bản slide và đóng gói dự phòng",
+      "due_at": "2026-09-18T22:30:00+07:00",
+      "items": [
+        {
+          "item_id": "cp5-validation",
+          "item_order": 1,
+          "source_type": "requirement",
+          "title": "Xác thực với người dùng ngoài nhóm",
+          "content": "Mời ít nhất 2 người ngoài nhóm trải nghiệm prototype, ưu tiên willing users từ CP1. Lưu validation/ gồm người thử, task giao, quan sát, quote nguyên văn và mức nghiêm trọng. Thực hiện 1–2 thay đổi từ phản hồi và cập nhật §9 Changelog trong spec.md.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp5/validation",
+          "is_required": true
+        },
+        {
+          "item_id": "cp5-slides",
+          "item_order": 2,
+          "source_type": "deliverable",
+          "title": "Xuất slide và video demo dự phòng",
+          "content": "Soạn đúng 6 slide theo 02-guide.md §5.1, mỗi trang có một con số, quote có nguồn hoặc kết quả đo. Xuất PDF tên demo-slides.pdf ở thư mục gốc. Quay video demo dự phòng, đẩy demo-slides.pdf, validation/ và spec.md lên GitHub.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp5/slides",
+          "is_required": true
+        },
+        {
+          "item_id": "cp5-submission",
+          "item_order": 3,
+          "source_type": "deliverable",
+          "title": "Nộp CP5",
+          "content": "Đội trưởng nộp demo-slides.pdf và link video demo dự phòng qua form CP5 trước 22:30 ngày 18/9. PDF phải đúng 6 trang, video truy cập công khai và đã dry run có bấm giờ.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp5/submission",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "checkpoint_id": "cp6",
+      "checkpoint_order": 7,
+      "title": "Nộp bài tổng kết và quy trình thuyết trình vòng thi",
+      "items": [
+        {
+          "item_id": "cp6-repository",
+          "item_order": 1,
+          "source_type": "deliverable",
+          "title": "Hoàn thiện cấu trúc repository nộp bài",
+          "content": "Repository public phải có README.md, spec.md, demo-slides.pdf, codebase/ có gọi AI thật, eval/ golden set ít nhất 20 case kèm kết quả, validation/ và reflection/ với một file thu hoạch cho mỗi thành viên.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp6/repository",
+          "is_required": true
+        },
+        {
+          "item_id": "cp6-submission",
+          "item_order": 2,
+          "source_type": "requirement",
+          "title": "Hoàn thành hai kênh nộp bài",
+          "content": "Đội trưởng nộp một form cho mỗi checkpoint CP1–CP5. Mọi thành viên tự nộp cùng link repository GitHub lên VLearn; đội trưởng không nộp thay được. Nhóm chuẩn bị thuyết trình với demo có thể chạy lại một case tại chỗ.",
+          "ref_id": "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp6/submission",
+          "is_required": true
+        }
+      ]
+    }
+  ]
+}
