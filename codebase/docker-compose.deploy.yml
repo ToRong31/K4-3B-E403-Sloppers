@@ -29,6 +29,8 @@ services:
       APP_API_PREFIX: /api/v1
       APP_LOG_LEVEL: ${APP_LOG_LEVEL:-INFO}
       APP_CORS_ORIGINS: https://labspace.torome.online
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-true}
+      SESSION_COOKIE_SAMESITE: ${SESSION_COOKIE_SAMESITE:-lax}
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-vlearn}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-vlearn_labspace}
       DATABASE_ECHO: "false"
       DATABASE_AUTO_CREATE: "false"
@@ -69,7 +71,7 @@ services:
     build:
       context: ./frontend
       args:
-        VITE_DATA_SOURCE: ${VITE_DATA_SOURCE:-mock}
+        VITE_DATA_SOURCE: ${VITE_DATA_SOURCE:-http}
         VITE_API_BASE_URL: /api/v1
         VITE_WS_URL: auto
     restart: unless-stopped
@@ -77,6 +79,12 @@ services:
       api:
         condition: service_healthy
         restart: true
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 5s
     ports:
       - 127.0.0.1:${APP_PORT:-18080}:80
     networks:

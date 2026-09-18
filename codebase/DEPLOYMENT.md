@@ -15,8 +15,10 @@ openssl rand -base64 36
 ```
 
 Put the generated value in `POSTGRES_PASSWORD`. Add an LLM provider key only
-when the backend AI routes need it. The UI stays in demo/mock mode by default
-because the current backend does not implement the frontend login endpoints.
+when the backend AI routes need it. The deploy stack uses the persisted HTTP API
+and PostgreSQL data source by default. Keep `SESSION_COOKIE_SECURE=true` for the
+HTTPS tunnel; temporarily override it to `false` only when testing on plain
+`http://127.0.0.1:18080`.
 
 ## 2. Start and verify without the tunnel
 
