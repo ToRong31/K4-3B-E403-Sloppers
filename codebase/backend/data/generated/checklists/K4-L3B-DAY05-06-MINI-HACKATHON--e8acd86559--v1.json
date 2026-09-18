@@ -1,5 +1,5 @@
 {
-  "checklist_id": "04b94120-a937-44e3-ba92-e7896e4a5d9d",
+  "checklist_id": "26cf9b43-c706-4835-911f-2312e25aa9fd",
   "lab_id": "K4-L3B-DAY05-06-MINI-HACKATHON",
   "lab_version": 1,
   "status": "pending_review",
@@ -9,22 +9,22 @@
       "checkpoint_order": 1,
       "tasks": [
         {
-          "id": "ddc9de72-b977-477f-b421-cdb41e9d8958",
+          "id": "57ef8af8-8d37-4ec0-a829-0a2ecf436807",
           "task_key": "cp1-task-01",
           "checkpoint_id": "cp1",
           "task_order": 1,
           "title": "Hoàn thành Canvas 7 dòng",
-          "description": "Tạo và hoàn thiện Canvas gồm đúng 7 dòng theo yêu cầu của LAB.",
-          "deliverable": "Canvas 7 dòng hoàn chỉnh.",
+          "description": "Tạo và hoàn thiện Canvas gồm 7 dòng theo yêu cầu của LAB.",
+          "deliverable": "Canvas 7 dòng đã hoàn thành.",
           "completion_criteria": [
-            "Canvas đã được tạo và có đủ 7 dòng.",
-            "Nội dung Canvas có thể truy cập để kiểm tra."
+            "Canvas có đủ 7 dòng.",
+            "Nội dung Canvas được lưu ở dạng có thể kiểm tra hoặc truy cập được."
           ],
           "required_skills": [
-            "Tổng hợp ý tưởng sản phẩm",
-            "Trình bày thông tin ngắn gọn"
+            "Tổng hợp yêu cầu",
+            "Trình bày ý tưởng ngắn gọn"
           ],
-          "estimated_effort": "small",
+          "estimated_effort": "medium",
           "depends_on": [],
           "reference_ids": [
             "lab://K4-L3B-DAY05-06/v1/cp1/item-1"
@@ -32,20 +32,20 @@
           "status": "proposed"
         },
         {
-          "id": "51e0d78e-9b20-4e32-ba33-5e958e788d8b",
+          "id": "cdc08931-7dbd-4d4a-809d-cf014819c2fa",
           "task_key": "cp1-task-02",
           "checkpoint_id": "cp1",
           "task_order": 2,
-          "title": "Nộp link repo công khai",
-          "description": "Cung cấp đường dẫn đến repo công khai chứa sản phẩm hoặc các tài liệu liên quan của bài LAB.",
-          "deliverable": "Link repo công khai.",
+          "title": "Nộp link repository công khai",
+          "description": "Cung cấp đường dẫn đến repository công khai của bài LAB.",
+          "deliverable": "Một đường dẫn repository công khai được nộp cùng Canvas.",
           "completion_criteria": [
-            "Có một đường dẫn repo được cung cấp.",
-            "Repo có thể truy cập ở chế độ công khai."
+            "Có đường dẫn repository được cung cấp.",
+            "Repository có thể truy cập ở chế độ công khai."
           ],
           "required_skills": [
             "Quản lý repository",
-            "Chia sẻ đường dẫn công khai"
+            "Chia sẻ liên kết công khai"
           ],
           "estimated_effort": "small",
           "depends_on": [
@@ -63,21 +63,21 @@
       "checkpoint_order": 3,
       "tasks": [
         {
-          "id": "7cbe50fc-94b4-42c6-8f5a-c1ef44fd099f",
+          "id": "e8b594a3-50ed-407e-a0e3-aab1bc924aa9",
           "task_key": "cp3-task-01",
           "checkpoint_id": "cp3",
           "task_order": 3,
-          "title": "Chuẩn bị Golden set và ghi nhận số đo",
-          "description": "Chuẩn bị bộ gồm ít nhất 20 câu thử và ghi lại số case đạt chuẩn.",
-          "deliverable": "Golden set có tối thiểu 20 câu thử kèm số case đạt chuẩn.",
+          "title": "Chuẩn bị Golden set tối thiểu 20 câu thử",
+          "description": "Tạo bộ gồm ít nhất 20 câu thử để kiểm tra sản phẩm và ghi lại số case đạt chuẩn.",
+          "deliverable": "Golden set có ít nhất 20 câu thử kèm số lượng case đạt chuẩn.",
           "completion_criteria": [
             "Golden set chứa ít nhất 20 câu thử.",
-            "Số case đạt chuẩn được ghi lại rõ ràng.",
-            "Có thể đối chiếu số liệu với các câu thử trong Golden set."
+            "Có số liệu ghi lại số case đạt chuẩn.",
+            "Các câu thử và số liệu được lưu ở dạng có thể kiểm tra."
           ],
           "required_skills": [
-            "Thiết kế câu thử",
-            "Ghi nhận và tổng hợp số liệu"
+            "Thiết kế bộ kiểm thử",
+            "Ghi nhận số liệu"
           ],
           "estimated_effort": "medium",
           "depends_on": [],
@@ -87,26 +87,24 @@
           "status": "proposed"
         },
         {
-          "id": "6b301b43-86a9-4482-a2d8-fd8897ff9d48",
+          "id": "41371acd-7f40-4ffd-9a0a-7ac03f84bcb2",
           "task_key": "cp3-task-02",
           "checkpoint_id": "cp3",
           "task_order": 4,
           "title": "Quay video thao tác sản phẩm",
-          "description": "Quay video thể hiện thao tác với sản phẩm theo thời lượng khoảng 30 giây.",
-          "deliverable": "Video thao tác sản phẩm khoảng 30 giây.",
+          "description": "Quay video thể hiện thao tác với sản phẩm trong thời lượng khoảng 30 giây.",
+          "deliverable": "Video thao tác sản phẩm dài khoảng 30 giây.",
           "completion_criteria": [
-            "Có video ghi lại thao tác với sản phẩm.",
+            "Có video thể hiện thao tác sản phẩm.",
             "Thời lượng video xấp xỉ 30 giây.",
-            "Video có thể mở hoặc truy cập để kiểm tra."
+            "Video có thể phát hoặc truy cập để kiểm tra."
           ],
           "required_skills": [
-            "Thao tác với sản phẩm",
+            "Thao tác sản phẩm",
             "Quay và chia sẻ video"
           ],
           "estimated_effort": "small",
-          "depends_on": [
-            "cp3-task-01"
-          ],
+          "depends_on": [],
           "reference_ids": [
             "lab://K4-L3B-DAY05-06/v1/cp3/item-2"
           ],

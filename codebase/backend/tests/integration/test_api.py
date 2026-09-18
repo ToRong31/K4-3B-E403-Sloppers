@@ -29,6 +29,17 @@ class FailingChatModel:
         raise TimeoutError("provider timeout")
 
 
+class CapturingChatModel:
+    model_name = "capturing-chat-model"
+
+    def __init__(self):
+        self.messages = []
+
+    def invoke(self, messages):
+        self.messages = messages
+        return AIMessage(content="Task thực tế đã được đọc từ LabSpace.")
+
+
 def make_client(chat_model=None) -> TestClient:
     class FakeRouterGraph:
         def invoke(self, state):
@@ -261,6 +272,15 @@ def test_chat_endpoint_uses_llm() -> None:
                 "message": "Tôi cần làm gì?",
                 "user_id": "Trọng",
                 "group_id": "Sloppers",
+                "tasks": [
+                    {
+                        "id": "actual-task",
+                        "title": "Canvas 7 dòng",
+                        "owner": "Trọng",
+                        "status": "todo",
+                        "deliverable": "canvas.md",
+                    }
+                ],
             },
         )
 
@@ -268,6 +288,55 @@ def test_chat_endpoint_uses_llm() -> None:
     data = response.json()
     assert "Canvas 7 dòng" in data["answer"]
     assert data["data"]["answer_source"] == "llm"
+    assert data["task_ids"] == ["actual-task"]
+
+
+def test_chat_grounds_llm_with_current_request_tasks_only() -> None:
+    model = CapturingChatModel()
+    with make_client(model) as client:
+        response = client.post(
+            "/api/v1/chat",
+            json={
+                "message": "Tôi đang có task gì?",
+                "user_id": "Trọng",
+                "group_id": "group-current",
+                "tasks": [
+                    {
+                        "id": "repo-task",
+                        "title": "Nộp link repository công khai",
+                        "owner": "Trọng",
+                        "status": "todo",
+                        "deliverable": "Repository công khai",
+                        "completion_criteria": ["Link truy cập được"],
+                    }
+                ],
+            },
+        )
+
+    assert response.status_code == 200
+    system_prompt = model.messages[0].content
+    assert "Nộp link repository công khai" in system_prompt
+    assert "Link truy cập được" in system_prompt
+    assert "Khảo sát và tổng hợp pain" not in system_prompt
+    assert response.json()["task_ids"] == ["repo-task"]
+
+
+def test_chat_does_not_fall_back_to_seed_tasks() -> None:
+    model = CapturingChatModel()
+    with make_client(model) as client:
+        response = client.post(
+            "/api/v1/chat",
+            json={
+                "message": "Tôi đang có task gì?",
+                "user_id": "Trọng",
+                "group_id": "group-current",
+                "tasks": [],
+            },
+        )
+
+    assert response.status_code == 200
+    assert "Chưa có task nào được giao" in model.messages[0].content
+    assert response.json()["task_ids"] == []
 
 
 def test_chat_endpoint_reports_model_failure() -> None:

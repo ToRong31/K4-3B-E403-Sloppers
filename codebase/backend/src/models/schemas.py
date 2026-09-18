@@ -97,7 +97,7 @@ class ChatRequest(BaseModel):
     thread_id: str = Field(default="thread-1")
     lab_id: str = Field(default="K4-L3B-DAY05-06-MINI-HACKATHON")
     task_id: str | None = None
-    tasks: list[dict[str, Any]] | None = None
+    tasks: list[dict[str, Any]] = Field(default_factory=list, max_length=100)
     documents: list[dict[str, Any]] | None = None
 
 
