@@ -11,13 +11,13 @@ class DraftStatus(StrEnum):
 
 
 class MemberInput(BaseModel):
-    id: UUID = Field(default_factory=uuid4)
+    id: UUID | str = Field(default_factory=uuid4)
     name: str = Field(min_length=1, max_length=100)
     skills: list[str] = Field(default_factory=list, max_length=10)
 
 
 class CanonicalTaskInput(BaseModel):
-    id: UUID = Field(default_factory=uuid4)
+    id: UUID | str = Field(default_factory=uuid4)
     title: str = Field(min_length=1, max_length=200)
     deliverable: str = Field(min_length=1, max_length=300)
 
@@ -29,8 +29,8 @@ class AssignmentDraftRequest(BaseModel):
 
 
 class AssignmentItem(BaseModel):
-    task_id: UUID
-    owner_id: UUID
+    task_id: UUID | str
+    owner_id: UUID | str
     reason: str = Field(min_length=1, max_length=300)
 
 

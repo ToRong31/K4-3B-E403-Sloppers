@@ -16,7 +16,9 @@ FIXTURE_DIR = Path(__file__).parents[2] / "examples_data" / "fixtures"
 CONTRACTS: list[tuple[str, type[BaseModel]]] = [
     ("lab_manifest.json", LabManifest),
     ("group_snapshot.json", GroupSnapshot),
+    ("group_snapshot_no_skills.json", GroupSnapshot),
     ("checklist_draft.json", ChecklistDraft),
+    ("checklist_draft_unmatched.json", ChecklistDraft),
     ("assignment_plan.json", AssignmentPlan),
     ("private_chat_context.json", PrivateChatContext),
     ("coach_alert.json", CoachAlert),

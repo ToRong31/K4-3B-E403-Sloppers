@@ -1,0 +1,48 @@
+{
+  "checklist_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbc",
+  "lab_id": "K4-L3B-DAY05-06-MINI-HACKATHON",
+  "lab_version": 1,
+  "status": "pending_review",
+  "checkpoints": [
+    {
+      "checkpoint_id": "cp3",
+      "checkpoint_order": 3,
+      "tasks": [
+        {
+          "id": "cccccccc-cccc-4ccc-8ccc-ccccccccccc1",
+          "task_key": "cp3-task-01",
+          "checkpoint_id": "cp3",
+          "task_order": 1,
+          "title": "Chuẩn bị golden set",
+          "description": "Tạo bộ câu thử dùng để đo chất lượng prototype.",
+          "deliverable": "eval/datasets/assignment_golden.jsonl",
+          "completion_criteria": [
+            "Có ít nhất 20 test case",
+            "Mỗi case có input và expected result"
+          ],
+          "required_skills": ["AI", "Evaluation"],
+          "estimated_effort": "medium",
+          "depends_on": [],
+          "reference_ids": ["lab://K4-L3B-DAY05-06/v1/cp3/item-1"],
+          "status": "proposed"
+        },
+        {
+          "id": "cccccccc-cccc-4ccc-8ccc-ccccccccccc4",
+          "task_key": "cp3-task-04",
+          "checkpoint_id": "cp3",
+          "task_order": 2,
+          "title": "Cấu hình mạch nhúng và vi điều khiển",
+          "description": "Thiết lập firmware và nạp code cho vi điều khiển STM32.",
+          "deliverable": "firmware/hex/main.hex",
+          "completion_criteria": ["Mạch khởi động được và nhấp nháy đèn LED"],
+          "required_skills": ["Embedded", "Hardware"],
+          "estimated_effort": "large",
+          "depends_on": [],
+          "reference_ids": ["lab://K4-L3B-DAY05-06/v1/cp3/item-1"],
+          "status": "proposed"
+        }
+      ]
+    }
+  ]
+}
+

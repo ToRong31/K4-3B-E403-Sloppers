@@ -1,11 +1,20 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { apiClient } from '../../api/createApiClient';
+
 const proposalByTaskId = {
   t1: { owner: 'Trọng', confidence: 95, reason: 'Sở trường Product & Research' },
   t2: { owner: 'Trọng', confidence: 98, reason: 'Kinh nghiệm Product Lead' },
   t3: { owner: 'Trang', confidence: 96, reason: 'Frontend + UI/UX' },
   t4: { owner: 'Dương', confidence: 94, reason: 'AI / Golden set' },
   t5: { owner: 'Dũng', confidence: 92, reason: 'Backend + Data' },
+};
+
+const defaultSkillsByName = {
+  Trọng: ['Product', 'Research'],
+  Trang: ['Frontend', 'UI/UX'],
+  Dương: ['AI', 'Evaluation', 'Prompt'],
+  Dũng: ['Backend', 'Testing', 'Data'],
 };
 
 const analysisLogs = [
@@ -58,8 +67,53 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, open, task
     setProgress(0);
     setLogs([]);
     setAssignments(buildDraftAssignments(latestTasksRef.current));
-    return undefined;
-  }, [draftVersion, open]);
+
+    let active = true;
+    const payload = {
+      group_name: 'Sloppers',
+      members: members.map((m) => ({
+        id: m.id || m.studentCode || m.name,
+        name: m.name || m.fullName,
+        skills: m.skills || defaultSkillsByName[m.name] || ['General'],
+      })),
+      tasks: latestTasksRef.current.map((t) => ({
+        id: t.id,
+        title: t.title,
+        deliverable: t.deliverable || t.title,
+      })),
+    };
+
+    apiClient.createAssignmentDraft(payload)
+      .then((res) => {
+        if (!active || !res?.assignments?.length) return;
+        const memberIdToName = Object.fromEntries(
+          members.map((m) => [m.id || m.studentCode || m.name, m.name]),
+        );
+        const mapped = latestTasksRef.current.map((task) => {
+          const item = res.assignments.find((a) => a.task_id === task.id);
+          const owner = item
+            ? (memberIdToName[item.owner_id] || item.owner_id)
+            : (proposalByTaskId[task.id]?.owner ?? task.owner);
+          return {
+            taskId: task.id,
+            title: task.title,
+            category: task.category,
+            proposedOwner: owner,
+            owner,
+            confidence: item ? 95 : (proposalByTaskId[task.id]?.confidence ?? 75),
+            reason: item?.reason || proposalByTaskId[task.id]?.reason || 'Khớp với phần việc hiện có',
+          };
+        });
+        setAssignments(mapped);
+      })
+      .catch((err) => {
+        console.warn('Fallback to local assignment proposal:', err);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [draftVersion, members, open]);
 
   useEffect(() => {
     if (!open || phase !== 'analyzing') return undefined;

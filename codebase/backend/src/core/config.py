@@ -33,7 +33,22 @@ class Settings(BaseSettings):
 
     @property
     def cors_origins(self) -> list[str]:
-        return [origin.strip() for origin in self.app_cors_origins.split(",") if origin.strip()]
+        origins = [origin.strip() for origin in self.app_cors_origins.split(",") if origin.strip()]
+        dev_origins = [
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "http://localhost:5500",
+            "http://127.0.0.1:5500",
+            "http://localhost:8080",
+            "http://127.0.0.1:8080",
+            "http://localhost:8000",
+            "http://127.0.0.1:8000",
+            "null",
+        ]
+        for d in dev_origins:
+            if d not in origins:
+                origins.append(d)
+        return origins
 
     @property
     def selected_api_key(self) -> SecretStr | None:

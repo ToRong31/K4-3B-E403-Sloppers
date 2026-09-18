@@ -38,6 +38,18 @@ export function createMockApiClient() {
         gaps: [],
         questions: [],
       }),
+    createAssignmentDraft: () =>
+      wait({
+        status: 'ready',
+        assignments: [
+          { task_id: 't1', owner_id: 'm1', reason: 'Sở trường Product & Research' },
+          { task_id: 't2', owner_id: 'm1', reason: 'Kinh nghiệm Product Lead' },
+          { task_id: 't3', owner_id: 'm2', reason: 'Frontend + UI/UX' },
+          { task_id: 't4', owner_id: 'm3', reason: 'AI / Golden set' },
+          { task_id: 't5', owner_id: 'm4', reason: 'Backend + Data' },
+        ],
+        gaps: [],
+      }),
     getWorkspaceSnapshot: () => wait(workspaceFixture),
     getCoachSnapshot: () => wait(coachFixture),
   };

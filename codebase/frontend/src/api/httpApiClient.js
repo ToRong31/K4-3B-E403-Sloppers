@@ -33,6 +33,11 @@ export function createHttpApiClient({ baseUrl }) {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
+    createAssignmentDraft: (payload) =>
+      request(baseUrl, '/assignments/draft', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
     getWorkspaceSnapshot: () => request(baseUrl, '/groups/current'),
     getCoachSnapshot: () => request(baseUrl, '/coach/groups'),
   };
