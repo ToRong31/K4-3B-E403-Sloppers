@@ -89,9 +89,24 @@ def test_lab_search_does_not_cross_lab_or_checkpoint_boundaries() -> None:
         LAB_ID,
         "golden set",
         [
-            {"lab_id": LAB_ID, "checkpoint_id": "cp3", "ref_id": "right", "content": "golden set"},
-            {"lab_id": "lab-2", "checkpoint_id": "cp3", "ref_id": "wrong-lab", "content": "golden set"},
-            {"lab_id": LAB_ID, "checkpoint_id": "cp4", "ref_id": "wrong-cp", "content": "golden set"},
+            {
+                "lab_id": LAB_ID,
+                "checkpoint_id": "cp3",
+                "ref_id": "right",
+                "content": "golden set",
+            },
+            {
+                "lab_id": "lab-2",
+                "checkpoint_id": "cp3",
+                "ref_id": "wrong-lab",
+                "content": "golden set",
+            },
+            {
+                "lab_id": LAB_ID,
+                "checkpoint_id": "cp4",
+                "ref_id": "wrong-cp",
+                "content": "golden set",
+            },
         ],
         checkpoint_id="cp3",
     )
