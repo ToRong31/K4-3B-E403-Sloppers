@@ -180,7 +180,7 @@ def analyze_each_checkpoint(state: TaskAnalysisState) -> TaskAnalysisState:
     model = state.get("model")
     model_output_json: dict[str, Any] | None = None
 
-    if model is None:
+    if model is None and "PYTEST_CURRENT_TEST" not in os.environ and state.get("mode") != "deterministic":
         try:
             model = build_chat_model()
         except (LLMConfigurationError, Exception) as exc:

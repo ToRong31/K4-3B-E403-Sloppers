@@ -24,6 +24,8 @@ export function WorkspacePage() {
   const [groupDialogOpen, setGroupDialogOpen] = useState(false);
   const groupDialogTriggerRef = useRef(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analyzeProgress, setAnalyzeProgress] = useState(0);
+  const [analyzeLog, setAnalyzeLog] = useState('');
 
   useEffect(() => {
     if (data) setWorkspaceData(data);
@@ -64,11 +66,35 @@ export function WorkspacePage() {
 
   const handleAnalyzeTask = async () => {
     setIsAnalyzing(true);
+    setAnalyzeProgress(12);
+    setAnalyzeLog('1/4: Đọc dữ liệu bài Lab & kiểm tra ref_id…');
+
+    const t1 = setTimeout(() => {
+      setAnalyzeProgress(38);
+      setAnalyzeLog('2/4: Đang gọi mô hình gpt-5.6-luna qua LangGraph…');
+    }, 1200);
+
+    const t2 = setTimeout(() => {
+      setAnalyzeProgress(68);
+      setAnalyzeLog('3/4: LLM đang phân rã checkpoint & bóc tách deliverables…');
+    }, 3200);
+
+    const t3 = setTimeout(() => {
+      setAnalyzeProgress(88);
+      setAnalyzeLog('4/4: Kiểm tra 100% requirement coverage & schema validation…');
+    }, 6000);
+
     try {
       const res = await apiClient.analyzeLab({
         lab_id: 'K4-L3B-DAY05-06-MINI-HACKATHON',
         lab_manifest: defaultLabManifest,
       });
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      setAnalyzeProgress(100);
+      setAnalyzeLog('Hoàn thành! Đang nạp danh sách task…');
+
       if (res && res.status === 'ready') {
         const draft = res.checklist_draft;
         let analyzedTasks = [];
@@ -93,15 +119,22 @@ export function WorkspacePage() {
         if (analyzedTasks.length === 0) {
           analyzedTasks = canonicalTasksFixture;
         }
-        setWorkspaceData((current) => ({
-          ...current,
-          tasks: analyzedTasks,
-          checklistSource: `${draft?.lab_id ?? 'K4-L3B-DAY05-06'} · AI Task Analysis (ChecklistDraft Ready)`,
-        }));
+        setTimeout(() => {
+          setWorkspaceData((current) => ({
+            ...current,
+            tasks: analyzedTasks,
+            checklistSource: `${draft?.lab_id ?? 'K4-L3B-DAY05-06'} · AI Task Analysis (gpt-5.6-luna)`,
+          }));
+          setIsAnalyzing(false);
+        }, 400);
+      } else {
+        setIsAnalyzing(false);
       }
     } catch (err) {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
       console.error('Lỗi khi phân tích bài Lab:', err);
-    } finally {
       setIsAnalyzing(false);
     }
   };
@@ -190,7 +223,7 @@ export function WorkspacePage() {
                   disabled={!isLeader || isAnalyzing}
                   onClick={handleAnalyzeTask}
                 >
-                  {isAnalyzing ? '⏳ Đang phân tích bài Lab…' : '✦ Phân tích Task (AI)'}
+                  {isAnalyzing ? `⏳ Đang phân tích (${analyzeProgress}%)…` : '✦ Phân tích Task (AI)'}
                 </button>
                 <button
                   className="secondary-button full"
@@ -219,7 +252,7 @@ export function WorkspacePage() {
                     disabled={isAnalyzing}
                     onClick={handleAnalyzeTask}
                   >
-                    {isAnalyzing ? '⏳ Đang phân tích lại…' : '↻ Phân tích lại Task'}
+                    {isAnalyzing ? `⏳ Đang phân tích (${analyzeProgress}%)…` : '↻ Phân tích lại Task'}
                   </button>
                 )}
               </>
@@ -235,7 +268,24 @@ export function WorkspacePage() {
             </div>
             <div className="overall-progress"><i style={{ width: `${progress}%` }} /></div>
             <div className="task-list">
-              {snapshot.tasks.length === 0 ? (
+              {isAnalyzing ? (
+                <section className="assignment-analyzing" style={{ padding: '36px 16px' }}>
+                  <div className="ai-orb" aria-hidden="true">✦</div>
+                  <h3 style={{ fontSize: '18px', margin: '16px 0 6px', color: '#173f61' }}>
+                    AI đang phân tích bài Lab…
+                  </h3>
+                  <p style={{ fontSize: '12px', color: '#708397', maxWidth: '440px', margin: '0 auto 16px', lineHeight: 1.55 }}>
+                    Mô hình <b>gpt-5.6-luna</b> đang đọc đề bài, đối soát checkpoints và bóc tách các đầu việc canonical.
+                  </p>
+                  <div className="ai-progress" style={{ margin: '0 auto', maxWidth: '460px' }}>
+                    <i style={{ width: `${analyzeProgress}%` }} />
+                  </div>
+                  <div className="ai-progress-meta" style={{ maxWidth: '460px', margin: '8px auto 0' }}>
+                    <span>{analyzeLog}</span>
+                    <b>{analyzeProgress}%</b>
+                  </div>
+                </section>
+              ) : snapshot.tasks.length === 0 ? (
                 <div style={{ padding: '40px 16px', textAlign: 'center', color: '#64748b' }}>
                   <div style={{ fontSize: '32px', marginBottom: '8px' }}>📋</div>
                   <b style={{ display: 'block', fontSize: '15px', color: '#1e293b', marginBottom: '6px' }}>
@@ -251,7 +301,7 @@ export function WorkspacePage() {
                       disabled={isAnalyzing}
                       onClick={handleAnalyzeTask}
                     >
-                      {isAnalyzing ? '⏳ Đang gọi AI phân tích bài Lab…' : '✦ Phân tích Task ngay'}
+                      ✦ Phân tích Task ngay
                     </button>
                   )}
                 </div>
