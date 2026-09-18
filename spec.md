@@ -46,7 +46,7 @@ Nguồn đầy đủ:
 - `14/36` (38,9%) khó biết nhóm đã hoàn thành đến đâu.
 - `20/36` (55,6%) mất ít nhất 15 phút để thống nhất yêu cầu hoặc cuối cùng vẫn chưa rõ.
 - `27/36` (75,0%) mất thêm ít nhất 5 phút vì phải chia hoặc hiểu lại task.
-- `9/36` (25,0%) có tín hiệu sẵn sàng dùng thử; 4 người để lại kênh liên hệ.
+- `7/36` (19,4%) có tín hiệu sẵn sàng dùng thử; 4 người để lại kênh liên hệ và 3 người đồng ý chung.
 
 **Mining:** 14/2.555 câu hỏi K4 không-preset hỏi trực tiếp về deliverable, cách nộp hoặc trạng thái nộp. Cách lọc và giới hạn suy luận đã ghi trong [`canvas.md`](canvas.md). Các mã minh họa gồm `T10323`, `T10349`, `T10705`, `T11149`, `T11557`.
 
@@ -260,6 +260,7 @@ Không làm multi-prototype trong phạm vi 39 giờ. Nhóm chọn một phươn
 | 18/09/2026 · integration | Loại bỏ fallback chat giả, bắt buộc model thật hoặc lỗi rõ ràng | Acceptance nội bộ phát hiện UI có thể trình bày câu trả lời deterministic như LLM. |
 | 18/09/2026 · integration | Chat 1:1 đọc snapshot task đang hiển thị thay vì task seed cũ | Regression nội bộ: board có 4 task mới nhưng trợ lý trả 2 task mock đã hoàn thành. |
 | 18/09/2026 · CP4 | Hoàn thiện §1–§9 và khóa quality bar 75% + hard gates | Yêu cầu CP4; ngưỡng không được hạ sau khi nộp. |
+| 18/09/2026 · evidence correction | Sửa willing-user signal từ 9/36 thành 7/36 | Đếm lại CSV gốc: 4 liên hệ trực tiếp + 3 đồng ý chung; loại 1 phản hồi từ chối/tiêu cực. |
 
 ### Tự khai phần chưa hoàn thành tại CP4
 

@@ -61,8 +61,9 @@ Theo quy chế Hackathon Day 05-06, tiêu chí đánh giá Bằng chứng (Evide
 > **86.1%** nhóm đọc README/repository và **58.3%** đọc VLearn, nhưng chỉ có **22.2%** lập tài liệu theo dõi (Google Docs/Notion). Việc đọc một lượng lớn tài liệu markdown mà không có công cụ tự động trích xuất checklist và cấu trúc phụ thuộc (Dependency Graph) là nguyên nhân trực tiếp khiến các nhóm mất phương hướng.
 
 > [!NOTE]
-> **Insight 5: Nhu cầu thị trường rất thực tế với 25% người dùng sẵn sàng thử nghiệm ngay**  
-> Dù câu hỏi để lại thông tin liên hệ là tùy chọn, đã có **9 học viên** (25.0% mẫu hợp lệ) phản hồi sẵn sàng dùng thử MVP của nhóm, trong đó có **4 người cung cấp thông tin liên lạc trực tiếp** (Discord, Zalo, SĐT cá nhân).
+> **Insight 5: Có 19,4% người dùng phát tín hiệu sẵn sàng thử nghiệm**
+>
+> Dù câu hỏi để lại thông tin liên hệ là tùy chọn, có **7/36 học viên** (19,4% mẫu hợp lệ) phát tín hiệu sẵn sàng dùng thử MVP: **4 người cung cấp thông tin liên lạc trực tiếp** và **3 người trả lời đồng ý chung**. Một phản hồi có nội dung từ chối/tiêu cực không được tính là willing user.
 
 ---
 
@@ -179,10 +180,11 @@ Theo quy chế Hackathon Day 05-06, tiêu chí đánh giá Bằng chứng (Evide
 
 | Trạng thái phản hồi | Số lượng (n) | Tỷ lệ (%) | Chi tiết liên hệ / Ghi chú |
 | :--- | :---: | :---: | :--- |
-| **Có thông tin liên hệ trực tiếp** | 4 | 11.1% | Discord ID, Số Zalo, Mã định danh học viên |
-| **Sẵn sàng thử nghiệm (Đồng ý)** | 5 | 13.9% | Xác nhận sẵn sàng tham gia thử nghiệm |
-| **Không để lại thông tin (Bỏ trống)** | 27 | 75.0% | Câu hỏi không bắt buộc |
-| **Tổng số người có tín hiệu quan tâm MVP** | **9** | **25.0%** | **Tín hiệu chuyển đổi tốt cho giai đoạn CP1-CP4** |
+| **Có thông tin liên hệ trực tiếp** | 4 | 11.1% | Discord ID, số điện thoại hoặc mã định danh học viên |
+| **Sẵn sàng thử nghiệm (đồng ý chung)** | 3 | 8.3% | Trả lời “ok”, “có thể” hoặc tương đương |
+| **Từ chối/tiêu cực** | 1 | 2.8% | Không tính là willing user |
+| **Không để lại thông tin (bỏ trống)** | 28 | 77.8% | Câu hỏi không bắt buộc |
+| **Tổng số người có tín hiệu quan tâm MVP** | **7** | **19.4%** | **Trong đó 4 người có kênh liên hệ trực tiếp** |
 
 ---
 
