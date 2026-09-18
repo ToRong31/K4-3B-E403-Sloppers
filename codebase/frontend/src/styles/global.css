@@ -181,6 +181,21 @@
 .task-main h3 { margin: 5px 0 3px; font-size: 14px; }
 .task-main p { margin: 0; color: var(--muted); font-size: 11px; }
 .task-tag { color: var(--brand); font-size: 9px; font-weight: 850; letter-spacing: .06em; }
+.task-header-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.task-ref-container { margin-top: 5px; }
+.task-ref-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
+.task-ref-chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; background: #f0f7ff; border: 1px solid #bae0fd; border-radius: 5px; font-size: 10px; color: #0284c7; text-decoration: none; font-weight: 600; transition: all .15s; }
+.task-ref-chip:hover { background: #e0f2fe; border-color: #7dd3fc; }
+.task-ref-chip .ref-icon { font-size: 10px; }
+.task-ref-toggle-btn { background: none; border: none; padding: 1px 4px; font-size: 10px; color: #64748b; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; font-weight: 600; }
+.task-ref-toggle-btn:hover { color: #0284c7; }
+.task-ref-detail-card { margin-top: 6px; padding: 8px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3px solid #0284c7; border-radius: 6px; font-size: 11px; line-height: 1.5; color: #334155; }
+.task-ref-detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-weight: 700; color: #1e293b; font-size: 11px; }
+.task-ref-detail-header .ref-tag { font-size: 9px; padding: 1px 5px; border-radius: 3px; background: #e0f2fe; color: #0369a1; font-weight: 700; }
+.task-ref-detail-content { margin: 0 0 6px; color: #475569; font-size: 10.5px; line-height: 1.45; }
+.task-ref-detail-footer { display: flex; justify-content: space-between; align-items: center; font-size: 9.5px; color: #64748b; }
+.task-ref-link { color: #0284c7; text-decoration: none; font-weight: 700; }
+.task-ref-link:hover { text-decoration: underline; }
 .task-owner { display: flex; align-items: center; gap: 7px; }
 .task-owner > div { display: grid; }
 .task-owner small { color: var(--muted); font-size: 10px; }

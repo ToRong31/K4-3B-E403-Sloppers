@@ -80,3 +80,25 @@ def test_analyze_lab_endpoint_missing_reference_clarify() -> None:
     assert body["status"] == "clarify"
     assert body["gaps"]
 
+
+def test_analyze_lab_endpoint_loads_bundled_manifest_by_lab_id() -> None:
+    response = make_client().post(
+        "/api/v1/labs/analyze",
+        json={"lab_id": "K4-L3B-DAY05-06-MINI-HACKATHON", "version": 1},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "ready"
+    assert body["checklist_draft"]["lab_id"] == "K4-L3B-DAY05-06-MINI-HACKATHON"
+    assert len(body["checklist_draft"]["checkpoints"]) == 7
+
+
+def test_analyze_lab_endpoint_returns_not_found_for_unknown_bundled_lab() -> None:
+    response = make_client().post(
+        "/api/v1/labs/analyze",
+        json={"lab_id": "unknown-lab", "version": 1},
+    )
+
+    assert response.status_code == 404
+

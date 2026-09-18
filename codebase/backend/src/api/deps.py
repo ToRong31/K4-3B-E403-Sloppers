@@ -10,6 +10,7 @@ from src.agent.progress.graph import build_progress_graph
 from src.agent.router_graph import build_router_graph
 from src.infrastructure.checklist_store import ChecklistStore
 from src.infrastructure.database.repositories import AssignmentDraftRepository
+from src.infrastructure.lab_manifest_store import LabManifestStore
 from src.infrastructure.llm.factory import build_chat_model
 from src.services.assignment_drafts import AssignmentDraftService
 from src.services.chat import ChatService
@@ -39,6 +40,12 @@ def get_progress_graph() -> Any:
 def get_checklist_store() -> ChecklistStore:
     """Return the local prototype store for validated canonical checklists."""
     return ChecklistStore()
+
+
+@lru_cache
+def get_lab_manifest_store() -> LabManifestStore:
+    """Return the bundled JSON LAB manifest reader."""
+    return LabManifestStore()
 
 
 def get_chat_model(request: Request) -> Any:

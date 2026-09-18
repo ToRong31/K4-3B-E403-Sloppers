@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { LabReferenceBadge } from '../labs/LabReferenceBadge';
 
 const proposalByTaskId = {
   t1: { owner: 'Trọng', confidence: 95, reason: 'Sở trường Product & Research' },
@@ -9,11 +10,10 @@ const proposalByTaskId = {
 };
 
 const analysisLogs = [
-  { percent: 12, icon: '🔍', text: 'Đọc 5 deliverable từ checklist chính thức…' },
-  { percent: 38, icon: '👥', text: 'Đối chiếu hồ sơ kỹ năng thành viên…' },
-  { percent: 67, icon: '🧠', text: 'Tính confidence và cân bằng khối lượng…' },
-  { percent: 88, icon: '⚠️', text: 'Kiểm tra các khoảng trống kỹ năng…' },
-  { percent: 100, icon: '✨', text: 'Bản nháp đã sẵn sàng để Nhóm trưởng kiểm tra.' },
+  { percent: 18, icon: '🔍', text: 'Đọc deliverables từ checklist chính thức…' },
+  { percent: 45, icon: '👥', text: 'Đối chiếu hồ sơ kỹ năng thành viên…' },
+  { percent: 70, icon: '🧠', text: 'Tính confidence và cân bằng khối lượng…' },
+  { percent: 88, icon: '⚡', text: 'AI agent đang tối ưu ma trận phân công…' },
 ];
 
 export function buildDraftAssignments(tasks, draftAssignments, members = []) {
@@ -25,13 +25,14 @@ export function buildDraftAssignments(tasks, draftAssignments, members = []) {
       const owner = memberById.get(assignment.owner_id);
       return {
         taskId: assignment.task_id,
-        title: task?.title ?? 'Task không xác định',
-        category: task?.category ?? 'TASK',
+        title: task?.title ?? assignment.title ?? `Task ${assignment.task_id}`,
+        category: task?.category ?? assignment.category ?? 'TASK',
         proposedOwner: owner?.name ?? assignment.owner_id,
         owner: owner?.name ?? assignment.owner_id,
         confidence: assignment.confidence === 'high' ? 95 : assignment.confidence === 'medium' ? 75 : 45,
         reason: assignment.reason,
         matchedSkills: assignment.matched_skills ?? [],
+        reference_ids: task?.reference_ids ?? assignment.reference_ids ?? [],
       };
     });
   }
@@ -43,6 +44,7 @@ export function buildDraftAssignments(tasks, draftAssignments, members = []) {
     owner: proposalByTaskId[task.id]?.owner ?? task.owner,
     confidence: proposalByTaskId[task.id]?.confidence ?? 75,
     reason: proposalByTaskId[task.id]?.reason ?? 'Khớp với phần việc hiện có',
+    reference_ids: task.reference_ids ?? [],
   }));
 }
 
@@ -90,6 +92,7 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
   useEffect(() => {
     if (!open || !onGenerateDraft) return undefined;
     let active = true;
+
     onGenerateDraft()
       .then((draft) => {
         if (!active) return;
@@ -97,25 +100,42 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
         setGaps(draft.gaps ?? []);
         setAssignments(buildDraftAssignments(latestTasksRef.current, draft.assignments, members));
         setDraftLoading(false);
+        setProgress(100);
+        setLogs((current) => [
+          ...current.filter((l) => l.percent !== 100),
+          { percent: 100, icon: '✨', text: 'Bản nháp đã sẵn sàng để Nhóm trưởng kiểm tra.' },
+        ]);
+        window.setTimeout(() => {
+          if (active) setPhase('review');
+        }, 400);
       })
       .catch((error) => {
-        if (active) {
-          setDraftError(error.message ?? 'Không thể tạo bản nháp AI.');
-          setDraftLoading(false);
-        }
+        if (!active) return;
+        setDraftError(error.message ?? 'Không thể tạo bản nháp AI.');
+        setDraftLoading(false);
+        setPhase('review');
       });
-    return () => { active = false; };
+
+    return () => {
+      active = false;
+    };
   }, [draftVersion, members, onGenerateDraft, open]);
 
   useEffect(() => {
     if (!open || phase !== 'analyzing') return undefined;
-    const timers = analysisLogs.map((entry, index) => window.setTimeout(() => {
-      setProgress(entry.percent);
-      setLogs((current) => [...current, entry]);
-      if (index === analysisLogs.length - 1) window.setTimeout(() => setPhase('review'), 260);
-    }, index * 330));
+
+    const timers = analysisLogs.map((entry, index) =>
+      window.setTimeout(() => {
+        setProgress((prev) => Math.max(prev, entry.percent));
+        setLogs((current) => {
+          if (current.some((l) => l.percent === entry.percent)) return current;
+          return [...current, entry];
+        });
+      }, (index + 1) * 400)
+    );
+
     return () => timers.forEach(window.clearTimeout);
-  }, [open, phase]);
+  }, [draftVersion, open, phase]);
 
   const workload = useMemo(() => calculateWorkload(assignments), [assignments]);
   const ownerChoices = members.filter((member) => member.status !== 'declined').map((member) => member.name);
@@ -130,8 +150,11 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
   };
 
   const skipAnalysis = () => {
+    if (draftLoading) {
+      setProgress((prev) => Math.max(prev, 90));
+      return;
+    }
     setProgress(100);
-    setLogs(analysisLogs);
     setPhase('review');
   };
 
@@ -167,7 +190,9 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
           <div className="ai-progress"><i style={{ width: `${progress}%` }} /></div>
           <div className="ai-progress-meta"><span>{logs.at(-1)?.text ?? 'Đang khởi động AI matching engine…'}</span><b>{progress}%</b></div>
           <div className="ai-log-list">{logs.map((entry) => <p key={entry.percent}><span>{entry.icon}</span>{entry.text}</p>)}</div>
-          <button className="text-button" type="button" onClick={skipAnalysis}>Xem kết quả ngay (bỏ qua animation) →</button>
+          <button className="text-button" type="button" onClick={skipAnalysis} disabled={draftLoading}>
+            {draftLoading ? 'Đang đợi AI hoàn thành…' : 'Xem kết quả ngay (bỏ qua animation) →'}
+          </button>
         </section>
       )}
 
@@ -183,8 +208,17 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
             {assignments.map((item) => {
               const overridden = item.owner !== item.proposedOwner;
               return (
-                <article className={overridden ? 'overridden' : ''} key={item.taskId}>
-                  <div><span className="task-tag">{item.category}</span><h3>{item.title}</h3><p>🤖 AI đề xuất: <b>{item.proposedOwner}</b> · {item.reason} · Match {item.confidence}%</p>{item.confidence < 93 && <small className="low-confidence">Cần kiểm tra lại: confidence dưới 93%.</small>}{overridden && <small>Leader đã đổi từ {item.proposedOwner} → {item.owner}</small>}</div>
+                <article key={item.taskId} className="assignment-task-card">
+                  <div>
+                    <span className="task-tag">{item.category}</span>
+                    <h3>{item.title}</h3>
+                    <p>🤖 AI đề xuất: <b>{item.proposedOwner}</b> · {item.reason} · Match {item.confidence}%</p>
+                    {item.reference_ids && item.reference_ids.length > 0 && (
+                      <LabReferenceBadge references={item.reference_ids} showDetailsToggle={true} />
+                    )}
+                    {item.confidence < 93 && <small className="low-confidence">Cần kiểm tra lại: confidence dưới 93%.</small>}
+                    {overridden && <small>Leader đã đổi từ {item.proposedOwner} → {item.owner}</small>}
+                  </div>
                   <label><span className="sr-only">Người phụ trách cho {item.title}</span><select value={item.owner} onChange={(event) => selectOwner(item.taskId, event.target.value)}>{ownerChoices.map((name) => <option key={name} value={name}>{name}</option>)}<option value="Cả nhóm">Cả nhóm</option></select></label>
                 </article>
               );

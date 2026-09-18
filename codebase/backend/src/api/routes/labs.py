@@ -1,16 +1,18 @@
 import logging
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
-from src.api.deps import get_checklist_store, get_router_graph
+from src.api.deps import get_checklist_store, get_lab_manifest_store, get_router_graph
 from src.infrastructure.checklist_store import ChecklistStore
 from src.infrastructure.json_store import get_json_store
+from src.infrastructure.lab_manifest_store import LabManifestNotFoundError, LabManifestStore
 from src.models.schemas import TaskAnalysisRequest, TaskAnalysisResponse
 
 router = APIRouter(prefix="/labs", tags=["labs"])
 RouterDep = Annotated[Any, Depends(get_router_graph)]
 ChecklistStoreDep = Annotated[ChecklistStore, Depends(get_checklist_store)]
+LabManifestStoreDep = Annotated[LabManifestStore, Depends(get_lab_manifest_store)]
 logger = logging.getLogger(__name__)
 
 
@@ -24,8 +26,9 @@ def analyze_lab_endpoint(
     payload: TaskAnalysisRequest,
     graph: RouterDep,
     checklist_store: ChecklistStoreDep,
+    lab_manifest_store: LabManifestStoreDep,
 ) -> TaskAnalysisResponse:
-    """Analyze a LAB manifest or lab_id using the router graph."""
+    """Analyze client-provided LAB data or load a bundled JSON manifest by lab_id."""
     state_payload: dict[str, Any] = {
         "operation": "analyze_lab",
         "use_llm": True,
@@ -34,6 +37,13 @@ def analyze_lab_endpoint(
     }
     if payload.lab_manifest:
         state_payload["lab_manifest"] = payload.lab_manifest
+    elif payload.lab_id and not payload.documents:
+        try:
+            state_payload["lab_manifest"] = lab_manifest_store.load(
+                payload.lab_id, payload.version
+            )
+        except LabManifestNotFoundError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
     if payload.lab_id:
         state_payload["lab_id"] = payload.lab_id
     if payload.documents:
