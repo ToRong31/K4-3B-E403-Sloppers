@@ -267,45 +267,66 @@ def analyze_each_checkpoint(state: TaskAnalysisState) -> TaskAnalysisState:
             model = None
 
     if model is not None:
-        try:
-            import re
-            from langchain_core.messages import HumanMessage, SystemMessage
+        import re
+        import time
+        from langchain_core.messages import HumanMessage, SystemMessage
 
-            sys_prompt = (
-                model_request.get("system")
-                or TASK_ANALYSIS_SYSTEM_PROMPT
-            ) + "\nBẮT BUỘC: Chỉ xuất duy nhất một khối JSON hợp lệ theo đúng schema trên. Không viết thêm lời chào hay giải thích gì bên ngoài JSON."
-            user_prompt = model_request.get("user") or build_task_analysis_prompt(
-                {
-                    "lab_id": state.get("lab_id"),
-                    "lab_version": state.get("lab_version", 1),
-                    "title": state.get("lab_title", ""),
-                    "checkpoints": checkpoints,
-                }
-            )
-            messages = [
-                SystemMessage(content=sys_prompt),
-                HumanMessage(content=user_prompt),
-            ]
-            response = model.invoke(messages)
-            content = getattr(response, "content", str(response))
-            cleaned = content.strip()
-            json_match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", cleaned)
-            if json_match:
-                cleaned = json_match.group(1).strip()
-            elif "{" in cleaned and "}" in cleaned:
-                start = cleaned.find("{")
-                end = cleaned.rfind("}") + 1
-                cleaned = cleaned[start:end].strip()
-            model_output_json = json.loads(cleaned)
-        except Exception as exc:
-            logger.exception("Task-analysis LLM invocation or parsing failed")
+        sys_prompt = (
+            model_request.get("system")
+            or TASK_ANALYSIS_SYSTEM_PROMPT
+        ) + "\nBẮT BUỘC: Chỉ xuất duy nhất một khối JSON hợp lệ theo đúng schema trên. Không viết thêm lời chào hay giải thích gì bên ngoài JSON."
+        user_prompt = model_request.get("user") or build_task_analysis_prompt(
+            {
+                "lab_id": state.get("lab_id"),
+                "lab_version": state.get("lab_version", 1),
+                "title": state.get("lab_title", ""),
+                "checkpoints": checkpoints,
+            }
+        )
+        messages = [
+            SystemMessage(content=sys_prompt),
+            HumanMessage(content=user_prompt),
+        ]
+
+        max_attempts = 3
+        last_exc: Exception | None = None
+        for attempt in range(1, max_attempts + 1):
+            try:
+                logger.info("Calling LLM for task analysis (attempt %d/%d)...", attempt, max_attempts)
+                response = model.invoke(messages)
+                content = getattr(response, "content", str(response))
+                cleaned = content.strip()
+                json_match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", cleaned)
+                if json_match:
+                    cleaned = json_match.group(1).strip()
+                elif "{" in cleaned and "}" in cleaned:
+                    start = cleaned.find("{")
+                    end = cleaned.rfind("}") + 1
+                    cleaned = cleaned[start:end].strip()
+                model_output_json = json.loads(cleaned)
+                last_exc = None
+                break
+            except Exception as exc:
+                last_exc = exc
+                logger.warning(
+                    "Task analysis LLM attempt %d/%d failed: %s",
+                    attempt,
+                    max_attempts,
+                    exc,
+                )
+                if attempt < max_attempts:
+                    time.sleep(2 * attempt)
+
+        if last_exc is not None:
+            logger.exception("All %d LLM task analysis attempts failed", max_attempts)
             if state.get("use_llm"):
                 return {
                     "status": "clarify",
-                    "gaps": ["AI không thể phân tích bài LAB lúc này. Vui lòng thử lại."],
+                    "gaps": [
+                        f"AI gặp sự cố timeout/kết nối sau {max_attempts} lần thử lại. Vui lòng kiểm tra lại kết nối hoặc API key."
+                    ],
                     "questions": [],
-                    "error": f"{type(exc).__name__}: {str(exc)[:500]}",
+                    "error": f"{type(last_exc).__name__}: {str(last_exc)[:500]}",
                 }
             model_output_json = None
 

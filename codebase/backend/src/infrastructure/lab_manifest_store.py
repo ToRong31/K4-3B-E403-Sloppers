@@ -31,3 +31,52 @@ class LabManifestStore:
         raise LabManifestNotFoundError(
             f"Không có dữ liệu JSON cho lab_id={lab_id!r}, version={version}."
         )
+
+    def get(self, lab_id: str | None, version: int = 1) -> dict[str, Any] | None:
+        """Find manifest matching specific lab_id (case-insensitive & dash-tolerant) or return None."""
+        if not self.root.is_dir():
+            return None
+
+        if not lab_id:
+            return self.load_any_or_first(version=version)
+
+        clean_target = (
+            str(lab_id)
+            .replace("\u2013", "-")
+            .replace("\u2014", "-")
+            .strip()
+            .casefold()
+        )
+        for source in sorted(self.root.glob("*.json")):
+            with source.open(encoding="utf-8") as handle:
+                payload = json.load(handle)
+            current_id = (
+                str(payload.get("lab_id", ""))
+                .replace("\u2013", "-")
+                .replace("\u2014", "-")
+                .strip()
+                .casefold()
+            )
+            if (
+                current_id == clean_target
+                or clean_target.startswith(current_id)
+                or current_id.startswith(clean_target)
+                or clean_target in current_id
+                or current_id in clean_target
+            ):
+                return LabManifest.model_validate(payload).model_dump(mode="json")
+
+        return self.load_any_or_first(version=version)
+
+    def load_any_or_first(
+        self, lab_id: str | None = None, version: int = 1
+    ) -> dict[str, Any] | None:
+        """Find manifest matching lab_id and version, or fallback to the first available JSON."""
+        if not self.root.is_dir():
+            return None
+        files = sorted(self.root.glob("*.json"))
+        if files:
+            with files[0].open(encoding="utf-8") as handle:
+                payload = json.load(handle)
+            return LabManifest.model_validate(payload).model_dump(mode="json")
+        return None

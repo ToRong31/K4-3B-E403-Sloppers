@@ -92,10 +92,10 @@ class ReadinessResponse(BaseModel):
 
 class ChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=2000)
-    user_id: str = Field(default="member-1")
-    group_id: str = Field(default="Sloppers")
-    thread_id: str = Field(default="thread-1")
-    lab_id: str = Field(default="K4-L3B-DAY05-06-MINI-HACKATHON")
+    user_id: str = Field(default="")
+    group_id: str = Field(default="")
+    thread_id: str = Field(default="")
+    lab_id: str = Field(default="")
     task_id: str | None = None
     tasks: list[dict[str, Any]] = Field(default_factory=list, max_length=100)
     documents: list[dict[str, Any]] | None = None

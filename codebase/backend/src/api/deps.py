@@ -84,5 +84,6 @@ def get_assignment_draft_service(
 def get_chat_service(
     graph: Annotated[Any, Depends(get_progress_graph)],
     model: Annotated[Any, Depends(get_chat_model)],
+    lab_manifest_store: Annotated[LabManifestStore, Depends(get_lab_manifest_store)],
 ) -> ChatService:
-    return ChatService(graph, llm=model)
+    return ChatService(graph, llm=model, lab_manifest_store=lab_manifest_store)
