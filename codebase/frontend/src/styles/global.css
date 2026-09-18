@@ -339,6 +339,12 @@
 .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .group-setup-dialog { width: min(780px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); padding: 0; overflow: hidden auto; border: 0; border-radius: 15px; color: #23364a; background: #fff; box-shadow: 0 28px 70px rgba(12, 35, 57, .26); }
 .group-setup-dialog::backdrop { background: rgba(17, 38, 57, .52); backdrop-filter: blur(2px); }
+.group-settings-dialog { width: min(620px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); padding: 0; overflow: hidden auto; border: 0; border-radius: 15px; color: #23364a; background: #fff; box-shadow: 0 28px 70px rgba(12, 35, 57, .26); }
+.group-settings-dialog::backdrop { background: rgba(17, 38, 57, .52); backdrop-filter: blur(2px); }
+.group-settings-dialog label { display: grid; gap: 6px; margin: 0 0 14px; color: #38536c; font-size: 12px; font-weight: 700; }
+.group-settings-dialog label input { width: 100%; padding: 10px 11px; border: 1px solid #cad8e4; border-radius: 8px; color: #23364a; background: #fff; font: inherit; font-weight: 500; }
+.group-member-management-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid #e5edf3; color: #466078; font-size: 12px; }
+.group-member-management-row .text-button { flex: 0 0 auto; color: #a33d3d; }
 .group-dialog-header { position: sticky; z-index: 2; top: 0; padding: 20px 24px 17px; display: flex; justify-content: space-between; gap: 16px; color: #fff; background: linear-gradient(120deg, #0f4d86, #126aa4); }
 .group-dialog-header span { display: block; margin-bottom: 6px; color: #cde8fb; font-size: 9px; font-weight: 800; letter-spacing: .09em; }
 .group-dialog-header h2 { margin: 0; font-size: 23px; letter-spacing: -.02em; }

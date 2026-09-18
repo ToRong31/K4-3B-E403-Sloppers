@@ -106,15 +106,15 @@ Nghiên cứu ngày 18/09/2026 từ trang sản phẩm chính thức:
 
 **Mức nhắm tới:** ☐ Sketch · ☐ Mock · ☑ Working (hybrid, chưa production-ready)
 
-| Phần | Trạng thái tại CP4 |
+| Phần | Trạng thái hiện tại |
 |---|---|
 | React UI: Labs, Lesson, Workspace, role views, assignment review | Chạy được; UI bám mockup tham chiếu. |
 | FastAPI + LangGraph Task Analysis/Assignment/Private Chat | Có endpoint, schema, test; cấu hình được model thật qua NVIDIA/OpenAI/Anthropic/Gemini. |
 | Model call thật | Đã có ở Task Analysis, Assignment và chat 1:1; lỗi provider trả lỗi/`CLARIFY`, không giả kết quả model. |
 | Golden set | Hai bộ độc lập, mỗi bộ 20 case; provenance validator trả `READY`. |
-| Auth, group/invite/profile và plan xuyên suốt | UI/demo adapter còn dữ liệu mô phỏng hoặc state cục bộ; backend authorization chưa hoàn chỉnh. |
-| Persistence và realtime đa vai trò | Có JSON/DB/WebSocket scaffolding và một số route, nhưng chưa chứng minh end-to-end authenticated/reconnect bằng ba session. |
-| Coach/help/submission | Có giao diện/route một phần; chưa đủ acceptance để coi là working production flow. |
+| Auth, group/invite/profile và plan xuyên suốt | PostgreSQL-backed session cookie; backend kiểm tra role, membership và class scope; UI deploy mặc định dùng HTTP. |
+| Persistence và realtime đa vai trò | Group/invite/profile/draft/approved plan/task/help được persist; automated acceptance đã chạy với ba session + ba WebSocket độc lập. |
+| Coach/help/submission | Coach reply/resolve và privacy aggregate đã persist; GitHub double-check/submission vẫn chưa đủ acceptance production. |
 
 ### Mức automation
 
@@ -147,10 +147,10 @@ AI tự phân tích và đề xuất khi đủ dữ liệu. Nếu thiếu nguồ
 | 2. Mô hình | Keyword/synonym gây match sai (`AI` trong `email`, REST/FastAPI, testing) | Owner sai nhưng trông hợp lý | Word-boundary/semantic validation; confidence thấp hoặc gap | AS-012, AS-013, AS-020 |
 | 2. Mô hình | Task không khớp skill nào | Che gap bằng % giả | Fallback cân bằng phải nêu rõ gap; leader review | AS-009, AS-015 |
 | 3. Hệ thống | Provider timeout/invalid output/response rỗng | UI hiển thị fake success | HTTP lỗi hoặc `CLARIFY`; cho retry, không giả output model | Integration tests, `ChatModelInvocationError` |
-| 3. Hệ thống | Event realtime trùng/cũ hoặc mất kết nối | State lệch giữa ba vai trò | Dedupe theo event/version và fetch snapshot sau reconnect | Chưa hoàn thiện end-to-end tại CP4 |
+| 3. Hệ thống | Event realtime trùng/cũ hoặc mất kết nối | State lệch giữa ba vai trò | Dedupe theo event/version và fetch snapshot sau reconnect | `validation/realtime-acceptance.md`; còn manual cross-browser matrix |
 | 3. Hệ thống | State UI mock ghi đè backend hoặc ngược lại | Chat/board dùng task cũ | Tách mock/HTTP adapter; chat nhận snapshot task hiện tại | Regression tests frontend/private chat |
 | 4. Con người/quyền | AI bị yêu cầu giải/nộp bài hoặc tự confirm | Vượt quyền, vi phạm bài thi | Từ chối hoặc chỉ tạo draft `pending_review` | TA-005, TA-006, TA-016, AS-018 |
-| 4. Con người/quyền | Leader muốn ép assignment hoặc workload lệch | Bất công/quá tải | Cho override nhưng cảnh báo workload và lưu audit | Assignment review flow; audit persistence còn thiếu |
+| 4. Con người/quyền | Leader muốn ép assignment hoặc workload lệch | Bất công/quá tải | Cho override nhưng cảnh báo workload và lưu audit | `assignment_items` giữ proposed/approved owner qua reload |
 | 4. Domain | Hai artefact cùng tên “video” nhưng khác mục đích CP3/CP5 | Gộp nhầm deliverable | Giữ task/checkpoint riêng | TA-017 |
 | 4. Domain | Dependency vòng | Kế hoạch không thể thực thi | `CLARIFY`, không tạo plan active | TA-018 |
 
@@ -170,7 +170,7 @@ Thiếu checklist, `ref_id`, skill hoặc provider lỗi → trả `CLARIFY`/HTT
 
 ### Correction
 
-Leader đổi owner khác đề xuất → UI đánh dấu “Leader đã đổi” → confirmation gate hiển thị assignment cuối → plan chỉ có hiệu lực sau xác nhận. Audit `proposed_owner`/`approved_owner` bền vững qua reload vẫn là phần chưa hoàn chỉnh.
+Leader đổi owner khác đề xuất → UI đánh dấu “Leader đã đổi” → confirmation gate hiển thị assignment cuối → plan chỉ có hiệu lực sau xác nhận. Audit `proposed_owner`/`approved_owner` được lưu trong PostgreSQL và còn nguyên sau reload.
 
 ### Khi bị đòi ngoài phạm vi
 
@@ -262,6 +262,9 @@ Không làm multi-prototype trong phạm vi 39 giờ. Nhóm chọn một phươn
 | 18/09/2026 · CP4 | Hoàn thiện §1–§9 và khóa quality bar 75% + hard gates | Yêu cầu CP4; ngưỡng không được hạ sau khi nộp. |
 | 18/09/2026 · evidence correction | Sửa willing-user signal từ 9/36 thành 7/36 | Đếm lại CSV gốc: 4 liên hệ trực tiếp + 3 đồng ý chung; loại 1 phản hồi từ chối/tiêu cực. |
 | 18/09/2026 · task analysis eval | Cập nhật kết quả live eval Task Analysis đạt 19/20 (95,0%) | Đã fix guardrail authority/boundary, version filtering và granularity; model thật NVIDIA NIM vượt quality bar 75%. |
+| 18/09/2026 · DB/auth/realtime | Thêm PostgreSQL schema, session cookie, role authorization và persistence cho workspace/Coach | `validation/realtime-acceptance.md`: 96 backend tests pass; ba session độc lập đi hết accept → profile → approve → progress → Coach. |
+| 18/09/2026 · reconnect | Thêm event log versioned, snapshot/resume, client dedupe và stale-version guard | Frontend 30 tests pass; môi trường chỉ có một IAB nên matrix Chrome/Edge/Firefox vẫn chờ chạy tay. |
+| 18/09/2026 · workspace CRUD | Thêm chỉnh sửa/xóa nhóm, hủy lời mời, xóa thành viên và tạo lại nhóm sau khi xóa | Leader-only backend authorization, cascade persistence và acceptance test đã bổ sung. |
 
 ### Tự khai phần chưa hoàn thành tại CP4
 

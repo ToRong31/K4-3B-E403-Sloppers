@@ -1,4 +1,4 @@
-const dataSource = import.meta.env.VITE_DATA_SOURCE ?? 'mock';
+const dataSource = import.meta.env.VITE_DATA_SOURCE ?? 'http';
 
 const browserOrigin = typeof window === 'undefined' ? 'http://127.0.0.1:8000' : window.location.origin;
 const browserWebSocketOrigin = browserOrigin.replace(/^http/, 'ws');
