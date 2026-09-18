@@ -35,7 +35,7 @@
           "status": "proposed"
         },
         {
-          "id": "651479fe-b8c1-439c-93ab-a2a976c07b86",
+          "id": "5cae9d73-e21d-4b7b-8280-05f59966dbcf",
           "task_key": "prepare-task-02",
           "checkpoint_id": "prepare",
           "task_order": 2,
@@ -77,9 +77,10 @@
             "Hai tệp nằm trong repository đúng vị trí yêu cầu."
           ],
           "required_skills": [
-            "Markdown",
-            "Git",
-            "Quản lý dữ liệu và bảo mật"
+            "Engineering",
+            "Evaluation",
+            "Presentation",
+            "AI"
           ],
           "estimated_effort": "small",
           "depends_on": [
@@ -97,8 +98,8 @@
       "checkpoint_order": 2,
       "tasks": [
         {
-          "id": "264135df-67d2-4b3c-b858-2375960c287a",
-          "task_key": "cp1-task-01",
+          "id": "fb87e078-e7b1-4661-9688-08ff774d07d7",
+          "task_key": "cp1-task-04",
           "checkpoint_id": "cp1",
           "task_order": 4,
           "title": "Thu thập và ghi nhật ký bằng chứng bài toán",
@@ -111,9 +112,10 @@
             "Nguồn dữ liệu hoặc phạm vi khảo sát được mô tả rõ."
           ],
           "required_skills": [
-            "Nghiên cứu người dùng",
-            "Phân tích dữ liệu",
-            "Ghi chép bằng chứng"
+            "Engineering",
+            "Evaluation",
+            "Presentation",
+            "AI"
           ],
           "estimated_effort": "medium",
           "depends_on": [
@@ -125,8 +127,8 @@
           "status": "proposed"
         },
         {
-          "id": "8107aafe-7556-41d2-b262-d7c4a2afb3c8",
-          "task_key": "cp1-task-02",
+          "id": "b5f3411d-ff13-4496-a6c8-2d0b14695d78",
+          "task_key": "cp1-task-05",
           "checkpoint_id": "cp1",
           "task_order": 5,
           "title": "Soạn Canvas 7 dòng trong spec.md",
@@ -140,9 +142,9 @@
             "Thay đổi đã được commit và push lên nhánh chính."
           ],
           "required_skills": [
-            "Product discovery",
-            "Viết product specification",
-            "Git"
+            "Evaluation",
+            "Engineering",
+            "AI"
           ],
           "estimated_effort": "medium",
           "depends_on": [
@@ -154,8 +156,8 @@
           "status": "proposed"
         },
         {
-          "id": "0bfccb4c-bd2b-4521-801f-716cacbf4e53",
-          "task_key": "cp1-task-03",
+          "id": "86b38cec-8ec0-4b78-8349-9b7d414387f6",
+          "task_key": "cp1-task-06",
           "checkpoint_id": "cp1",
           "task_order": 6,
           "title": "Nộp form Checkpoint CP1",
@@ -169,8 +171,9 @@
             "Form được nộp trước 19:30 ngày 17/9."
           ],
           "required_skills": [
-            "Quản lý submission",
-            "Kiểm tra thông tin"
+            "Evaluation",
+            "Engineering",
+            "AI"
           ],
           "estimated_effort": "small",
           "depends_on": [
@@ -188,8 +191,8 @@
       "checkpoint_order": 3,
       "tasks": [
         {
-          "id": "3ad7ed29-4cbc-4a63-b24b-e3081952c93e",
-          "task_key": "cp2-task-01",
+          "id": "5c4ea161-d0c8-4b83-ab7f-4e2137ad2789",
+          "task_key": "cp2-task-07",
           "checkpoint_id": "cp2",
           "task_order": 7,
           "title": "Dựng prototype tương tác và luồng trải nghiệm",
@@ -203,9 +206,9 @@
             "Có tối thiểu 4 nguyên tắc HAX/PAIR và vị trí áp dụng cụ thể."
           ],
           "required_skills": [
-            "Thiết kế UX",
-            "Prototyping",
-            "Thiết kế luồng AI"
+            "Evaluation",
+            "Presentation",
+            "AI"
           ],
           "estimated_effort": "large",
           "depends_on": [
@@ -217,8 +220,8 @@
           "status": "proposed"
         },
         {
-          "id": "66235e7b-747a-40d9-9e14-b7dd1842b03d",
-          "task_key": "cp2-task-02",
+          "id": "a173a444-c85b-4714-8558-6290d28293e2",
+          "task_key": "cp2-task-08",
           "checkpoint_id": "cp2",
           "task_order": 8,
           "title": "Cập nhật spec.md và lưu codebase prototype",
@@ -232,9 +235,9 @@
             "Thay đổi đã được commit và push lên origin main."
           ],
           "required_skills": [
-            "Markdown",
-            "Quản lý mã nguồn",
-            "Tài liệu hóa thiết kế"
+            "Evaluation",
+            "Engineering",
+            "AI"
           ],
           "estimated_effort": "medium",
           "depends_on": [
@@ -246,8 +249,8 @@
           "status": "proposed"
         },
         {
-          "id": "a77623fd-5f84-4578-a398-cf40e812921d",
-          "task_key": "cp2-task-03",
+          "id": "ce669d10-c67e-40fa-83da-db0ac48d7e66",
+          "task_key": "cp2-task-09",
           "checkpoint_id": "cp2",
           "task_order": 9,
           "title": "Nộp form Checkpoint CP2",
@@ -278,8 +281,8 @@
       "checkpoint_order": 4,
       "tasks": [
         {
-          "id": "ba3c265c-cf02-4051-998f-01de9a0edba7",
-          "task_key": "cp3-task-01",
+          "id": "0c812625-89b9-48ee-ae64-f54e6e7a262e",
+          "task_key": "cp3-task-10",
           "checkpoint_id": "cp3",
           "task_order": 10,
           "title": "Tích hợp module AI thật và trace log",
@@ -293,9 +296,9 @@
             "Module nằm trong codebase/ và có thể chạy kiểm chứng."
           ],
           "required_skills": [
-            "Lập trình tích hợp API",
-            "AI application development",
-            "Logging"
+            "Evaluation",
+            "Engineering",
+            "AI"
           ],
           "estimated_effort": "large",
           "depends_on": [
@@ -307,8 +310,8 @@
           "status": "proposed"
         },
         {
-          "id": "5b7d11a5-1aa4-4e8d-991b-7d4fa91e44b2",
-          "task_key": "cp3-task-02",
+          "id": "bd1ece37-b448-4080-85e2-66aa2617dad4",
+          "task_key": "cp3-task-11",
           "checkpoint_id": "cp3",
           "task_order": 11,
           "title": "Xây dựng golden set 20 case",
@@ -336,8 +339,8 @@
           "status": "proposed"
         },
         {
-          "id": "60ffe7f5-ffa0-4878-9b07-4cebcd86688e",
-          "task_key": "cp3-task-03",
+          "id": "20d8d616-14c8-4923-bae2-1c88d8432b2f",
+          "task_key": "cp3-task-12",
           "checkpoint_id": "cp3",
           "task_order": 12,
           "title": "Thực thi kiểm thử đợt 1 và lập bảng số đo",
@@ -365,8 +368,8 @@
           "status": "proposed"
         },
         {
-          "id": "5de2448b-abf8-441b-a83e-91794a18a5a5",
-          "task_key": "cp3-task-04",
+          "id": "849a39d1-f6a7-4788-bdb1-36e1a8937715",
+          "task_key": "cp3-task-13",
           "checkpoint_id": "cp3",
           "task_order": 13,
           "title": "Quay video thao tác và nộp form CP3",
@@ -380,9 +383,10 @@
             "Form được nộp trước 16:00 ngày 18/9."
           ],
           "required_skills": [
-            "Quay màn hình",
-            "Quản lý submission",
-            "Git"
+            "Engineering",
+            "Evaluation",
+            "Presentation",
+            "AI"
           ],
           "estimated_effort": "medium",
           "depends_on": [
@@ -400,8 +404,8 @@
       "checkpoint_order": 5,
       "tasks": [
         {
-          "id": "0c0aad93-8518-4a93-9ab0-f081ada11cd5",
-          "task_key": "cp4-task-01",
+          "id": "030f5fa5-bc82-48c9-96f2-4ce409e92376",
+          "task_key": "cp4-task-14",
           "checkpoint_id": "cp4",
           "task_order": 14,
           "title": "Hoàn thiện AI Spec và khóa Quality Bar",
@@ -433,10 +437,38 @@
           "status": "proposed"
         },
         {
-          "id": "3aa90fdf-c2c2-4e53-a64d-f791a87ca863",
-          "task_key": "cp4-task-02",
+          "id": "4c885884-aa0b-4ae3-91c5-fffdc9636dda",
+          "task_key": "cp4-task-15",
           "checkpoint_id": "cp4",
           "task_order": 15,
+          "title": "Khóa Quality Bar tại §7",
+          "description": "Ghi công thức quality bar chính thức tại §7, nêu rõ chức năng hoặc case chưa xử lý kịp và không chỉnh sửa quality bar sau 21:00 ngày 18/9.",
+          "deliverable": "Quality bar chính thức được ghi và khóa trong spec.md §7.",
+          "completion_criteria": [
+            "§7 có công thức theo mẫu “Đạt khi ≥ ___% qua bộ, và [điều kiện cứng]”.",
+            "Các chức năng hoặc case chưa kịp xử lý được tự khai rõ.",
+            "Quality bar được xác định trước thời điểm khóa.",
+            "Sau thời điểm khóa, chỉ cập nhật bảng kết quả lượt chạy, không sửa công thức hoặc điều kiện quality bar."
+          ],
+          "required_skills": [
+            "Định nghĩa tiêu chí chất lượng",
+            "Phân tích đánh giá",
+            "Quản lý phiên bản"
+          ],
+          "estimated_effort": "medium",
+          "depends_on": [
+            "cp4-task-01"
+          ],
+          "reference_ids": [
+            "lab://K4-L3B-DAY05-06-MINI-HACKATHON/v1/cp4/quality-bar-freeze"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "8570a76d-b360-451e-b022-2ea8f5ac7d23",
+          "task_key": "cp4-task-16",
+          "checkpoint_id": "cp4",
+          "task_order": 16,
           "title": "Commit spec.md và nộp form CP4",
           "description": "Commit và push phiên bản spec.md đã chốt, sau đó nộp đường dẫn trực tiếp tới tệp qua form CP4.",
           "deliverable": "Phiếu nộp CP4 kèm link spec.md đã chốt.",
@@ -467,8 +499,8 @@
       "checkpoint_order": 6,
       "tasks": [
         {
-          "id": "4a2c019c-ac2a-4954-af30-92a5843bf34a",
-          "task_key": "cp5-task-01",
+          "id": "b2542611-85df-441f-914b-cb4069cf27bd",
+          "task_key": "cp5-task-17",
           "checkpoint_id": "cp5",
           "task_order": 16,
           "title": "Xác thực prototype với người dùng ngoài nhóm",
@@ -483,9 +515,9 @@
             "Nhật ký được lưu trong validation/."
           ],
           "required_skills": [
-            "Usability testing",
-            "Phỏng vấn người dùng",
-            "Phân tích phản hồi"
+            "Evaluation",
+            "Presentation",
+            "AI"
           ],
           "estimated_effort": "large",
           "depends_on": [
@@ -497,8 +529,8 @@
           "status": "proposed"
         },
         {
-          "id": "98a9b8ef-7b89-4ee5-bdf9-f888bd9ceeda",
-          "task_key": "cp5-task-02",
+          "id": "454580e7-4140-410b-b665-759e68193567",
+          "task_key": "cp5-task-18",
           "checkpoint_id": "cp5",
           "task_order": 17,
           "title": "Soạn và xuất bộ slide demo 6 trang",
@@ -515,9 +547,10 @@
             "Mỗi trang có ít nhất một con số, quote có nguồn hoặc kết quả đo."
           ],
           "required_skills": [
-            "Storytelling sản phẩm",
-            "Thiết kế slide",
-            "Phân tích số liệu"
+            "Engineering",
+            "Evaluation",
+            "Presentation",
+            "AI"
           ],
           "estimated_effort": "large",
           "depends_on": [
@@ -529,8 +562,8 @@
           "status": "proposed"
         },
         {
-          "id": "19526a28-1e97-4b64-a25f-85bfd10584ab",
-          "task_key": "cp5-task-03",
+          "id": "4fe947f6-934f-4d2c-b4a5-e0216144aeb2",
+          "task_key": "cp5-task-19",
           "checkpoint_id": "cp5",
           "task_order": 18,
           "title": "Quay video demo dự phòng và dry run",
@@ -557,8 +590,8 @@
           "status": "proposed"
         },
         {
-          "id": "4bda5d73-3791-4e45-8ff3-d90f05f4d239",
-          "task_key": "cp5-task-04",
+          "id": "2a438943-da22-416f-9238-880cce35cd46",
+          "task_key": "cp5-task-20",
           "checkpoint_id": "cp5",
           "task_order": 19,
           "title": "Nộp form Checkpoint CP5",
@@ -573,8 +606,9 @@
             "Form được nộp trước 22:30 ngày 18/9."
           ],
           "required_skills": [
-            "Quản lý submission",
-            "Kiểm tra hồ sơ"
+            "Evaluation",
+            "Presentation",
+            "AI"
           ],
           "estimated_effort": "small",
           "depends_on": [
@@ -592,8 +626,8 @@
       "checkpoint_order": 7,
       "tasks": [
         {
-          "id": "3b32029b-abc9-43b3-8838-ba1f4743021b",
-          "task_key": "cp6-task-01",
+          "id": "8596a6b4-bd83-46af-aa00-46ff1eef4137",
+          "task_key": "cp6-task-21",
           "checkpoint_id": "cp6",
           "task_order": 20,
           "title": "Chuẩn hóa cấu trúc repository và reflection",
@@ -610,9 +644,10 @@
             "Mỗi reflection nêu vai trò cá nhân, phần việc phụ trách, cách ứng dụng AI và bài học từ thất bại của nhóm."
           ],
           "required_skills": [
-            "Quản lý repository",
-            "Tài liệu hóa",
-            "Tự phản ánh chuyên môn"
+            "Engineering",
+            "Evaluation",
+            "Presentation",
+            "AI"
           ],
           "estimated_effort": "medium",
           "depends_on": [
@@ -624,8 +659,8 @@
           "status": "proposed"
         },
         {
-          "id": "5a046173-6abd-4f07-b952-59381912626f",
-          "task_key": "cp6-task-02",
+          "id": "ff2febb7-d3f8-4501-8f3e-fbd7dc820bca",
+          "task_key": "cp6-task-22",
           "checkpoint_id": "cp6",
           "task_order": 21,
           "title": "Hoàn thành hai kênh nộp bài",
@@ -639,8 +674,9 @@
             "Không dùng việc đội trưởng nộp thay để thay thế phần nộp cá nhân trên VLearn."
           ],
           "required_skills": [
-            "Quản lý submission",
-            "Kiểm tra tính nhất quán"
+            "Evaluation",
+            "Engineering",
+            "AI"
           ],
           "estimated_effort": "medium",
           "depends_on": [
@@ -652,8 +688,8 @@
           "status": "proposed"
         },
         {
-          "id": "f0752c73-68d8-4221-9d3c-f6089dda53f0",
-          "task_key": "cp6-task-03",
+          "id": "55c87f8a-dca3-4370-a293-f577c45029ea",
+          "task_key": "cp6-task-23",
           "checkpoint_id": "cp6",
           "task_order": 22,
           "title": "Thuyết trình và thi đấu tại LAB 6",
@@ -667,9 +703,9 @@
             "Thành viên có thể giải thích phần được phân công và chạy lại case khi được yêu cầu."
           ],
           "required_skills": [
-            "Thuyết trình",
-            "Demo sản phẩm",
-            "Phối hợp nhóm"
+            "Evaluation",
+            "Presentation",
+            "AI"
           ],
           "estimated_effort": "medium",
           "depends_on": [
