@@ -1,12 +1,27 @@
 async function request(baseUrl, path, options = {}) {
-  const response = await fetch(`${baseUrl}${path}`, {
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-    ...options,
-  });
+  const { timeoutMs = 30000, ...fetchOptions } = options;
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+
+  let response;
+  try {
+    response = await fetch(`${baseUrl}${path}`, {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...fetchOptions.headers,
+      },
+      ...fetchOptions,
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error('Không thể kết nối API. Hãy kiểm tra backend đang chạy ở cổng 8000.');
+    }
+    throw error;
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
@@ -26,6 +41,7 @@ export function createHttpApiClient({ baseUrl }) {
       request(baseUrl, '/auth/login', {
         method: 'POST',
         body: JSON.stringify(credentials),
+        timeoutMs: 10000,
       }),
     logout: () => request(baseUrl, '/auth/logout', { method: 'POST' }),
     getSession: () => request(baseUrl, '/auth/me'),
