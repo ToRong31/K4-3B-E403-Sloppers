@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from typing import Annotated, Any, Literal
 from uuid import UUID
 
@@ -318,11 +319,88 @@ async def update_current_group_task(
         raise_domain(error)
 
 
+class FileUploadPayload(BaseModel):
+    filename: str = Field(min_length=1, max_length=255)
+    content_type: str = Field(default="application/octet-stream", max_length=100)
+    file_url: str
+    size_bytes: int = Field(default=0, ge=0)
+    group_id: str | None = None
+    channel: str = Field(default="group", max_length=20)
+    is_image: bool = False
+
+
 @router.get("/groups/current/chat")
-def get_current_group_chat() -> list[dict[str, Any]]:
+def get_current_group_chat(repo: WorkspaceRepo) -> list[dict[str, Any]]:
+    db_messages = repo.list_group_chat_messages("group-sloppers")
+    if db_messages:
+        return db_messages
     return get_json_store().get_group_chat_messages()
 
 
 @router.post("/groups/current/chat")
-def send_current_group_chat(payload: dict[str, Any]) -> dict[str, Any]:
-    return get_json_store().add_group_chat_message(payload)
+async def send_current_group_chat(
+    payload: dict[str, Any], repo: WorkspaceRepo
+) -> dict[str, Any]:
+    # Persist to database
+    saved_record = repo.save_group_chat_message(payload)
+    # Sync with json store for backward-compatibility
+    get_json_store().add_group_chat_message(payload)
+
+    # Realtime websocket broadcast to active group members
+    group_id = str(payload.get("groupId") or "group-sloppers")
+    await realtime_hub.broadcast({
+        "event_id": f"chat:{saved_record.id}",
+        "type": "chat.message_sent",
+        "scope_id": group_id,
+        "entity_id": str(saved_record.id),
+        "version": 1,
+        "occurred_at": datetime.now(UTC).isoformat(),
+        "actor": {
+            "id": str(payload.get("senderId") or "system"),
+            "role": str(payload.get("role") or "member"),
+        },
+        "payload": payload,
+    })
+    return payload
+
+
+@router.post("/files/upload")
+def upload_file_to_db(payload: FileUploadPayload, repo: WorkspaceRepo) -> dict[str, Any]:
+    record = repo.save_file_attachment(
+        filename=payload.filename,
+        content_type=payload.content_type,
+        file_url=payload.file_url,
+        size_bytes=payload.size_bytes,
+        group_id=payload.group_id or "group-sloppers",
+        channel=payload.channel,
+        is_image=payload.is_image,
+    )
+    return {
+        "id": str(record.id),
+        "filename": record.filename,
+        "content_type": record.content_type,
+        "size_bytes": record.size_bytes,
+        "file_url": record.file_url,
+        "channel": record.channel,
+        "is_image": record.is_image,
+        "created_at": record.created_at.isoformat() if record.created_at else None,
+    }
+
+
+@router.get("/groups/current/files")
+def list_current_group_files(repo: WorkspaceRepo) -> list[dict[str, Any]]:
+    attachments = repo.list_file_attachments(group_id="group-sloppers")
+    return [
+        {
+            "id": str(att.id),
+            "filename": att.filename,
+            "content_type": att.content_type,
+            "size_bytes": att.size_bytes,
+            "file_url": att.file_url,
+            "channel": att.channel,
+            "is_image": att.is_image,
+            "created_at": att.created_at.isoformat() if att.created_at else None,
+        }
+        for att in attachments
+    ]
+

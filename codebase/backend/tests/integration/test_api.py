@@ -354,3 +354,60 @@ def test_chat_endpoint_reports_model_failure() -> None:
     assert response.json()["detail"] == (
         "Không thể nhận phản hồi từ mô hình AI. Vui lòng thử lại."
     )
+
+
+def test_group_chat_message_and_attachment_persisted_to_db() -> None:
+    client = make_client()
+    msg_payload = {
+        "id": "msg-test-1001",
+        "groupId": "group-sloppers",
+        "senderId": "user-test-1",
+        "senderCode": "21010001",
+        "author": "Nguyễn Văn A",
+        "shortName": "A",
+        "initial": "A",
+        "role": "Thành viên",
+        "isLeader": False,
+        "time": "14:30",
+        "text": "Mình gửi file báo cáo nè",
+        "file": {
+            "name": "bao_cao_lab.pdf",
+            "size": "1.2 MB",
+            "type": "application/pdf",
+            "dataUrl": "data:application/pdf;base64,JVBERi0xLjQK...",
+        },
+    }
+    post_res = client.post("/api/v1/groups/current/chat", json=msg_payload)
+    assert post_res.status_code == 200
+
+    get_res = client.get("/api/v1/groups/current/chat")
+    assert get_res.status_code == 200
+    messages = get_res.json()
+    assert any(m.get("id") == "msg-test-1001" and m.get("file", {}).get("name") == "bao_cao_lab.pdf" for m in messages)
+
+
+def test_file_upload_and_list_endpoints() -> None:
+    client = make_client()
+    upload_res = client.post(
+        "/api/v1/files/upload",
+        json={
+            "filename": "diagram.png",
+            "content_type": "image/png",
+            "file_url": "data:image/png;base64,iVBORw0KGgo...",
+            "size_bytes": 1024,
+            "group_id": "group-sloppers",
+            "channel": "group",
+            "is_image": True,
+        },
+    )
+    assert upload_res.status_code == 200
+    data = upload_res.json()
+    assert data["filename"] == "diagram.png"
+    assert data["is_image"] is True
+    assert "id" in data
+
+    list_res = client.get("/api/v1/groups/current/files")
+    assert list_res.status_code == 200
+    files = list_res.json()
+    assert any(f.get("filename") == "diagram.png" for f in files)
+

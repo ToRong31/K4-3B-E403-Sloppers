@@ -9,6 +9,8 @@ from src.infrastructure.database.models import (
     ApprovedPlanRecord,
     AssignmentDraftRecord,
     CanonicalTaskRecord,
+    FileAttachmentRecord,
+    GroupChatMessageRecord,
     GroupMemberRecord,
     GroupRecord,
     HelpRequestRecord,
@@ -255,3 +257,139 @@ class WorkspaceRepository:
             .options(selectinload(HelpRequestRecord.replies))
             .where(HelpRequestRecord.id == request_id)
         )
+
+    def save_file_attachment(
+        self,
+        *,
+        filename: str,
+        content_type: str,
+        file_url: str,
+        size_bytes: int = 0,
+        group_id: str | None = None,
+        user_id: str | None = None,
+        channel: str = "group",
+        is_image: bool = False,
+    ) -> FileAttachmentRecord:
+        record = FileAttachmentRecord(
+            filename=filename,
+            content_type=content_type,
+            size_bytes=size_bytes,
+            file_url=file_url,
+            group_id=group_id,
+            user_id=user_id,
+            channel=channel,
+            is_image=is_image,
+        )
+        self.session.add(record)
+        self.session.commit()
+        self.session.refresh(record)
+        return record
+
+    def list_file_attachments(
+        self, *, group_id: str | None = None, channel: str | None = None
+    ) -> list[FileAttachmentRecord]:
+        query = select(FileAttachmentRecord)
+        if group_id:
+            query = query.where(FileAttachmentRecord.group_id == group_id)
+        if channel:
+            query = query.where(FileAttachmentRecord.channel == channel)
+        return list(self.session.scalars(query.order_by(FileAttachmentRecord.created_at.desc())))
+
+    def save_group_chat_message(self, message: dict[str, Any]) -> GroupChatMessageRecord:
+        client_id = str(message.get("id") or f"msg-{int(datetime.now(UTC).timestamp() * 1000)}")
+        existing = self.session.scalar(
+            select(GroupChatMessageRecord).where(GroupChatMessageRecord.client_id == client_id)
+        )
+        if existing:
+            return existing
+
+        image_data = message.get("image")
+        file_obj = message.get("file")
+        file_name = file_obj.get("name") if isinstance(file_obj, dict) else None
+        file_size = file_obj.get("size") if isinstance(file_obj, dict) else None
+        file_type = file_obj.get("type") if isinstance(file_obj, dict) else None
+        file_data = file_obj.get("dataUrl") if isinstance(file_obj, dict) else None
+
+        # Also store to file_attachments table for persistent asset retrieval
+        if file_name and file_data:
+            attachment = FileAttachmentRecord(
+                filename=file_name,
+                content_type=file_type or "application/octet-stream",
+                file_url=file_data,
+                group_id=str(message.get("groupId") or ""),
+                user_id=str(message.get("senderId") or ""),
+                channel="group",
+                is_image=False,
+            )
+            self.session.add(attachment)
+
+        if image_data:
+            attachment = FileAttachmentRecord(
+                filename=f"image_{client_id}.png",
+                content_type="image/png",
+                file_url=image_data,
+                group_id=str(message.get("groupId") or ""),
+                user_id=str(message.get("senderId") or ""),
+                channel="group",
+                is_image=True,
+            )
+            self.session.add(attachment)
+
+        record = GroupChatMessageRecord(
+            client_id=client_id,
+            group_id=str(message.get("groupId") or "group-sloppers"),
+            sender_id=str(message.get("senderId") or ""),
+            sender_code=message.get("senderCode"),
+            author=str(message.get("author") or "Thành viên"),
+            short_name=message.get("shortName"),
+            initial=message.get("initial"),
+            role=message.get("role"),
+            is_leader=bool(message.get("isLeader")),
+            time_label=message.get("time"),
+            text=str(message.get("text") or ""),
+            image_url=image_data,
+            file_name=file_name,
+            file_size=file_size,
+            file_type=file_type,
+            file_data=file_data,
+        )
+        self.session.add(record)
+        self.session.commit()
+        self.session.refresh(record)
+        return record
+
+    def list_group_chat_messages(self, group_id: str) -> list[dict[str, Any]]:
+        records = list(
+            self.session.scalars(
+                select(GroupChatMessageRecord)
+                .where(GroupChatMessageRecord.group_id == group_id)
+                .order_by(GroupChatMessageRecord.created_at.asc())
+            )
+        )
+        result = []
+        for r in records:
+            item: dict[str, Any] = {
+                "id": r.client_id,
+                "groupId": r.group_id,
+                "senderId": r.sender_id,
+                "senderCode": r.sender_code,
+                "author": r.author,
+                "shortName": r.short_name,
+                "initial": r.initial,
+                "role": r.role,
+                "isLeader": r.is_leader,
+                "time": r.time_label,
+                "text": r.text,
+            }
+            if r.image_url:
+                item["image"] = r.image_url
+            if r.file_name:
+                item["file"] = {
+                    "name": r.file_name,
+                    "size": r.file_size,
+                    "type": r.file_type,
+                    "dataUrl": r.file_data,
+                }
+            result.append(item)
+        return result
+

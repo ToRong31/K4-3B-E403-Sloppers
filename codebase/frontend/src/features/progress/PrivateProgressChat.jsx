@@ -295,16 +295,15 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
     });
 
     try {
+      if (apiClient.sendGroupChatMessage) {
+        await apiClient.sendGroupChatMessage(newMsg);
+      }
       if (realtimeStatus === 'connected' && realtimeClient?.publish) {
-        // Backend WebSocket handler saves to store.json and broadcasts to peers
         realtimeClient.publish({
           type: 'chat.message_sent',
           scope_id: snapshot.group?.id || 'group-sloppers',
           payload: newMsg,
         });
-      } else if (apiClient.sendGroupChatMessage) {
-        // Fallback REST endpoint
-        await apiClient.sendGroupChatMessage(newMsg);
       }
     } catch (err) {
       console.warn('Error sending group message:', err);

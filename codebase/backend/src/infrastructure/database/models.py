@@ -270,3 +270,40 @@ class RealtimeEventRecord(Base):
         DateTime(timezone=True), server_default=func.now(), index=True
     )
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class FileAttachmentRecord(Base, AuditMixin):
+    __tablename__ = "file_attachments"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    filename: Mapped[str] = mapped_column(String(255))
+    content_type: Mapped[str] = mapped_column(String(100))
+    size_bytes: Mapped[int] = mapped_column(Integer, default=0)
+    file_url: Mapped[str] = mapped_column(Text)
+    group_id: Mapped[str | None] = mapped_column(String(100), index=True, nullable=True)
+    user_id: Mapped[str | None] = mapped_column(String(100), index=True, nullable=True)
+    channel: Mapped[str] = mapped_column(String(20), default="group", index=True)
+    is_image: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class GroupChatMessageRecord(Base, AuditMixin):
+    __tablename__ = "group_chat_messages"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    client_id: Mapped[str] = mapped_column(String(100), unique=True, index=True)
+    group_id: Mapped[str] = mapped_column(String(100), index=True)
+    sender_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    sender_code: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    author: Mapped[str] = mapped_column(String(120))
+    short_name: Mapped[str | None] = mapped_column(String(60), nullable=True)
+    initial: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    role: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    is_leader: Mapped[bool] = mapped_column(Boolean, default=False)
+    time_label: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    text: Mapped[str] = mapped_column(Text, default="")
+    image_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    file_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    file_size: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    file_type: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    file_data: Mapped[str | None] = mapped_column(Text, nullable=True)
+
