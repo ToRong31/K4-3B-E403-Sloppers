@@ -16,11 +16,16 @@ class RouterState(TypedDict, total=False):
     tasks: list[dict[str, Any]]
     documents: list[dict[str, Any]]
     checkpoints: list[dict[str, Any]]
+    lab_manifest: dict[str, Any]
+    checklist_draft: dict[str, Any]
     now_iso: str
     status: str
     gaps: list[str]
+    questions: list[str]
+    mode: str
+    model: Any
     assignments: list[dict[str, Any]]
     analyzed_tasks: list[dict[str, Any]]
-    model_request: dict[str, str]
+    model_request: dict[str, Any]
     response: dict[str, Any]
     references: list[str]

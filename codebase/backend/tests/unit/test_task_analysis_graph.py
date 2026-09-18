@@ -204,4 +204,3 @@ def test_task_analysis_graph_with_mock_model_structured_output() -> None:
     assert result["analyzed_tasks"][0]["deliverable"] == "canvas.md"
     draft = ChecklistDraft.model_validate(result["checklist_draft"])
     assert draft.checkpoints[0].tasks[0].task_key == "cp1-task-01"
-

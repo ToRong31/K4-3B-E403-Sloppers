@@ -1,4 +1,5 @@
 from enum import StrEnum
+from typing import Any
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -37,6 +38,18 @@ class AssignmentDraftResponse(BaseModel):
     status: DraftStatus
     assignments: list[AssignmentItem] = Field(default_factory=list)
     gaps: list[str] = Field(default_factory=list)
+
+
+class TaskAnalysisRequest(BaseModel):
+    lab_id: str | None = None
+    lab_manifest: dict[str, Any] | None = None
+
+
+class TaskAnalysisResponse(BaseModel):
+    status: DraftStatus
+    checklist_draft: dict[str, Any] | None = None
+    gaps: list[str] = Field(default_factory=list)
+    questions: list[str] = Field(default_factory=list)
 
 
 class HealthResponse(BaseModel):

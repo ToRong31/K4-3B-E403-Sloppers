@@ -27,6 +27,17 @@ export function createMockApiClient() {
     },
     getDemoAccounts: () => wait(demoAccounts, 60),
     getLabs: () => wait([labFixture]),
+    analyzeLab: (payload) =>
+      wait({
+        status: 'ready',
+        checklist_draft: {
+          lab_id: payload?.lab_id ?? payload?.lab_manifest?.lab_id ?? 'K4-L3B-DAY05-06-MINI-HACKATHON',
+          version: '1.0.0',
+          tasks: workspaceFixture.tasks,
+        },
+        gaps: [],
+        questions: [],
+      }),
     getWorkspaceSnapshot: () => wait(workspaceFixture),
     getCoachSnapshot: () => wait(coachFixture),
   };
