@@ -9,6 +9,7 @@ import { AssignmentReviewDialog } from '../assignment/AssignmentReviewDialog';
 import { LeaderGroupDialog } from '../group/LeaderGroupDialog';
 import { MemberInviteFlow } from '../profile/MemberInviteFlow';
 import { PrivateProgressChat } from '../progress/PrivateProgressChat';
+import { LabReferenceBadge } from '../labs/LabReferenceBadge';
 
 const statusLabel = {
   accepted: 'Đã vào',
@@ -67,36 +68,38 @@ export function WorkspacePage() {
 
   const handleAnalyzeTask = async () => {
     setIsAnalyzing(true);
-    setAnalyzeProgress(12);
-    setAnalyzeLog('1/4: Đọc dữ liệu bài Lab & kiểm tra ref_id…');
+    setAnalyzeProgress(10);
+    setAnalyzeLog('1/4: Nạp 7 Checkpoint từ LAB JSON canonical & kiểm tra ref_id…');
 
-    const t1 = setTimeout(() => {
-      setAnalyzeProgress(38);
-      setAnalyzeLog('2/4: Đang gọi mô hình gpt-5.6-luna qua LangGraph…');
-    }, 1200);
+    const steps = [
+      { at: 2000, pct: 28, msg: '2/4: Đang gọi mô hình gpt-5.6-luna qua LangGraph task_analysis…' },
+      { at: 8000, pct: 45, msg: '3/4: LLM đang bóc tách 23 items & xác định deliverables…' },
+      { at: 20000, pct: 65, msg: '3/4: LLM đang trích xuất completion_criteria & reference_ids…' },
+      { at: 40000, pct: 82, msg: '3/4: LLM đang tối ưu hóa dependency graph…' },
+      { at: 65000, pct: 92, msg: '4/4: Kiểm tra 100% requirement coverage & lưu canonical checklist…' },
+    ];
 
-    const t2 = setTimeout(() => {
-      setAnalyzeProgress(68);
-      setAnalyzeLog('3/4: LLM đang phân rã checkpoint & bóc tách deliverables…');
-    }, 3200);
+    const timerIds = steps.map((s) =>
+      setTimeout(() => {
+        setAnalyzeProgress(s.pct);
+        setAnalyzeLog(s.msg);
+      }, s.at)
+    );
 
-    const t3 = setTimeout(() => {
-      setAnalyzeProgress(88);
-      setAnalyzeLog('4/4: Kiểm tra 100% requirement coverage & schema validation…');
-    }, 6000);
+    const clearAllTimers = () => timerIds.forEach(clearTimeout);
 
     try {
       const res = await apiClient.analyzeLab({
         lab_id: 'K4-L3B-DAY05-06-MINI-HACKATHON',
+        version: 1,
         lab_manifest: defaultLabManifest,
       });
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      setAnalyzeProgress(100);
-      setAnalyzeLog('Hoàn thành! Đang nạp danh sách task…');
+      clearAllTimers();
 
       if (res && res.status === 'ready') {
+        setAnalyzeProgress(100);
+        setAnalyzeLog('Hoàn thành! Đã phân tích thành công từ mô hình AI.');
+
         const draft = res.checklist_draft;
         let analyzedTasks = [];
         if (draft?.checkpoints?.length) {
@@ -110,6 +113,7 @@ export function WorkspacePage() {
               task_order: t.task_order ?? idx + 1,
               owner: t.owner ?? t.owner_id ?? 'Chưa phân công',
               status: t.status === 'proposed' ? 'todo' : (t.status ?? 'todo'),
+              reference_ids: t.reference_ids ?? [],
             }))
           );
         } else if (draft?.tasks?.length) {
@@ -117,11 +121,16 @@ export function WorkspacePage() {
             ...t,
             owner: t.owner ?? 'Chưa phân công',
             status: t.status ?? 'todo',
+            reference_ids: t.reference_ids ?? [],
           }));
         }
+
         if (analyzedTasks.length === 0) {
-          analyzedTasks = canonicalTasksFixture;
+          alert('Không tìm thấy task nào được tạo từ phản hồi AI.');
+          setIsAnalyzing(false);
+          return;
         }
+
         setTimeout(() => {
           setWorkspaceData((current) => ({
             ...current,
@@ -130,14 +139,18 @@ export function WorkspacePage() {
           }));
           setIsAnalyzing(false);
         }, 400);
+      } else if (res && res.status === 'clarify') {
+        const msg = res.gaps?.length ? res.gaps.join('\n') : 'Mô hình AI cần làm rõ thêm thông tin đề bài.';
+        alert(`AI Clarification:\n${msg}`);
+        setIsAnalyzing(false);
       } else {
+        alert('Phân tích thất bại: Backend không trả về trạng thái ready.');
         setIsAnalyzing(false);
       }
     } catch (err) {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
+      clearAllTimers();
       console.error('Lỗi khi phân tích bài Lab:', err);
+      alert(`Lỗi khi gọi AI phân tích bài Lab: ${err.message || err}`);
       setIsAnalyzing(false);
     }
   };
@@ -166,19 +179,31 @@ export function WorkspacePage() {
     } : current);
   };
 
-  const generateAssignmentDraft = useCallback(() => apiClient.assignTasks({
-    group_name: snapshot.group.name,
-    members: snapshot.members.map((member) => ({
-      id: member.id,
-      name: member.name,
-      skills: member.skills ?? [],
-    })),
-    tasks: snapshot.tasks.map((task) => ({
-      id: task.id,
-      title: task.title,
-      deliverable: task.deliverable,
-    })),
-  }), [snapshot]);
+  const generateAssignmentDraft = useCallback(() => {
+    const payload = {
+      group_name: snapshot.group.name,
+      members: snapshot.members.map((member) => ({
+        id: member.id,
+        name: member.name,
+        skills: member.skills ?? [],
+      })),
+    };
+    if (snapshot.tasks && snapshot.tasks.length > 0) {
+      payload.tasks = snapshot.tasks.map((task) => ({
+        id: task.id,
+        title: task.title,
+        deliverable: task.deliverable ?? '',
+        description: task.description ?? '',
+        required_skills: task.required_skills ?? [],
+        checkpoint_id: task.checkpoint_id ?? null,
+        depends_on: task.depends_on ?? [],
+      }));
+    } else {
+      payload.lab_id = 'K4-L3B-DAY05-06-MINI-HACKATHON';
+      payload.version = 1;
+    }
+    return apiClient.assignTasks(payload);
+  }, [snapshot]);
 
   if (status === 'loading') return <main className="page-shell"><LoadingState label="Đang tải LabSpace…" /></main>;
   if (status === 'error') return <main className="page-shell"><ErrorState message={error.message} onRetry={reload} /></main>;
@@ -326,7 +351,16 @@ export function WorkspacePage() {
                 snapshot.tasks.map((task) => (
                   <article className={`task ${task.status}`} key={task.id}>
                     <span className={`task-check ${task.status === 'done' ? 'checked' : ''}`}>{task.status === 'done' ? '✓' : ''}</span>
-                    <div className="task-main"><span className="task-tag">{task.category}</span><h3>{task.title}</h3><p>Deliverable: {task.deliverable}</p></div>
+                    <div className="task-main">
+                      <div className="task-header-row">
+                        <span className="task-tag">{task.category}</span>
+                      </div>
+                      <h3>{task.title}</h3>
+                      <p>Deliverable: {task.deliverable}</p>
+                      {task.reference_ids && task.reference_ids.length > 0 && (
+                        <LabReferenceBadge references={task.reference_ids} showDetailsToggle={true} />
+                      )}
+                    </div>
                     <div className="task-owner"><span className="member-avatar">{task.owner[0]}</span><div><b>{task.owner}</b><small>{task.status}</small></div></div>
                   </article>
                 ))

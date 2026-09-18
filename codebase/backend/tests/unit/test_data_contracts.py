@@ -36,7 +36,7 @@ def test_lab_items_have_stable_order_and_references() -> None:
     payload = json.loads((FIXTURE_DIR / "lab_manifest.json").read_text(encoding="utf-8"))
     lab = LabManifest.model_validate(payload)
 
-    assert [checkpoint.checkpoint_order for checkpoint in lab.checkpoints] == [1, 3]
+    assert [checkpoint.checkpoint_order for checkpoint in lab.checkpoints] == [1, 2, 3, 4, 5, 6, 7]
     assert all(item.ref_id.startswith("lab://") for cp in lab.checkpoints for item in cp.items)
 
 

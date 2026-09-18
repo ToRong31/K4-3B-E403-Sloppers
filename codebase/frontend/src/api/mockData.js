@@ -50,54 +50,9 @@ export const canonicalTasksFixture = Object.freeze([
   { id: 't5', category: 'SUBMISSION', title: 'Hoàn thiện spec và gói nộp', deliverable: 'Spec + slide + video', owner: 'Chưa phân công', status: 'todo' },
 ]);
 
-export const defaultLabManifest = Object.freeze({
-  lab_id: 'K4-L3B-DAY05-06-MINI-HACKATHON',
-  version: 1,
-  title: 'Mini Hackathon AI',
-  checkpoints: [
-    {
-      checkpoint_id: 'cp1',
-      checkpoint_order: 1,
-      title: 'Canvas và repo',
-      items: [
-        {
-          item_id: 'cp1-item-1',
-          item_order: 1,
-          source_type: 'deliverable',
-          title: 'Canvas 7 dòng',
-          content: 'Hoàn thành Canvas 7 dòng và nộp link repo công khai.',
-          ref_id: 'lab://K4-L3B-DAY05-06/v1/cp1/item-1',
-          is_required: true,
-        },
-      ],
-    },
-    {
-      checkpoint_id: 'cp3',
-      checkpoint_order: 3,
-      title: 'Video thao tác và số đo',
-      items: [
-        {
-          item_id: 'cp3-item-1',
-          item_order: 1,
-          source_type: 'requirement',
-          title: 'Golden set',
-          content: 'Chuẩn bị ít nhất 20 câu thử và ghi lại số case đạt chuẩn.',
-          ref_id: 'lab://K4-L3B-DAY05-06/v1/cp3/item-1',
-          is_required: true,
-        },
-        {
-          item_id: 'cp3-item-2',
-          item_order: 2,
-          source_type: 'deliverable',
-          title: 'Video thao tác',
-          content: 'Quay video thao tác sản phẩm khoảng 30 giây.',
-          ref_id: 'lab://K4-L3B-DAY05-06/v1/cp3/item-2',
-          is_required: true,
-        },
-      ],
-    },
-  ],
-});
+import fullLabManifest from './labManifest.json';
+
+export const defaultLabManifest = Object.freeze(fullLabManifest);
 
 export const workspaceFixture = Object.freeze({
   source: 'mock',
