@@ -217,7 +217,7 @@ Ngày 18/09/2026, `python eval/scripts/validate_golden_set.py --submission-ready
 | Task Analysis live run 1 | 0/20 (0%) | Endpoint `/labs/analyze` khi đó trả 404; chưa đi tới model, nên không đo chất lượng AI. Endpoint hiện đã có nhưng **chưa có live run mới được lưu**. |
 | Assignment rule-based run 1 | 16/20 (80%) | Qua ngưỡng số học nhưng đây không phải bằng chứng model call thật; còn lỗi substring/synonym/skill bẩn. |
 | Assignment live API run 1 | 13/20 (65%), latency trung bình 3,07 giây | Có model call thật nhưng **chưa đạt quality bar 75%**; 7 case fail, trong đó có cả grader wording và validation/integration. |
-| Video thao tác CP3 | Đã có video 30 giây | Nhóm xác nhận video đã được quay/nộp; artefact nằm ngoài repo và được đối chiếu qua phiếu nộp CP3 của đội trưởng. |
+| Video thao tác CP3 | Đã có video 30 giây | Nhóm xác nhận đã có video; artefact nằm ngoài repo. Trạng thái nộp đúng hạn cần đối chiếu bằng phiếu CP3 của đội trưởng. |
 | Backend automated tests tại CP4 | 88 pass, 4 xfail | Chứng minh contract/unit/integration hiện tại, không thay thế live golden-set score. |
 | Frontend automated tests tại CP4 | 25 pass; production build thành công | Chứng minh component/adapter build được, chưa thay thế multi-session acceptance test. |
 
