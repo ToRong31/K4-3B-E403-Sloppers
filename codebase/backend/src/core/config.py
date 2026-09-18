@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     app_debug: bool = False
     app_api_prefix: str = "/api/v1"
     app_log_level: str = "INFO"
-    app_cors_origins: str = "http://localhost:5173,http://localhost:8000"
+    app_cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:8000"
 
     llm_provider: LLMProvider = LLMProvider.OPENAI
     llm_model: str = ""

@@ -163,6 +163,20 @@ export function WorkspacePage() {
     } : current);
   };
 
+  const generateAssignmentDraft = useCallback(() => apiClient.assignTasks({
+    group_name: snapshot.group.name,
+    members: snapshot.members.map((member) => ({
+      id: member.id,
+      name: member.name,
+      skills: member.skills ?? [],
+    })),
+    tasks: snapshot.tasks.map((task) => ({
+      id: task.id,
+      title: task.title,
+      deliverable: task.deliverable,
+    })),
+  }), [snapshot]);
+
   if (status === 'loading') return <main className="page-shell"><LoadingState label="Đang tải LabSpace…" /></main>;
   if (status === 'error') return <main className="page-shell"><ErrorState message={error.message} onRetry={reload} /></main>;
 
@@ -350,6 +364,7 @@ export function WorkspacePage() {
           tasks={snapshot.tasks}
           members={snapshot.members}
           onApprove={handlePlanApproved}
+          onGenerateDraft={generateAssignmentDraft}
           onClose={() => setAssignmentDialogOpen(false)}
         />
       )}

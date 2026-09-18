@@ -3,6 +3,7 @@ from typing import Any
 
 from src.agent.assignment.graph import build_assignment_graph
 from src.agent.router_graph import build_router_graph
+from src.infrastructure.checklist_store import ChecklistStore
 from src.infrastructure.llm.factory import build_chat_model
 
 
@@ -15,6 +16,7 @@ def get_assignment_graph() -> Any:
 @lru_cache
 def get_router_graph() -> Any:
     """One compiled router graph per process; override this dependency in tests."""
+    """Compiled operation router used by public workflow endpoints."""
     return build_router_graph()
 
 
@@ -22,3 +24,9 @@ def get_router_graph() -> Any:
 def get_chat_model() -> Any:
     """Build only the provider selected by LLM_PROVIDER and reuse it per process."""
     return build_chat_model()
+
+
+@lru_cache
+def get_checklist_store() -> ChecklistStore:
+    """Return the local prototype store for validated canonical checklists."""
+    return ChecklistStore()

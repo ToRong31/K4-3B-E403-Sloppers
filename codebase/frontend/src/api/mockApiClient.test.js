@@ -33,5 +33,22 @@ describe('mockApiClient', () => {
       'Tài khoản demo không tồn tại.',
     );
   });
+
+  it('creates a skill-based draft through the assignTasks client operation', async () => {
+    const client = createMockApiClient();
+    const draft = await client.assignTasks({
+      group_name: 'Sloppers',
+      members: [
+        { id: 'ui', name: 'Trang', skills: ['UI'] },
+        { id: 'ai', name: 'Dương', skills: ['AI'] },
+      ],
+      tasks: [{ id: 'task-1', title: 'AI evaluation', deliverable: 'golden set' }],
+    });
+
+    expect(draft).toMatchObject({
+      status: 'ready',
+      assignments: [{ task_id: 'task-1', owner_id: 'ai', matched_skills: ['AI'], confidence: 'high' }],
+    });
+  });
 });
 

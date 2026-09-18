@@ -94,6 +94,12 @@ def validate_lab_sources(
             gaps.append(f"Item '{item_id}' thiếu ref_id bắt buộc.")
             continue
 
+        # Evaluation and imported classroom conversations have immutable
+        # chatlog references rather than LabManifest URIs. They are trusted
+        # source identifiers, but do not encode a lab version to compare.
+        if ref_id.startswith("chatlog://"):
+            continue
+
         match = ref_id_pattern.match(ref_id)
         if not match:
             gaps.append(

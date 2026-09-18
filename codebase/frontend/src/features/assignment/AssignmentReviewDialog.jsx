@@ -16,7 +16,25 @@ const analysisLogs = [
   { percent: 100, icon: '✨', text: 'Bản nháp đã sẵn sàng để Nhóm trưởng kiểm tra.' },
 ];
 
-export function buildDraftAssignments(tasks) {
+export function buildDraftAssignments(tasks, draftAssignments, members = []) {
+  if (draftAssignments) {
+    const taskById = new Map(tasks.map((task) => [task.id, task]));
+    const memberById = new Map(members.map((member) => [member.id, member]));
+    return draftAssignments.map((assignment) => {
+      const task = taskById.get(assignment.task_id);
+      const owner = memberById.get(assignment.owner_id);
+      return {
+        taskId: assignment.task_id,
+        title: task?.title ?? 'Task không xác định',
+        category: task?.category ?? 'TASK',
+        proposedOwner: owner?.name ?? assignment.owner_id,
+        owner: owner?.name ?? assignment.owner_id,
+        confidence: assignment.confidence === 'high' ? 95 : assignment.confidence === 'medium' ? 75 : 45,
+        reason: assignment.reason,
+        matchedSkills: assignment.matched_skills ?? [],
+      };
+    });
+  }
   return tasks.map((task) => ({
     taskId: task.id,
     title: task.title,
@@ -32,7 +50,7 @@ export function calculateWorkload(assignments) {
   return assignments.reduce((workload, item) => ({ ...workload, [item.owner]: (workload[item.owner] ?? 0) + 1 }), {});
 }
 
-export function AssignmentReviewDialog({ members, onApprove, onClose, open, tasks }) {
+export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerateDraft, open, tasks }) {
   const dialogRef = useRef(null);
   const latestTasksRef = useRef(tasks);
   const [phase, setPhase] = useState('analyzing');
@@ -40,6 +58,10 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, open, task
   const [logs, setLogs] = useState([]);
   const [draftVersion, setDraftVersion] = useState(1);
   const [assignments, setAssignments] = useState(() => buildDraftAssignments(tasks));
+  const [draftStatus, setDraftStatus] = useState('ready');
+  const [gaps, setGaps] = useState([]);
+  const [draftError, setDraftError] = useState('');
+  const [draftLoading, setDraftLoading] = useState(false);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -57,9 +79,33 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, open, task
     setPhase('analyzing');
     setProgress(0);
     setLogs([]);
-    setAssignments(buildDraftAssignments(latestTasksRef.current));
+    setAssignments([]);
+    setDraftStatus('ready');
+    setGaps([]);
+    setDraftError('');
+    setDraftLoading(true);
     return undefined;
   }, [draftVersion, open]);
+
+  useEffect(() => {
+    if (!open || !onGenerateDraft) return undefined;
+    let active = true;
+    onGenerateDraft()
+      .then((draft) => {
+        if (!active) return;
+        setDraftStatus(draft.status);
+        setGaps(draft.gaps ?? []);
+        setAssignments(buildDraftAssignments(latestTasksRef.current, draft.assignments, members));
+        setDraftLoading(false);
+      })
+      .catch((error) => {
+        if (active) {
+          setDraftError(error.message ?? 'Không thể tạo bản nháp AI.');
+          setDraftLoading(false);
+        }
+      });
+    return () => { active = false; };
+  }, [draftVersion, members, onGenerateDraft, open]);
 
   useEffect(() => {
     if (!open || phase !== 'analyzing') return undefined;
@@ -74,10 +120,10 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, open, task
   const workload = useMemo(() => calculateWorkload(assignments), [assignments]);
   const ownerChoices = members.filter((member) => member.status !== 'declined').map((member) => member.name);
   const changedCount = assignments.filter((item) => item.owner !== item.proposedOwner).length;
-  const missingProfiles = members.filter((member) => !member.profileReady && member.role !== 'Nhóm trưởng');
   const workloadCounts = ownerChoices.map((name) => workload[name] ?? 0);
   const workloadGap = Math.max(...workloadCounts, 0) - Math.min(...workloadCounts, 0);
   const workloadImbalanced = workloadGap > 1;
+  const canApprove = !draftLoading && draftStatus === 'ready' && !draftError && assignments.length === tasks.length;
 
   const closeDialog = () => {
     onClose();
@@ -117,7 +163,7 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, open, task
         <section className="assignment-analyzing">
           <div className="ai-orb" aria-hidden="true">✦</div>
           <h3>AI đang phân tích ma trận kỹ năng & bài Lab…</h3>
-          <p>Đang đối soát checklist và hồ sơ tự đánh giá. Đây là animation UI mẫu, chưa gọi mô hình AI thật.</p>
+          <p>Đang đối soát checklist và hồ sơ kỹ năng tự khai của nhóm.</p>
           <div className="ai-progress"><i style={{ width: `${progress}%` }} /></div>
           <div className="ai-progress-meta"><span>{logs.at(-1)?.text ?? 'Đang khởi động AI matching engine…'}</span><b>{progress}%</b></div>
           <div className="ai-log-list">{logs.map((entry) => <p key={entry.percent}><span>{entry.icon}</span>{entry.text}</p>)}</div>
@@ -128,9 +174,10 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, open, task
       {phase === 'review' && (
         <section className="assignment-review-body">
           <div className="ai-summary-card"><span>✦</span><div><b>AI đã tạo bản nháp gợi ý · phiên bản {draftVersion}</b><p>Nhóm trưởng có thể đổi bất kỳ owner nào. Task chỉ chính thức khi bạn phê duyệt.</p></div></div>
-          {missingProfiles.length > 0 ? (
-            <div className="ai-output-status clarify"><b>⚠ CLARIFY</b><span>{missingProfiles.length} hồ sơ kỹ năng chưa hoàn tất: {missingProfiles.map((member) => member.name).join(', ')}. Bản nháp vẫn mở để kiểm tra UI, không phải kết quả AI thật.</span></div>
-          ) : <div className="ai-output-status ready"><b>✓ READY</b><span>Dữ liệu hồ sơ demo đã đủ để Leader kiểm tra bản nháp.</span></div>}
+          {draftLoading ? <div className="ai-output-status ready"><b>… ĐANG CHỜ BACKEND</b><span>Chưa có bản nháp để hiển thị.</span></div>
+            : draftError ? <div className="ai-output-status clarify"><b>⚠ LỖI</b><span>{draftError}</span></div>
+            : draftStatus === 'clarify' ? <div className="ai-output-status clarify"><b>⚠ CLARIFY</b><span>{gaps.join(' ')}</span></div>
+              : <div className="ai-output-status ready"><b>✓ READY</b><span>Bản nháp được tạo từ endpoint `assign_tasks`; Leader có thể kiểm tra và chỉnh sửa.</span></div>}
           <div className="ai-human-boundary">⚖️ <span><b>Ranh giới AI & con người:</b> AI đề xuất dựa trên dữ liệu demo. Quyết định cuối cùng và trách nhiệm phân công thuộc về Nhóm trưởng.</span></div>
           <div className="assignment-task-list">
             {assignments.map((item) => {
@@ -144,12 +191,12 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, open, task
             })}
           </div>
           <div className="assignment-insights">
-            <div>⚠️ <span><b>Skill gap:</b> chưa có hồ sơ mạnh về Presentation/Thuyết trình. Đề xuất slide và video demo do <b>Cả nhóm</b> cùng chịu trách nhiệm.</span></div>
+            {gaps.map((gap) => <div key={gap}>⚠️ <span><b>Skill gap:</b> {gap}</span></div>)}
             <div>⚖️ <span><b>Khối lượng hiện tại:</b> {Object.entries(workload).map(([owner, count]) => `${owner} ${count} task`).join(' · ')}.</span></div>
           </div>
           {workloadImbalanced && <p className="workload-warning">⚠ Cảnh báo workload: chênh lệch đang là {workloadGap} task giữa các thành viên. Hãy cân nhắc cân bằng lại trước khi phê duyệt.</p>}
           {changedCount > 0 && <p className="assignment-audit">Đã ghi nhận {changedCount} thay đổi do Leader thực hiện trong UI demo.</p>}
-          <footer className="group-dialog-actions"><button className="secondary-button" type="button" onClick={regenerate}>↻ Tạo lại bản nháp</button><button className="primary-button" type="button" onClick={() => setPhase('confirm')}>Phê duyệt phân công này →</button></footer>
+          <footer className="group-dialog-actions"><button className="secondary-button" type="button" onClick={regenerate}>↻ Tạo lại bản nháp</button><button className="primary-button" type="button" disabled={!canApprove} onClick={() => setPhase('confirm')}>Phê duyệt phân công này →</button></footer>
         </section>
       )}
 
@@ -157,7 +204,7 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, open, task
         <section className="assignment-confirm">
           <span className="confirm-icon">!</span>
           <h3>Xác nhận phê duyệt kế hoạch?</h3>
-          <p>5 task sẽ được cập nhật owner trong giao diện demo. Backend chưa được gọi, nên dữ liệu sẽ không persistence sau reload.</p>
+          <p>{assignments.length} task sẽ được cập nhật owner trên board sau khi bạn xác nhận. Bản nháp AI chưa tự thay đổi task.</p>
           <div className="assignment-confirm-list">{assignments.map((item) => <span key={item.taskId}><b>{item.title}</b><em>{item.owner}</em></span>)}</div>
           <footer className="group-dialog-actions"><button className="secondary-button" type="button" onClick={() => setPhase('review')}>← Quay lại</button><button className="primary-button" type="button" onClick={approve}>✓ Xác nhận phê duyệt</button></footer>
         </section>
@@ -166,7 +213,7 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, open, task
       {phase === 'approved' && (
         <section className="group-created-state">
           <span className="group-created-check">✓</span><h3>Kế hoạch đã được phê duyệt</h3><p>Owner của các task đã được cập nhật vào board UI.</p>
-          <div className="leader-setup-notice">Đây là mutation mô phỏng frontend. Backend, audit log thật và realtime sẽ được tích hợp sau.</div>
+          <div className="leader-setup-notice">Bản nháp đã được lấy từ backend. Việc lưu chính thức và audit log sẽ được tích hợp ở operation phê duyệt riêng.</div>
           <footer className="group-dialog-actions"><button className="primary-button" type="button" onClick={closeDialog}>Về LabSpace →</button></footer>
         </section>
       )}

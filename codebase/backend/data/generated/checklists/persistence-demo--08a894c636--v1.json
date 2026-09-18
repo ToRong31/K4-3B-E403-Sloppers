@@ -1,0 +1,68 @@
+{
+  "checklist_id": "73478bba-21a0-479e-9862-c0f756f41ec6",
+  "lab_id": "persistence-demo",
+  "lab_version": 1,
+  "status": "pending_review",
+  "checkpoints": [
+    {
+      "checkpoint_id": "cp1",
+      "checkpoint_order": 1,
+      "tasks": [
+        {
+          "id": "cc63a3da-29e3-4eb7-be65-cd595c3a9dd6",
+          "task_key": "cp1-task-01",
+          "checkpoint_id": "cp1",
+          "task_order": 1,
+          "title": "Implement FastAPI health endpoint",
+          "description": "Implement endpoint GET /api/v1/health trong FastAPI theo yêu cầu của LAB.",
+          "deliverable": "Tệp nguồn src/api/routes/health.py chứa implementation của endpoint.",
+          "completion_criteria": [
+            "Tệp src/api/routes/health.py tồn tại.",
+            "Endpoint GET /api/v1/health được triển khai trong FastAPI.",
+            "Khi gọi endpoint, HTTP status code trả về là 200.",
+            "Response body dạng JSON có trường status với giá trị ok."
+          ],
+          "required_skills": [
+            "Python",
+            "FastAPI",
+            "HTTP API"
+          ],
+          "estimated_effort": "small",
+          "depends_on": [],
+          "reference_ids": [
+            "lab://persistence-demo/v1/cp1/it1"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "b5868a37-fe10-46d9-abe6-3325e21e9b18",
+          "task_key": "cp1-task-02",
+          "checkpoint_id": "cp1",
+          "task_order": 2,
+          "title": "Add pytest API test for health endpoint",
+          "description": "Viết pytest API test để kiểm chứng endpoint GET /api/v1/health trả về đúng status code và JSON body theo yêu cầu.",
+          "deliverable": "Một pytest API test cho endpoint GET /api/v1/health.",
+          "completion_criteria": [
+            "Test thực hiện request tới GET /api/v1/health.",
+            "Test assert HTTP status code bằng 200.",
+            "Test assert body có trường status với giá trị ok.",
+            "Test chạy thành công."
+          ],
+          "required_skills": [
+            "Python testing",
+            "pytest",
+            "API testing"
+          ],
+          "estimated_effort": "small",
+          "depends_on": [
+            "cp1-task-01"
+          ],
+          "reference_ids": [
+            "lab://persistence-demo/v1/cp1/it1"
+          ],
+          "status": "proposed"
+        }
+      ]
+    }
+  ]
+}

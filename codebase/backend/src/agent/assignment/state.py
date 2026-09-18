@@ -6,6 +6,8 @@ class AssignmentState(TypedDict, total=False):
 
     group_name: str
     group_id: str
+    use_llm: bool
+    model: Any
     members: list[dict[str, Any]]
     tasks: list[dict[str, Any]]
     status: str

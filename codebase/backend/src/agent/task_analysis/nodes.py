@@ -181,10 +181,23 @@ def analyze_each_checkpoint(state: TaskAnalysisState) -> TaskAnalysisState:
     model = state.get("model")
     model_output_json: dict[str, Any] | None = None
 
-    if model is None and "PYTEST_CURRENT_TEST" not in os.environ and state.get("mode") != "deterministic":
+    should_build_model = (
+        model is None
+        and "PYTEST_CURRENT_TEST" not in os.environ
+        and state.get("mode") != "deterministic"
+    )
+    if should_build_model:
         try:
             model = build_chat_model()
         except (LLMConfigurationError, Exception) as exc:
+            if state.get("use_llm"):
+                logger.exception("Task-analysis LLM could not be configured")
+                return {
+                    "status": "clarify",
+                    "gaps": ["Không thể khởi tạo AI để phân tích bài LAB. Vui lòng thử lại."],
+                    "questions": [],
+                    "error": f"{type(exc).__name__}: {str(exc)[:500]}",
+                }
             logger.info(
                 "Chat model not configured or failed to build (%s); using deterministic parser", exc
             )
@@ -205,7 +218,14 @@ def analyze_each_checkpoint(state: TaskAnalysisState) -> TaskAnalysisState:
                 cleaned = cleaned[:-3]
             model_output_json = json.loads(cleaned.strip())
         except Exception as exc:
-            logger.warning("Failed to invoke or parse LLM response: %s", exc)
+            logger.exception("Task-analysis LLM invocation or parsing failed")
+            if state.get("use_llm"):
+                return {
+                    "status": "clarify",
+                    "gaps": ["AI không thể phân tích bài LAB lúc này. Vui lòng thử lại."],
+                    "questions": [],
+                    "error": f"{type(exc).__name__}: {str(exc)[:500]}",
+                }
             model_output_json = None
 
     if model_output_json:
