@@ -155,6 +155,9 @@
 - [x] ✅ Onboarding khai kỹ năng theo Engineering/AI-Data/Product-Design.
 - [x] ✅ Slider lựa chọn level 1–5 cho từng kỹ năng đã chọn.
 - [x] ✅ Review và xác nhận skill profile.
+- [x] ✅ Đủ nhóm Engineering, AI/Data, Product, Design và Leadership theo UI tham chiếu.
+- [x] ✅ Tự nhập/thêm/xóa kỹ năng ngoài danh sách.
+- [x] ✅ Chọn ngành đang công tác và xác nhận lại ở bước review.
 - [ ] ⚪ Màn hình chờ leader phê duyệt plan.
 - [ ] ⚪ Xem task được giao.
 - [ ] ⚪ Tick done/reopen task theo quyền.

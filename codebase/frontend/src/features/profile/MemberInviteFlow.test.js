@@ -1,13 +1,22 @@
 import { describe, expect, it } from 'vitest';
 
-import { buildSkillProfile, skillGroups } from './MemberInviteFlow';
+import { buildSkillProfile, industries, skillGroups } from './MemberInviteFlow';
 
 describe('member skill profile', () => {
-  it('keeps the three skill categories defined by the approved mockup', () => {
+  it('keeps the five skill categories defined by the approved mockup', () => {
     expect(skillGroups.map((group) => group.label)).toEqual([
       'ENGINEERING',
       'AI / DATA',
-      'PRODUCT & DESIGN',
+      'PRODUCT',
+      'DESIGN',
+      'LEADERSHIP',
+    ]);
+  });
+
+  it('offers every working-industry choice from the supplied UI reference', () => {
+    expect(industries).toEqual([
+      'IT', 'Education', 'Healthcare', 'Finance', 'E-commerce',
+      'Agriculture', 'Entertainment', 'Social Impact', 'Productivity', 'Khác',
     ]);
   });
 
