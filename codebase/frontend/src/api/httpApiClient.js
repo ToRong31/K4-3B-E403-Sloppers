@@ -30,6 +30,11 @@ export function createHttpApiClient({ baseUrl }) {
     getLabs: () => request(baseUrl, '/labs'),
     getWorkspaceSnapshot: () => request(baseUrl, '/groups/current'),
     getCoachSnapshot: () => request(baseUrl, '/coach/groups'),
+    sendChatMessage: (payload) =>
+      request(baseUrl, '/chat', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
   };
 }
 

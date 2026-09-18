@@ -8,6 +8,43 @@ function taskReference(task) {
   return task.reference_ids ?? [];
 }
 
+export function createGroupChatDemoMessages({ members, tasks, user }) {
+  const leader = members.find((member) => member.role === 'Nhóm trưởng') ?? members[0];
+  const currentMember = members.find((member) => member.studentCode === user.accountId);
+  const previewMember = leader?.studentCode === user.accountId
+    ? members.find((member) => member.studentCode !== user.accountId) ?? leader
+    : leader;
+  const myTasks = tasks.filter((task) => task.owner === user.shortName);
+  const myTaskSummary = myTasks.length
+    ? myTasks.map((task) => task.title).join(', ')
+    : 'chưa có task được giao';
+
+  return [
+    {
+      id: 'group-demo-leader',
+      author: previewMember?.name ?? 'Thành viên',
+      initial: previewMember?.name?.[0] ?? 'N',
+      role: previewMember?.role ?? 'Thành viên',
+      isLeader: previewMember?.role === 'Nhóm trưởng',
+      mine: false,
+      time: 'Vừa xong',
+      text: previewMember?.role === 'Nhóm trưởng'
+        ? 'Mọi người kiểm tra lại task và tiêu chí hoàn thành trước khi bắt đầu nhé.'
+        : 'Mình đã kiểm tra task và tiêu chí hoàn thành được giao rồi nhé.',
+    },
+    {
+      id: 'group-demo-current-user',
+      author: currentMember?.name ?? user.shortName,
+      initial: currentMember?.name?.[0] ?? user.shortName?.[0] ?? 'B',
+      role: currentMember?.role ?? user.roleLabel,
+      isLeader: currentMember?.role === 'Nhóm trưởng',
+      mine: true,
+      time: 'Vừa xong',
+      text: `Mình đã nhận phần: ${myTaskSummary}.`,
+    },
+  ];
+}
+
 function explainTask(task) {
   if (!task) {
     return {

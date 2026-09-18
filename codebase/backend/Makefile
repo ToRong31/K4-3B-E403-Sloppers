@@ -1,4 +1,4 @@
-.PHONY: install dev test eval lint format
+.PHONY: install dev test eval lint format smoke-llm docker-up docker-down docker-logs db-shell
 
 install:
 	python -m pip install -r requirements.txt
@@ -17,4 +17,19 @@ lint:
 
 format:
 	python -m ruff format .
+
+smoke-llm:
+	python -m src.infrastructure.llm.smoke_test
+
+docker-up:
+	docker compose up -d --build
+
+docker-down:
+	docker compose down
+
+docker-logs:
+	docker compose logs -f api db
+
+db-shell:
+	docker compose exec db psql -U vlearn -d vlearn_labspace
 

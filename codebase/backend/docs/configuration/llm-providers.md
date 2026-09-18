@@ -1,12 +1,13 @@
 # LLM provider configuration
 
-Backend hỗ trợ ba provider qua cùng một factory:
+Backend hỗ trợ bốn provider qua cùng một factory:
 
 | `LLM_PROVIDER` | Adapter | API key |
 |---|---|---|
 | `openai` | `ChatOpenAI` | `OPENAI_API_KEY` |
 | `anthropic` | `ChatAnthropic` | `ANTHROPIC_API_KEY` |
 | `gemini` | `ChatGoogleGenerativeAI` | `GOOGLE_API_KEY` |
+| `nvidia` | `ChatOpenAI` qua NVIDIA NIM OpenAI-compatible API | `NVIDIA_API_KEY` |
 
 `LLM_PROVIDER` là nguồn quyết định duy nhất. Factory không tự đoán provider từ key vì máy developer hoặc production có thể chứa nhiều key cùng lúc.
 
@@ -33,6 +34,31 @@ LLM_PROVIDER=gemini
 LLM_MODEL=your-gemini-model
 GOOGLE_API_KEY=your-key
 ```
+
+## NVIDIA hosted NIM
+
+NVIDIA API Catalog cung cấp endpoint Chat Completions tương thích OpenAI. Key chỉ
+được đọc ở backend; không đặt `NVIDIA_API_KEY` trong biến `VITE_*` hoặc mã frontend.
+
+```env
+LLM_PROVIDER=nvidia
+LLM_MODEL=meta/llama-3.3-70b-instruct
+NVIDIA_BASE_URL=https://integrate.api.nvidia.com/v1
+NVIDIA_API_KEY=nvapi-your-key
+```
+
+Để chuẩn bị nhanh trên Windows PowerShell:
+
+```powershell
+Copy-Item .env.nvidia.example .env
+# Mở .env, dán key sau NVIDIA_API_KEY= rồi chạy:
+python -m src.infrastructure.llm.smoke_test
+```
+
+Lệnh smoke test gửi đúng một request nhỏ tới model đã cấu hình và chỉ in provider,
+model cùng nội dung trả lời. Lệnh không in hoặc log API key. Với NIM tự host, đổi
+`NVIDIA_BASE_URL` sang endpoint có hậu tố `/v1` và dùng đúng model trả về từ
+`GET /v1/models`.
 
 Các tham số dùng chung:
 

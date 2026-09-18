@@ -327,10 +327,36 @@ function sendChatMessage(text, attachment) {
   }
 }
 
-function respondAiInGroup(query, askerName) {
-  const answer = generateLabAiAnswer(query);
-  const aiMsg = {
-    id: Date.now(),
+/* --- CALL REAL BACKEND API FOR CHAT (DOCKER / LOCALHOST:8000) --- */
+async function callBackendChatApi(message, userId) {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4500);
+    const response = await fetch('http://127.0.0.1:8000/api/v1/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message,
+        user_id: userId || (currentRole === 'leader' ? 'Trọng' : 'Trang'),
+        group_id: 'Sloppers',
+        lab_id: 'K4-L3B-DAY05-06-MINI-HACKATHON'
+      }),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    if (!response.ok) return null;
+    return await response.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+async function respondAiInGroup(query, askerName) {
+  const typingId = Date.now();
+  const typingMsg = {
+    id: typingId,
     sender: 'Trợ lý Lab AI [BOT]',
     role: 'bot',
     roleName: 'Cố vấn nhóm',
@@ -338,9 +364,43 @@ function respondAiInGroup(query, askerName) {
     avatarClass: 'ai',
     isBot: true,
     time: formatTimeNow(),
-    html: `<div><strong>Chào ${askerName}!</strong> Dưới đây là giải đáp cho cả nhóm:<br><br>${answer}</div>`
+    html: '<div class="ai-chat-typing"><i></i><i></i><i></i> <span>Trợ lý AI đang phản hồi nhóm...</span></div>'
   };
-  chatMessagesData.push(aiMsg);
+  chatMessagesData.push(typingMsg);
+  renderChatMessages();
+
+  const apiRes = await callBackendChatApi(query, askerName);
+  let answerContent = '';
+
+  if (apiRes && apiRes.answer) {
+    let formatted = escapeHtml(apiRes.answer)
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+
+    let refsHtml = '';
+    if (apiRes.reference_ids && apiRes.reference_ids.length > 0) {
+      refsHtml = `<div class="ai-chat-references"><span>Dẫn chứng bài LAB</span> ${apiRes.reference_ids.map(r => `<span>${escapeHtml(r)}</span>`).join(' ')}</div>`;
+    }
+
+    answerContent = `<div><strong>Chào ${askerName}!</strong> Dưới đây là giải đáp từ AI Backend:<br><br>${formatted}</div>${refsHtml}`;
+  } else {
+    answerContent = `<div><strong>Chào ${askerName}!</strong> Dưới đây là giải đáp cho cả nhóm:<br><br>${generateLabAiAnswer(query)}</div>`;
+  }
+
+  const idx = chatMessagesData.findIndex(m => m.id === typingId);
+  if (idx !== -1) {
+    chatMessagesData[idx] = {
+      id: typingId,
+      sender: 'Trợ lý Lab AI [BOT]',
+      role: 'bot',
+      roleName: 'Cố vấn nhóm',
+      avatarChar: '🤖',
+      avatarClass: 'ai',
+      isBot: true,
+      time: formatTimeNow(),
+      html: answerContent
+    };
+  }
   renderChatMessages();
 }
 
@@ -397,7 +457,7 @@ function generateLabAiAnswer(prompt) {
 }
 
 /* --- 1:1 PRIVATE CHAT INTERACTIONS --- */
-function sendAiPrivateMessage(prompt) {
+async function sendAiPrivateMessage(prompt) {
   if (!prompt || !prompt.trim()) return;
   const userText = prompt.trim();
 
@@ -409,17 +469,52 @@ function sendAiPrivateMessage(prompt) {
   });
   renderAiPrivateMessages();
 
-  setTimeout(() => {
-    const answer = generateLabAiAnswer(userText);
-    aiPrivateChatData.push({
-      id: Date.now() + 1,
+  // Hiển thị trạng thái đang tra cứu
+  const typingId = Date.now() + 1;
+  aiPrivateChatData.push({
+    id: typingId,
+    sender: 'assistant',
+    time: formatTimeNow(),
+    html: '<div class="ai-chat-typing"><i></i><i></i><i></i> <span>Trợ lý AI đang tra cứu & kết nối...</span></div>'
+  });
+  renderAiPrivateMessages();
+
+  const currentUserId = currentRole === 'leader' ? 'Trọng' : 'Trang';
+  const apiRes = await callBackendChatApi(userText, currentUserId);
+
+  let answerHtml = '';
+  if (apiRes && apiRes.answer) {
+    let formatted = escapeHtml(apiRes.answer)
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+
+    let refsHtml = '';
+    if (apiRes.reference_ids && apiRes.reference_ids.length > 0) {
+      refsHtml = `<div class="ai-chat-references"><span>Dẫn nguồn</span> ${apiRes.reference_ids.map(r => `<span>${escapeHtml(r)}</span>`).join(' ')}</div>`;
+    }
+
+    let nextActionHtml = '';
+    if (apiRes.suggested_next_action) {
+      nextActionHtml = `<div class="ai-chat-next-action">💡 <b>Gợi ý tiếp theo:</b> ${escapeHtml(apiRes.suggested_next_action)}</div>`;
+    }
+
+    answerHtml = `<div>${formatted}</div>${refsHtml}${nextActionHtml}`;
+  } else {
+    answerHtml = generateLabAiAnswer(userText);
+  }
+
+  const idx = aiPrivateChatData.findIndex(m => m.id === typingId);
+  if (idx !== -1) {
+    aiPrivateChatData[idx] = {
+      id: typingId,
       sender: 'assistant',
       time: formatTimeNow(),
-      html: answer
-    });
-    renderAiPrivateMessages();
-  }, 400);
+      html: answerHtml
+    };
+  }
+  renderAiPrivateMessages();
 }
+
 
 function askAiPrompt(promptText) {
   switchChatTab('ai');

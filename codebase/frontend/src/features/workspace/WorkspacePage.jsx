@@ -101,7 +101,6 @@ export function WorkspacePage() {
             <p><span className="role-tag">VIEW {user.roleLabel.toUpperCase()}</span> Mini Hackathon AI</p>
           </div>
           <div className="workspace-actions">
-            <PrivateProgressChat snapshot={snapshot} user={user} isMock={snapshot.source === 'mock'} />
             {isLeader && (
               <button ref={groupDialogTriggerRef} className="primary-button" type="button" onClick={() => setGroupDialogOpen(true)}>
                 ＋ Lập nhóm Lab
@@ -169,6 +168,8 @@ export function WorkspacePage() {
           </aside>
         </div>
       </main>
+
+      <PrivateProgressChat snapshot={snapshot} user={user} isMock={snapshot.source === 'mock'} />
 
       {isLeader && (
         <LeaderGroupDialog

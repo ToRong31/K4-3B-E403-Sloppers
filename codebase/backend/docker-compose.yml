@@ -1,12 +1,52 @@
 services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-vlearn_labspace}
+      POSTGRES_USER: ${POSTGRES_USER:-vlearn}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vlearn_dev_password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - vlearn_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
   api:
     build: .
     ports:
       - "8000:8000"
     env_file:
-      - path: .env
-        required: false
+      - .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-vlearn}:${POSTGRES_PASSWORD:-vlearn_dev_password}@db:5432/${POSTGRES_DB:-vlearn_labspace}
+      DATABASE_AUTO_CREATE: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
     volumes:
       - .:/app
-    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
+    command:
+      - sh
+      - -c
+      - python -m alembic upgrade head && python -m uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/ready')
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+volumes:
+  vlearn_postgres_data:
+    name: vlearn_labspace_postgres_data
 

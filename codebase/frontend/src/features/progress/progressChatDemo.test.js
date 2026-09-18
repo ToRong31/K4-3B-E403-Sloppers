@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { createProgressChatDemoReply } from './progressChatDemo';
+import { createGroupChatDemoMessages, createProgressChatDemoReply } from './progressChatDemo';
 
 const user = { shortName: 'Trang' };
 const tasks = [
@@ -37,5 +37,21 @@ describe('createProgressChatDemoReply', () => {
 
     expect(reply.status).toBe('ready');
     expect(reply.reference_ids).toEqual(['fixture://lab/cp2/flow']);
+  });
+});
+
+describe('createGroupChatDemoMessages', () => {
+  it('marks the signed-in member preview as their own message', () => {
+    const messages = createGroupChatDemoMessages({
+      members: [
+        { name: 'Phạm Hoàng Trọng', studentCode: 'leader', role: 'Nhóm trưởng' },
+        { name: 'Lê Thị Thùy Trang', studentCode: 'member', role: 'Thành viên' },
+      ],
+      tasks,
+      user: { ...user, accountId: 'member', roleLabel: 'Thành viên' },
+    });
+
+    expect(messages.at(-1).mine).toBe(true);
+    expect(messages.at(-1).text).toContain('Dựng flow tương tác');
   });
 });

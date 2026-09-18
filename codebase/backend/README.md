@@ -160,6 +160,36 @@ uvicorn src.api.main:app --reload
 
 Swagger UI: `http://127.0.0.1:8000/docs`.
 
+## Chạy nhanh bằng Docker + PostgreSQL
+
+Docker Compose chạy hai service `api` và `db`, tự chờ PostgreSQL healthy, chạy
+Alembic migration rồi mới khởi động FastAPI:
+
+```powershell
+docker compose up -d --build
+docker compose ps
+docker compose logs -f api db
+```
+
+Các địa chỉ kiểm tra:
+
+- Liveness: `http://127.0.0.1:8000/api/v1/health`
+- Readiness có kiểm tra kết nối DB: `http://127.0.0.1:8000/api/v1/ready`
+- Swagger: `http://127.0.0.1:8000/docs`
+
+PostgreSQL được expose tại `127.0.0.1:5432`. Dữ liệu nằm trong named volume
+`vlearn_labspace_postgres_data`, vì vậy `docker compose down` rồi chạy lại không
+làm mất dữ liệu. Không chạy `docker compose down -v` nếu muốn giữ database.
+
+Assignment draft tạo qua `POST /api/v1/assignments/draft` được lưu vào bảng
+`assignment_drafts`, gồm request, kết quả, trạng thái và thời điểm tạo.
+
+Mở `psql` trong container:
+
+```powershell
+docker compose exec db psql -U vlearn -d vlearn_labspace
+```
+
 ## Chọn LLM provider
 
 Copy `.env.example` thành `.env`, sau đó chọn provider, model và key:
@@ -170,7 +200,18 @@ LLM_MODEL=your-model-name
 OPENAI_API_KEY=your-key
 ```
 
-Giá trị `LLM_PROVIDER` hỗ trợ: `openai`, `anthropic`, `gemini`. Chỉ provider được chọn mới được khởi tạo; xem [cấu hình ba LLM provider](docs/configuration/llm-providers.md).
+Giá trị `LLM_PROVIDER` hỗ trợ: `openai`, `anthropic`, `gemini`, `nvidia`. Chỉ provider được chọn mới được khởi tạo; xem [cấu hình LLM provider](docs/configuration/llm-providers.md).
+
+Với NVIDIA hosted NIM, có thể dùng file mẫu riêng:
+
+```powershell
+Copy-Item .env.nvidia.example .env
+# Dán key nvapi-... vào NVIDIA_API_KEY trong .env
+python -m src.infrastructure.llm.smoke_test
+```
+
+Endpoint mặc định là `https://integrate.api.nvidia.com/v1`; key chỉ tồn tại trong
+`codebase/backend/.env` đã được gitignore, không đưa sang frontend.
 
 ## Kiểm tra
 
@@ -207,5 +248,5 @@ Thay đổi `models/schemas.py` hoặc `router_state.py` là thay đổi contrac
 - [Tools and prompts](docs/architecture/tools-and-prompts.md)
 - [Data contracts và fixtures](docs/data-model/README.md)
 - [Task plan cho 3 người](docs/task-plan-3-people.md)
-- [Cấu hình ba LLM provider](docs/configuration/llm-providers.md)
+- [Cấu hình LLM provider](docs/configuration/llm-providers.md)
 - [ADR: FastAPI + LangGraph](docs/adr/0001-langgraph-fastapi.md)

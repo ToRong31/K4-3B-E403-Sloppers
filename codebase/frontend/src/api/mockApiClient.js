@@ -29,5 +29,20 @@ export function createMockApiClient() {
     getLabs: () => wait([labFixture]),
     getWorkspaceSnapshot: () => wait(workspaceFixture),
     getCoachSnapshot: () => wait(coachFixture),
+    sendChatMessage: async (payload) => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (response.ok) {
+          return await response.json();
+        }
+      } catch (err) {
+        console.warn('Backend chat API connection error, using local fallback:', err);
+      }
+      return null;
+    },
   };
 }

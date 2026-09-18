@@ -14,6 +14,7 @@ def make_settings(provider: LLMProvider, **overrides) -> Settings:
         "openai_api_key": None,
         "anthropic_api_key": None,
         "google_api_key": None,
+        "nvidia_api_key": None,
     }
     values.update(overrides)
     return Settings(_env_file=None, **values)
@@ -25,6 +26,7 @@ def make_settings(provider: LLMProvider, **overrides) -> Settings:
         (LLMProvider.OPENAI, "openai_api_key"),
         (LLMProvider.ANTHROPIC, "anthropic_api_key"),
         (LLMProvider.GEMINI, "google_api_key"),
+        (LLMProvider.NVIDIA, "nvidia_api_key"),
     ],
 )
 def test_factory_uses_only_selected_provider(
@@ -73,4 +75,11 @@ def test_factory_requires_model_name() -> None:
     )
 
     with pytest.raises(LLMConfigurationError, match="LLM_MODEL"):
+        factory.build_chat_model(settings)
+
+
+def test_factory_rejects_blank_nvidia_key() -> None:
+    settings = make_settings(LLMProvider.NVIDIA, nvidia_api_key="")
+
+    with pytest.raises(LLMConfigurationError, match="NVIDIA_API_KEY"):
         factory.build_chat_model(settings)
