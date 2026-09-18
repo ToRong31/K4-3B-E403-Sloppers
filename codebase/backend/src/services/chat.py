@@ -1,9 +1,22 @@
 from typing import Any
 
+from src.infrastructure.json_store import get_json_store
 from src.models.schemas import ChatRequest, ChatResponse
 
 
 def _load_default_tasks(group_id: str) -> list[dict[str, Any]]:
+    try:
+        tasks = get_json_store().get_workspace().get("tasks", [])
+        if tasks:
+            normalized = []
+            for t in tasks:
+                item = dict(t)
+                item["owner_id"] = t.get("owner_id") or t.get("owner")
+                item["group_id"] = t.get("group_id") or group_id
+                normalized.append(item)
+            return normalized
+    except Exception:
+        pass
     return [
         {
             "id": "task-cp1",

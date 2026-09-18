@@ -1,0 +1,431 @@
+{
+  "users": [
+    {
+      "id": "user-leader-trong",
+      "accountId": "2A202602765",
+      "email": "leader.demo@vlearn.local",
+      "displayName": "Phạm Hoàng Trọng",
+      "shortName": "Trọng",
+      "role": "leader",
+      "roleLabel": "Nhóm trưởng",
+      "avatar": "T"
+    },
+    {
+      "id": "user-member-trang",
+      "accountId": "2A202602678",
+      "email": "member.demo@vlearn.local",
+      "displayName": "Lê Thị Thùy Trang",
+      "shortName": "Trang",
+      "role": "member",
+      "roleLabel": "Thành viên",
+      "avatar": "T"
+    },
+    {
+      "id": "user-member-duong",
+      "accountId": "2A202602676",
+      "email": "duong.demo@vlearn.local",
+      "displayName": "Lâm Hải Dương",
+      "shortName": "Dương",
+      "role": "member",
+      "roleLabel": "Thành viên",
+      "avatar": "D"
+    },
+    {
+      "id": "user-member-dung",
+      "accountId": "2A202602523",
+      "email": "dung.demo@vlearn.local",
+      "displayName": "Hoàng Quốc Dũng",
+      "shortName": "Dũng",
+      "role": "member",
+      "roleLabel": "Thành viên",
+      "avatar": "D"
+    },
+    {
+      "id": "user-coach-e403",
+      "accountId": "COACH-E403",
+      "email": "coach.demo@vlearn.local",
+      "displayName": "Lab Coach E403",
+      "shortName": "Coach E403",
+      "role": "coach",
+      "roleLabel": "Lab Coach",
+      "avatar": "GV"
+    }
+  ],
+  "labs": [
+    {
+      "id": "k4-l3b-day05-06",
+      "course": "K4 · L3B · DAY05–06",
+      "title": "Bài 16 · MINI HACKATHON",
+      "description": "AI Product Hackathon: SPEC → Prototype → Demo · đầy đủ nội dung CP1–CP6.",
+      "status": "in_progress",
+      "progress": 40,
+      "lessonCount": 21,
+      "updatedAt": "Bài Lab mẫu đã được tải lên"
+    }
+  ],
+  "group": {
+    "source": "api",
+    "group": {
+      "id": "group-sloppers",
+      "name": "Sloppers",
+      "code": "SLOP-3B"
+    },
+    "checklistSource": "K4–L3B–DAY05–06–MINI–HACKATHON",
+    "planStatus": "approved",
+    "members": [
+      {
+        "id": "m1",
+        "studentCode": "2A202602765",
+        "fullName": "Phạm Hoàng Trọng",
+        "name": "Trọng",
+        "role": "Nhóm trưởng",
+        "className": "K4-E403",
+        "avatar": "T",
+        "color": "#0284c7",
+        "status": "accepted",
+        "profileReady": true
+      },
+      {
+        "id": "m2",
+        "studentCode": "2A202602678",
+        "fullName": "Lê Thị Thùy Trang",
+        "name": "Trang",
+        "role": "Frontend · UI/UX",
+        "className": "K4-E403",
+        "avatar": "T",
+        "color": "#0d9488",
+        "status": "accepted",
+        "profileReady": true
+      },
+      {
+        "id": "m3",
+        "studentCode": "2A202602676",
+        "fullName": "Lâm Hải Dương",
+        "name": "Dương",
+        "role": "AI · Prompt",
+        "className": "K4-E403",
+        "avatar": "D",
+        "color": "#7c3aed",
+        "status": "accepted",
+        "profileReady": true
+      },
+      {
+        "id": "m4",
+        "studentCode": "2A202602523",
+        "fullName": "Hoàng Quốc Dũng",
+        "name": "Dũng",
+        "role": "Backend · Data",
+        "className": "K4-E403",
+        "avatar": "D",
+        "color": "#ea580c",
+        "status": "accepted",
+        "profileReady": true
+      }
+    ],
+    "tasks": [
+      {
+        "id": "t1",
+        "category": "EVIDENCE",
+        "title": "Khảo sát và tổng hợp pain",
+        "deliverable": "Evidence log + quote",
+        "owner": "Trọng",
+        "status": "done",
+        "completion_criteria": [
+          "Có quote và cách đếm"
+        ],
+        "depends_on": [],
+        "reference_ids": [
+          "fixture://lab/cp1/evidence"
+        ]
+      },
+      {
+        "id": "t2",
+        "category": "PRODUCT",
+        "title": "Chốt Canvas 7 dòng",
+        "deliverable": "canvas.md",
+        "owner": "Trọng",
+        "status": "done",
+        "completion_criteria": [
+          "Đủ 7 dòng Canvas"
+        ],
+        "depends_on": [
+          "t1"
+        ],
+        "reference_ids": [
+          "fixture://lab/cp1/canvas"
+        ]
+      },
+      {
+        "id": "t3",
+        "category": "UI / FLOW",
+        "title": "Dựng flow tương tác",
+        "deliverable": "Mockup bấm được",
+        "owner": "Trang",
+        "status": "doing",
+        "completion_criteria": [
+          "Luồng thao tác được bấm từ đầu đến cuối"
+        ],
+        "depends_on": [
+          "t2"
+        ],
+        "reference_ids": [
+          "fixture://lab/cp2/flow"
+        ]
+      },
+      {
+        "id": "t4",
+        "category": "AI / EVAL",
+        "title": "AI assignment + golden set",
+        "deliverable": "Model call + ≥20 case",
+        "owner": "Dương",
+        "status": "todo",
+        "completion_criteria": [
+          "Có model call và ít nhất 20 case"
+        ],
+        "depends_on": [
+          "t2"
+        ],
+        "reference_ids": [
+          "fixture://lab/cp3/golden-set"
+        ]
+      },
+      {
+        "id": "t5",
+        "category": "SUBMISSION",
+        "title": "Hoàn thiện spec và gói nộp",
+        "deliverable": "Spec + slide + video",
+        "owner": "Dũng",
+        "status": "todo",
+        "completion_criteria": [
+          "Có spec, slide và video"
+        ],
+        "depends_on": [
+          "t3",
+          "t4"
+        ],
+        "reference_ids": [
+          "fixture://lab/cp4/submission"
+        ]
+      }
+    ]
+  },
+  "coach": {
+    "source": "api",
+    "summary": {
+      "activeGroups": 12,
+      "aboveEighty": 5,
+      "blocked": 3,
+      "helpNeeded": 2
+    },
+    "groups": [
+      {
+        "id": "g1",
+        "name": "Sloppers",
+        "code": "SLOP-3B",
+        "progress": 40,
+        "blocked": 1,
+        "lastCheckIn": "2 phút trước",
+        "help": null
+      },
+      {
+        "id": "g2",
+        "name": "Team Phoenix",
+        "code": "PHNX-08",
+        "progress": 80,
+        "blocked": 0,
+        "lastCheckIn": "5 phút trước",
+        "help": null
+      },
+      {
+        "id": "g3",
+        "name": "Null Pointers",
+        "code": "NULL-12",
+        "progress": 20,
+        "blocked": 2,
+        "lastCheckIn": "11 phút trước",
+        "help": "pending"
+      },
+      {
+        "id": "g4",
+        "name": "AI Sprinters",
+        "code": "AISP-04",
+        "progress": 100,
+        "blocked": 0,
+        "lastCheckIn": "1 phút trước",
+        "help": null
+      }
+    ]
+  },
+  "support_requests": [
+    {
+      "id": "req-2",
+      "groupId": "group-sloppers",
+      "groupName": "Sloppers",
+      "studentName": "Trang",
+      "taskTitle": "Dựng flow tương tác",
+      "question": "Nhóm em cần hướng dẫn về cách cấu hình WebSocket realtime ạ.",
+      "response": "Coach đã kiểm tra, phần này có thể dùng HTTP polling hoặc Server-Sent Events cho đơn giản nhé.",
+      "status": "resolved",
+      "createdAt": "2026-09-18T07:23:00.972687+00:00",
+      "resolvedAt": "2026-09-18T07:23:01.008087+00:00"
+    },
+    {
+      "id": "req-1",
+      "groupId": "group-sloppers",
+      "groupName": "Sloppers",
+      "studentName": "Trang",
+      "taskTitle": "Dựng flow tương tác",
+      "question": "Nhóm em đang gặp khó khăn khi nối API Chat vào giao diện React, Coach xem giúp em phần CORS với ạ!",
+      "response": "Coach đã kiểm tra cấu hình CORS trong FastAPI, em nhớ cho phép domain http://localhost:5173 là chạy mượt nhé.",
+      "status": "resolved",
+      "createdAt": "2026-09-18T10:15:00Z",
+      "resolvedAt": "2026-09-18T10:30:00Z"
+    }
+  ],
+  "submissions": [
+    {
+      "valid": true,
+      "repo_url": "https://github.com/sloppers/vlearn-labspace",
+      "status": "verified",
+      "summary": "AI Double Check thành công: Repository nộp bài có đầy đủ các tệp bàn giao bắt buộc (README, Canvas, Spec, Codebase). Đủ điều kiện nghiệm thu Lab.",
+      "checks": [
+        {
+          "file": "README.md",
+          "description": "Tài liệu giới thiệu sản phẩm & hướng dẫn chạy",
+          "passed": true,
+          "note": "Tệp hợp lệ và đầy đủ nội dung theo yêu cầu Lab."
+        },
+        {
+          "file": "docs/canvas.md",
+          "description": "Canvas 7 dòng chốt bài toán & giá trị",
+          "passed": true,
+          "note": "Tệp hợp lệ và đầy đủ nội dung theo yêu cầu Lab."
+        },
+        {
+          "file": "docs/spec.md",
+          "description": "Tài liệu đặc tả giải pháp SPEC",
+          "passed": true,
+          "note": "Tệp hợp lệ và đầy đủ nội dung theo yêu cầu Lab."
+        },
+        {
+          "file": "codebase/",
+          "description": "Mã nguồn ứng dụng có thể chạy được",
+          "passed": true,
+          "note": "Tệp hợp lệ và đầy đủ nội dung theo yêu cầu Lab."
+        },
+        {
+          "file": "eval/",
+          "description": "Bộ đánh giá Golden set (≥20 test cases)",
+          "passed": true,
+          "note": "Tệp hợp lệ và đầy đủ nội dung theo yêu cầu Lab."
+        }
+      ],
+      "missing_files": [],
+      "checked_at": "2026-09-18T07:19:22.509735+00:00"
+    },
+    {
+      "valid": true,
+      "repo_url": "https://github.com/sloppers/vlearn-labspace",
+      "status": "verified",
+      "summary": "AI Double Check thành công: Repository nộp bài có đầy đủ các tệp bàn giao bắt buộc (README, Canvas, Spec, Codebase). Đủ điều kiện nghiệm thu Lab.",
+      "checks": [
+        {
+          "file": "README.md",
+          "description": "Tài liệu giới thiệu sản phẩm & hướng dẫn chạy",
+          "passed": true,
+          "note": "Tệp hợp lệ và đầy đủ nội dung theo yêu cầu Lab."
+        },
+        {
+          "file": "docs/canvas.md",
+          "description": "Canvas 7 dòng chốt bài toán & giá trị",
+          "passed": true,
+          "note": "Tệp hợp lệ và đầy đủ nội dung theo yêu cầu Lab."
+        },
+        {
+          "file": "docs/spec.md",
+          "description": "Tài liệu đặc tả giải pháp SPEC",
+          "passed": true,
+          "note": "Tệp hợp lệ và đầy đủ nội dung theo yêu cầu Lab."
+        },
+        {
+          "file": "codebase/",
+          "description": "Mã nguồn ứng dụng có thể chạy được",
+          "passed": true,
+          "note": "Tệp hợp lệ và đầy đủ nội dung theo yêu cầu Lab."
+        },
+        {
+          "file": "eval/",
+          "description": "Bộ đánh giá Golden set (≥20 test cases)",
+          "passed": true,
+          "note": "Tệp hợp lệ và đầy đủ nội dung theo yêu cầu Lab."
+        }
+      ],
+      "missing_files": [],
+      "checked_at": "2026-09-18T07:23:01.040425+00:00"
+    }
+  ],
+  "group_chat_messages": [
+    {
+      "id": "msg-init-1",
+      "groupId": "group-sloppers",
+      "author": "Phạm Hoàng Trọng",
+      "shortName": "Trọng",
+      "initial": "T",
+      "role": "Nhóm trưởng",
+      "isLeader": true,
+      "time": "10:00",
+      "text": "Mọi người kiểm tra lại task và tiêu chí hoàn thành trước khi bắt đầu nhé.",
+      "createdAt": "2026-09-18T07:38:57.454217+00:00"
+    },
+    {
+      "id": "msg-init-2",
+      "groupId": "group-sloppers",
+      "author": "Lê Thị Thùy Trang",
+      "shortName": "Trang",
+      "initial": "T",
+      "role": "Frontend · UI/UX",
+      "isLeader": false,
+      "time": "10:05",
+      "text": "Mình đang tiến hành dựng flow tương tác cho mockup rồi nhé.",
+      "createdAt": "2026-09-18T07:38:57.474592+00:00"
+    },
+    {
+      "id": "msg-1789717210411-l1vm",
+      "groupId": "group-sloppers",
+      "author": "Lê Thị Thùy Trang",
+      "shortName": "Trang",
+      "initial": "T",
+      "role": "Thành viên",
+      "isLeader": false,
+      "time": "14:40",
+      "text": "hello",
+      "createdAt": "2026-09-18T07:40:10.424720+00:00"
+    },
+    {
+      "id": "msg-1789717592872-5k01",
+      "groupId": "group-sloppers",
+      "author": "Lê Thị Thùy Trang",
+      "shortName": "Trang",
+      "initial": "T",
+      "role": "Thành viên",
+      "isLeader": false,
+      "time": "14:46",
+      "text": "xin chào nhe",
+      "mine": true,
+      "createdAt": "2026-09-18T07:46:32.873456+00:00"
+    },
+    {
+      "id": "msg-1789717629782-8ynr",
+      "groupId": "group-sloppers",
+      "author": "Lê Thị Thùy Trang",
+      "shortName": "Trang",
+      "initial": "T",
+      "role": "Thành viên",
+      "isLeader": false,
+      "time": "14:47",
+      "text": "oke tôi là Trang",
+      "mine": true,
+      "createdAt": "2026-09-18T07:47:09.782476+00:00"
+    }
+  ]
+}

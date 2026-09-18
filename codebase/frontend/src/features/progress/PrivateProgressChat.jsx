@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '../../api/createApiClient';
+import { useRealtime } from '../../realtime/useRealtime';
 import { createGroupChatDemoMessages, createProgressChatDemoReply } from './progressChatDemo';
 
 const quickQuestions = [
@@ -37,22 +38,67 @@ function SendIcon() {
 }
 
 export function PrivateProgressChat({ snapshot, user, isMock }) {
+  const { client: realtimeClient, status: realtimeStatus } = useRealtime();
   const [open, setOpen] = useState(true);
-  const [activeTab, setActiveTab] = useState('ai');
+  const [activeTab, setActiveTab] = useState('group');
   const [question, setQuestion] = useState('');
   const [messages, setMessages] = useState(() => [initialAssistantMessage(isMock)]);
   const [isResponding, setIsResponding] = useState(false);
+  const [groupInput, setGroupInput] = useState('');
+  const [groupChatMessages, setGroupChatMessages] = useState(() =>
+    createGroupChatDemoMessages({ members: snapshot.members, tasks: snapshot.tasks, user }),
+  );
   const inputRef = useRef(null);
+  const groupInputRef = useRef(null);
   const panelLabelId = useId();
   const ownTasks = useMemo(
     () => snapshot.tasks.filter((task) => task.owner === user.shortName),
     [snapshot.tasks, user.shortName],
   );
   const selectedTaskId = ownTasks[0]?.id ?? '';
-  const groupMessages = useMemo(
-    () => createGroupChatDemoMessages({ members: snapshot.members, tasks: snapshot.tasks, user }),
-    [snapshot.members, snapshot.tasks, user],
-  );
+
+  // Load chat history from backend on mount
+  useEffect(() => {
+    let ignore = false;
+    async function loadHistory() {
+      try {
+        if (apiClient.getGroupChatMessages) {
+          const history = await apiClient.getGroupChatMessages();
+          if (!ignore && history?.length) {
+            setGroupChatMessages(history);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load group chat from backend:', err);
+      }
+    }
+    loadHistory();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  // Listen to realtime websocket broadcasts
+  useEffect(() => {
+    if (!realtimeClient?.subscribe) return;
+    const unsubscribe = realtimeClient.subscribe((event) => {
+      if (event.type === 'chat.message_sent' && event.payload) {
+        const incoming = event.payload;
+        setGroupChatMessages((prev) => {
+          if (prev.some((m) => m.id === incoming.id)) return prev;
+          const isDuplicate = prev.some(
+            (m) =>
+              (m.author === incoming.author || m.shortName === incoming.shortName) &&
+              m.text === incoming.text &&
+              m.time === incoming.time,
+          );
+          if (isDuplicate) return prev;
+          return [...prev, incoming];
+        });
+      }
+    });
+    return () => unsubscribe();
+  }, [realtimeClient]);
 
   useEffect(() => {
     document.body.classList.toggle('chat-sidebar-open', open);
@@ -133,6 +179,48 @@ export function PrivateProgressChat({ snapshot, user, isMock }) {
     window.requestAnimationFrame(() => inputRef.current?.focus());
   };
 
+  const handleSendGroupMessage = async (e) => {
+    e?.preventDefault();
+    const text = groupInput.trim();
+    if (!text) return;
+    setGroupInput('');
+
+    const newMsg = {
+      id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      groupId: snapshot.group?.id || 'group-sloppers',
+      author: user.displayName || user.shortName,
+      shortName: user.shortName,
+      initial: (user.shortName || user.displayName)?.[0]?.toUpperCase() || 'T',
+      role: user.roleLabel || 'Thành viên',
+      isLeader: user.role === 'leader',
+      time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
+      text,
+      mine: true,
+    };
+
+    // Optimistically update local message list
+    setGroupChatMessages((prev) => {
+      if (prev.some((m) => m.id === newMsg.id)) return prev;
+      return [...prev, newMsg];
+    });
+
+    try {
+      if (realtimeStatus === 'connected' && realtimeClient?.publish) {
+        // Backend WebSocket handler saves to store.json and broadcasts to peers
+        realtimeClient.publish({
+          type: 'chat.message_sent',
+          scope_id: snapshot.group?.id || 'group-sloppers',
+          payload: newMsg,
+        });
+      } else if (apiClient.sendGroupChatMessage) {
+        // Fallback REST endpoint
+        await apiClient.sendGroupChatMessage(newMsg);
+      }
+    } catch (err) {
+      console.warn('Error sending group message:', err);
+    }
+  };
+
   return (
     <>
       <aside
@@ -186,32 +274,53 @@ export function PrivateProgressChat({ snapshot, user, isMock }) {
             </div>
             <button className="group-ai-summary-btn" type="button" disabled title="Sẽ nối backend ở task chat nhóm">✨ AI tóm tắt</button>
           </div>
-          {isMock && <div className="chat-identity-banner"><strong>Dữ liệu demo</strong> · Kênh nhóm chưa nối backend realtime</div>}
           <div className="chat-messages" aria-live="polite">
-            {groupMessages.map((message) => (
-              <article className={`chat-msg-row ${message.mine ? 'mine' : 'peer'}`} key={message.id}>
-                <span className={`chat-msg-avatar ${message.isLeader ? 'leader' : 'member'}`} aria-hidden="true">{message.initial}</span>
-                <div className="chat-msg-content">
-                  <div className="chat-msg-meta">
-                    <span className="author-name">{message.mine ? 'Bạn' : message.author}</span>
-                    <span className="author-role-tag">{message.role}</span>
-                    <span>{message.time}</span>
+            {groupChatMessages.map((message) => {
+              const isMine =
+                message.mine ||
+                message.shortName === user.shortName ||
+                message.author === user.displayName ||
+                message.author === user.shortName;
+              return (
+                <article className={`chat-msg-row ${isMine ? 'mine' : 'peer'}`} key={message.id}>
+                  <span className={`chat-msg-avatar ${message.isLeader ? 'leader' : 'member'}`} aria-hidden="true">
+                    {message.initial}
+                  </span>
+                  <div className="chat-msg-content">
+                    <div className="chat-msg-meta">
+                      <span className="author-name">{isMine ? 'Bạn' : message.author}</span>
+                      <span className="author-role-tag">{message.role}</span>
+                      <span>{message.time}</span>
+                    </div>
+                    <div className="chat-msg-bubble">{message.text}</div>
                   </div>
-                  <div className="chat-msg-bubble">{message.text}</div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
           <div className="chat-footer">
             <div className="chat-input-toolbar">
-              <button className="chat-tool-btn" type="button" disabled>📎 File</button>
-              <button className="chat-tool-btn" type="button" disabled>📑 Tài liệu Lab</button>
-              <button className="chat-tool-btn ai-mention-btn" type="button" disabled>🤖 @Trợ lý AI</button>
+              <span className={`chat-connection-indicator ${realtimeStatus}`}>
+                ● {realtimeStatus === 'connected' ? 'Real-time WebSocket' : 'Đang đồng bộ'}
+              </span>
             </div>
-            <div className="chat-input-form">
-              <input className="chat-input" placeholder="Chat nhóm sẽ được nối ở task riêng..." disabled />
-              <button className="chat-send-btn" type="button" disabled aria-label="Gửi tin nhắn nhóm"><SendIcon /></button>
-            </div>
+            <form className="chat-input-form" onSubmit={handleSendGroupMessage}>
+              <input
+                ref={groupInputRef}
+                className="chat-input"
+                value={groupInput}
+                onChange={(e) => setGroupInput(e.target.value)}
+                placeholder="Nhập tin nhắn cho cả nhóm..."
+              />
+              <button
+                className="chat-send-btn"
+                type="submit"
+                disabled={!groupInput.trim()}
+                aria-label="Gửi tin nhắn nhóm"
+              >
+                <SendIcon />
+              </button>
+            </form>
           </div>
         </section>
 

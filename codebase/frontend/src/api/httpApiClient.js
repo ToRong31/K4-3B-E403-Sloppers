@@ -29,9 +29,45 @@ export function createHttpApiClient({ baseUrl }) {
     getSession: () => request(baseUrl, '/auth/me'),
     getLabs: () => request(baseUrl, '/labs'),
     getWorkspaceSnapshot: () => request(baseUrl, '/groups/current'),
+    updateTask: (taskId, updates) =>
+      request(baseUrl, `/groups/current/tasks/${taskId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(updates),
+      }),
+    approvePlan: () =>
+      request(baseUrl, '/groups/current/plan/approve', {
+        method: 'POST',
+      }),
     getCoachSnapshot: () => request(baseUrl, '/coach/groups'),
+    getSupportRequests: () => request(baseUrl, '/coach/support-requests'),
+    createSupportRequest: (payload) =>
+      request(baseUrl, '/coach/support-requests', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
+    resolveSupportRequest: (requestId, response) =>
+      request(baseUrl, `/coach/support-requests/${requestId}/resolve`, {
+        method: 'POST',
+        body: JSON.stringify({ response }),
+      }),
+    checkGithubSubmission: (repoUrl) =>
+      request(baseUrl, '/submissions/check-github', {
+        method: 'POST',
+        body: JSON.stringify({ repo_url: repoUrl }),
+      }),
     sendChatMessage: (payload) =>
       request(baseUrl, '/chat', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
+    getGroupChatMessages: () => request(baseUrl, '/groups/current/chat'),
+    sendGroupChatMessage: (payload) =>
+      request(baseUrl, '/groups/current/chat', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
+    createAssignmentDraft: (payload) =>
+      request(baseUrl, '/assignments/draft', {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
