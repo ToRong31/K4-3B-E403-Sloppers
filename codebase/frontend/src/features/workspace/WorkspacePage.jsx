@@ -4,6 +4,7 @@ import { apiClient } from '../../api/createApiClient';
 import { useAuth } from '../../auth/useAuth';
 import { ErrorState, LoadingState } from '../../components/PageState';
 import { useAsyncResource } from '../../hooks/useAsyncResource';
+import { AssignmentReviewDialog } from '../assignment/AssignmentReviewDialog';
 import { LeaderGroupDialog } from '../group/LeaderGroupDialog';
 import { MemberInviteFlow } from '../profile/MemberInviteFlow';
 import { PrivateProgressChat } from '../progress/PrivateProgressChat';
@@ -19,6 +20,7 @@ export function WorkspacePage() {
   const loader = useCallback(() => apiClient.getWorkspaceSnapshot(), []);
   const { status, data, error, reload } = useAsyncResource(loader);
   const [workspaceData, setWorkspaceData] = useState(null);
+  const [assignmentDialogOpen, setAssignmentDialogOpen] = useState(false);
   const [groupDialogOpen, setGroupDialogOpen] = useState(false);
   const groupDialogTriggerRef = useRef(null);
 
@@ -69,6 +71,15 @@ export function WorkspacePage() {
 
   const handleProfileSaved = (skills) => {
     updateCurrentMember({ status: 'accepted', profileReady: true, skills });
+  };
+
+  const handlePlanApproved = (assignments) => {
+    const ownerByTask = new Map(assignments.map((assignment) => [assignment.taskId, assignment.owner]));
+    setWorkspaceData((current) => current ? {
+      ...current,
+      planStatus: 'approved',
+      tasks: current.tasks.map((task) => ({ ...task, owner: ownerByTask.get(task.id) ?? task.owner })),
+    } : current);
   };
 
   if (status === 'loading') return <main className="page-shell"><LoadingState label="Đang tải LabSpace…" /></main>;
@@ -123,7 +134,7 @@ export function WorkspacePage() {
                 </li>
               ))}
             </ul>
-            <button className="primary-button full" type="button" disabled={!isLeader}>
+            <button className="primary-button full" type="button" disabled={!isLeader} onClick={() => isLeader && setAssignmentDialogOpen(true)}>
               ✦ {isLeader ? 'Tạo bản nháp phân công AI' : 'Chờ nhóm trưởng phân công'}
             </button>
             {!isLeader && <p className="permission-note">🔒 Chỉ nhóm trưởng có quyền tạo và phê duyệt kế hoạch.</p>}
@@ -133,7 +144,7 @@ export function WorkspacePage() {
           <section className="card board-panel">
             <div className="card-heading">
               <div><h2>Kế hoạch của nhóm</h2><p>Shell UI đang đọc qua API adapter; mutation sẽ được nối ở bước tiếp theo.</p></div>
-              <span className="status-chip">{snapshot.planStatus === 'draft' ? 'Bản nháp' : snapshot.planStatus}</span>
+              <span className="status-chip">{snapshot.planStatus === 'draft' ? 'Bản nháp' : snapshot.planStatus === 'approved' ? 'Đã duyệt' : snapshot.planStatus}</span>
             </div>
             <div className="overall-progress"><i style={{ width: `${progress}%` }} /></div>
             <div className="task-list">
@@ -168,6 +179,15 @@ export function WorkspacePage() {
           leaderCode={user.accountId}
           onCreated={handleGroupCreated}
           onClose={closeGroupDialog}
+        />
+      )}
+      {isLeader && (
+        <AssignmentReviewDialog
+          open={assignmentDialogOpen}
+          tasks={snapshot.tasks}
+          members={snapshot.members}
+          onApprove={handlePlanApproved}
+          onClose={() => setAssignmentDialogOpen(false)}
         />
       )}
     </>

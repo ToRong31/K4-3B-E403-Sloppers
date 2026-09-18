@@ -23,13 +23,13 @@
 | Workspace nhóm | 🟡 | Có board chính và dialog lập nhóm; AI/help chưa hoạt động |
 | Flow Nhóm trưởng | 🟡 | Đã có tạo nhóm, mời thành viên; còn thiếu review và approve plan |
 | Flow Thành viên | 🟡 | Đã có invitation và khai skill; còn thiếu thao tác task |
-| AI assignment review | ⚪ | Chưa có draft/reason/confidence/override/approve UI |
+| AI assignment review | 🟡 | Đã có bản nháp, override và approve UI; chưa gọi AI thật |
 | Coach dashboard | 🟡 | Có bảng tổng quan; chưa có chi tiết help request |
 | Notification/help/chat sidebar | 🟡 | Đã có notification lời mời; help/chat chưa chuyển sang React |
 | GitHub double-check và nộp thật | ⚪ | Mới có trang trạng thái nộp tĩnh |
 | Responsive + accessibility toàn hệ thống | 🟡 | Login/Lesson tốt; Workspace/Coach cần hoàn thiện |
 
-**Tiến độ theo module giao diện:** 4 hoàn thiện · 7 một phần · 2 chưa làm.
+**Tiến độ theo module giao diện:** 4 hoàn thiện · 8 một phần · 1 chưa làm.
 
 ---
 
@@ -124,6 +124,7 @@
 - [x] ✅ Loading và error/retry state.
 - [x] ✅ Leader/member có CTA khác nhau theo quyền.
 - [x] ✅ Leader mở được dialog lập nhóm trực tiếp từ Workspace.
+- [x] ✅ CTA “Lập nhóm Lab” xuất hiện ngay tại phần chuẩn bị đội ngũ của bài Lab cho Nhóm trưởng.
 - [x] ✅ Sau thao tác demo, tên/mã nhóm và trạng thái thành viên được cập nhật ngay trên UI.
 - [ ] 🟡 CTA AI, copy mã nhóm và yêu cầu Coach chưa hoạt động.
 - [ ] 🟡 Task/checklist đang read-only, chưa có hover/focus/interaction đầy đủ như mockup.
@@ -142,11 +143,11 @@
 - [x] ✅ Validation mã sai, trùng, chính mình và quá số thành viên.
 - [x] ✅ Theo dõi invitation `pending/accepted/declined` trên Workspace; trạng thái sau khi gửi là `pending`.
 - [ ] ⚪ Trạng thái chờ thành viên hoàn tất skill profile.
-- [ ] ⚪ CTA chạy AI draft với loading animation và nút bỏ qua.
-- [ ] ⚪ Màn hình review bản nháp AI.
-- [ ] ⚪ Override owner và đánh dấu khác đề xuất AI.
-- [ ] ⚪ Approve plan final gate.
-- [ ] ⚪ Regenerate/version draft.
+- [x] ✅ CTA chạy AI draft với loading animation và nút bỏ qua.
+- [x] ✅ Màn hình review bản nháp AI.
+- [x] ✅ Override owner và đánh dấu khác đề xuất AI.
+- [x] ✅ Approve plan final gate.
+- [x] ✅ Regenerate/version draft.
 
 ## 8. Flow Thành viên
 
@@ -165,15 +166,15 @@
 
 ## 9. AI assignment review UI
 
-- [ ] ⚪ Trạng thái `CLARIFY` kèm dữ liệu còn thiếu.
-- [ ] ⚪ Trạng thái `READY` với toàn bộ canonical task.
-- [ ] ⚪ Proposed owner cho từng task.
-- [ ] ⚪ Reason, confidence và gap.
-- [ ] ⚪ Cảnh báo low-confidence.
-- [ ] ⚪ Cảnh báo workload mất cân bằng.
-- [ ] ⚪ Dropdown đổi owner cho Leader.
-- [ ] ⚪ Audit “AI đề xuất / Leader đã đổi”.
-- [ ] ⚪ Nút approve và confirmation dialog.
+- [x] ✅ Trạng thái `CLARIFY` kèm danh sách hồ sơ kỹ năng còn thiếu.
+- [x] ✅ Trạng thái `READY` UI sau animation phân tích mô phỏng.
+- [x] ✅ Proposed owner cho từng task.
+- [x] ✅ Reason, confidence và skill gap.
+- [x] ✅ Cảnh báo low-confidence dưới ngưỡng 93%.
+- [x] ✅ Cảnh báo workload mất cân bằng sau khi Leader đổi owner.
+- [x] ✅ Dropdown đổi owner cho Leader.
+- [x] ✅ Audit “AI đề xuất / Leader đã đổi”.
+- [x] ✅ Nút approve và confirmation dialog.
 - [ ] ⚪ Timeout/invalid-output/retry state.
 
 ## 10. Coach dashboard và hỗ trợ

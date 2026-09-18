@@ -1,6 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+import { apiClient } from '../../api/createApiClient';
+import { useAuth } from '../../auth/useAuth';
+import { useAsyncResource } from '../../hooks/useAsyncResource';
+import { LeaderGroupDialog } from '../group/LeaderGroupDialog';
 import { labLessons } from './labContent';
 
 function CourseSidebar({ activeIndex, isOpen, onClose, onSelect }) {
@@ -69,13 +73,26 @@ function SubmissionPage() {
 
 export function LessonPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notice, setNotice] = useState('');
+  const [groupDialogOpen, setGroupDialogOpen] = useState(false);
+  const [createdGroup, setCreatedGroup] = useState(null);
+  const groupCtaRef = useRef(null);
+  const workspaceLoader = useCallback(() => apiClient.getWorkspaceSnapshot(), []);
+  const { data: workspaceSnapshot } = useAsyncResource(workspaceLoader);
   const requestedLesson = searchParams.get('lesson') ?? labLessons[0].id;
   const activeIndex = Math.max(0, labLessons.findIndex((lesson) => lesson.id === requestedLesson));
   const activeLesson = labLessons[activeIndex];
   const LessonContent = activeLesson.component;
+  const isLeader = user.role === 'leader';
+  const isPreparation = activeLesson.id === 'prepare';
+  const group = createdGroup ?? workspaceSnapshot?.group;
+  const directory = useMemo(
+    () => (workspaceSnapshot?.members ?? []).filter((member) => member.studentCode !== user.accountId),
+    [workspaceSnapshot?.members, user.accountId],
+  );
 
   const completedCount = 0;
 
@@ -94,6 +111,11 @@ export function LessonPage() {
     window.setTimeout(() => setNotice(''), 3200);
   };
 
+  const closeGroupDialog = () => {
+    setGroupDialogOpen(false);
+    window.requestAnimationFrame(() => groupCtaRef.current?.focus());
+  };
+
   return (
     <main className="course-reader">
       <header className="course-topbar">
@@ -101,6 +123,7 @@ export function LessonPage() {
         <b>Bài 16 · MINI HACKATHON</b>
         <button className="course-menu-button" type="button" onClick={() => setSidebarOpen(true)}>☰ Mục lục</button>
         <div className="course-progress"><b>{completedCount}/21 bài</b><span><i style={{ width: `${(completedCount / 21) * 100}%` }} /></span></div>
+        {isLeader && <button ref={groupCtaRef} className="course-labspace-button" type="button" onClick={() => setGroupDialogOpen(true)}>＋ Lập nhóm Lab</button>}
         <button className="course-tool" type="button" onClick={() => showComingSoon('Trợ lý AI sẽ được kết nối ở bước tích hợp backend.')}><span>✦</span> Đặt câu hỏi với AI</button>
         <button className="course-tool" type="button" onClick={() => showComingSoon('Tính năng gửi yêu cầu sẽ được nối với Coach ở bước realtime.')}><span>♨</span> Gửi yêu cầu</button>
         <span className="course-avatar">L</span>
@@ -113,6 +136,20 @@ export function LessonPage() {
         <CourseSidebar activeIndex={activeIndex} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} onSelect={selectLesson} />
 
         <article className={`course-article ${activeLesson.id === 'submission' ? 'submission-article' : ''}`}>
+          {isPreparation && (
+            <aside className="lesson-labspace-entry" aria-label="Khởi tạo LabSpace">
+              <div>
+                <span>LABSPACE · BƯỚC 1</span>
+                <h2>{isLeader ? 'Lập nhóm trước khi bắt đầu Mini Hackathon' : 'Chờ lời mời nhóm LabSpace'}</h2>
+                <p>{isLeader
+                  ? 'Tạo nhóm cho bài Lab này, mời thành viên bằng mã học viên và sau đó theo dõi tiến độ trong LabSpace.'
+                  : 'Nhóm trưởng sẽ gửi lời mời đến Thông báo của bạn. Bạn tự xác nhận và khai hồ sơ năng lực cho phiên Lab.'}</p>
+              </div>
+              {isLeader ? (
+                <p className="lesson-labspace-hint">{createdGroup ? `✓ Nhóm ${createdGroup.code} đã được tạo. ` : ''}Dùng nút <b>“Lập nhóm Lab”</b> trên thanh bài học để mở thao tác ở bất kỳ checkpoint nào.</p>
+              ) : <button className="secondary-button" type="button" onClick={() => navigate('/workspace')}>Mở LabSpace</button>}
+            </aside>
+          )}
           {LessonContent ? <LessonContent /> : <SubmissionPage />}
           <footer className="lesson-pagination">
             <button type="button" disabled={activeIndex === 0} onClick={() => selectLesson(labLessons[activeIndex - 1].id)}>‹ <span>Bài trước</span></button>
@@ -122,6 +159,21 @@ export function LessonPage() {
           </footer>
         </article>
       </div>
+      {isLeader && workspaceSnapshot && (
+        <LeaderGroupDialog
+          open={groupDialogOpen}
+          directory={directory}
+          initialGroupName={group?.name ?? 'Nhóm mới'}
+          labTitle="K4–L3B–DAY05–06–MINI–HACKATHON"
+          leaderCode={user.accountId}
+          onCreated={(newGroup) => setCreatedGroup(newGroup)}
+          onEnterLabSpace={() => {
+            closeGroupDialog();
+            navigate('/workspace');
+          }}
+          onClose={closeGroupDialog}
+        />
+      )}
     </main>
   );
 }

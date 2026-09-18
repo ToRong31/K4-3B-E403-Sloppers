@@ -31,7 +31,7 @@ function createSlots(codes) {
   return codes.map((code, index) => ({ id: `invite-slot-${index + 1}`, code }));
 }
 
-export function LeaderGroupDialog({ directory, initialGroupName, labTitle, leaderCode, onClose, onCreated, open }) {
+export function LeaderGroupDialog({ directory, initialGroupName, labTitle, leaderCode, onClose, onCreated, onEnterLabSpace, open }) {
   const dialogRef = useRef(null);
   const slotSequence = useRef(4);
   const [groupName, setGroupName] = useState(initialGroupName);
@@ -189,7 +189,7 @@ export function LeaderGroupDialog({ directory, initialGroupName, labTitle, leade
             ))}
           </div>
           <div className="leader-setup-notice">Các trạng thái trên chỉ phục vụ demo UI. Backend và realtime sẽ là nguồn xác nhận cuối cùng.</div>
-          <footer className="group-dialog-actions"><button className="primary-button" type="button" onClick={onClose}>Vào LabSpace →</button></footer>
+          <footer className="group-dialog-actions"><button className="primary-button" type="button" onClick={onEnterLabSpace ?? onClose}>Vào LabSpace →</button></footer>
         </section>
       )}
     </dialog>
