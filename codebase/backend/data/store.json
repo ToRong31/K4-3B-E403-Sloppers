@@ -368,6 +368,8 @@
     {
       "id": "msg-init-1",
       "groupId": "group-sloppers",
+      "senderId": "user-leader-trong",
+      "senderCode": "2A202602765",
       "author": "Phạm Hoàng Trọng",
       "shortName": "Trọng",
       "initial": "T",
@@ -380,6 +382,8 @@
     {
       "id": "msg-init-2",
       "groupId": "group-sloppers",
+      "senderId": "user-member-trang",
+      "senderCode": "2A202602678",
       "author": "Lê Thị Thùy Trang",
       "shortName": "Trang",
       "initial": "T",
@@ -392,6 +396,8 @@
     {
       "id": "msg-1789717210411-l1vm",
       "groupId": "group-sloppers",
+      "senderId": "user-member-trang",
+      "senderCode": "2A202602678",
       "author": "Lê Thị Thùy Trang",
       "shortName": "Trang",
       "initial": "T",
@@ -404,6 +410,8 @@
     {
       "id": "msg-1789717592872-5k01",
       "groupId": "group-sloppers",
+      "senderId": "user-member-trang",
+      "senderCode": "2A202602678",
       "author": "Lê Thị Thùy Trang",
       "shortName": "Trang",
       "initial": "T",
@@ -411,12 +419,13 @@
       "isLeader": false,
       "time": "14:46",
       "text": "xin chào nhe",
-      "mine": true,
       "createdAt": "2026-09-18T07:46:32.873456+00:00"
     },
     {
       "id": "msg-1789717629782-8ynr",
       "groupId": "group-sloppers",
+      "senderId": "user-member-trang",
+      "senderCode": "2A202602678",
       "author": "Lê Thị Thùy Trang",
       "shortName": "Trang",
       "initial": "T",
@@ -424,7 +433,6 @@
       "isLeader": false,
       "time": "14:47",
       "text": "oke tôi là Trang",
-      "mine": true,
       "createdAt": "2026-09-18T07:47:09.782476+00:00"
     }
   ]

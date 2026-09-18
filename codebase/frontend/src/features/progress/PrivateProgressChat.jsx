@@ -188,14 +188,15 @@ export function PrivateProgressChat({ snapshot, user, isMock }) {
     const newMsg = {
       id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
       groupId: snapshot.group?.id || 'group-sloppers',
-      author: user.displayName || user.shortName,
+      senderId: user.id,
+      senderCode: user.accountId,
+      author: user.displayName || user.name || user.shortName,
       shortName: user.shortName,
-      initial: (user.shortName || user.displayName)?.[0]?.toUpperCase() || 'T',
+      initial: (user.shortName || user.displayName || user.name)?.[0]?.toUpperCase() || 'T',
       role: user.roleLabel || 'Thành viên',
       isLeader: user.role === 'leader',
       time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
       text,
-      mine: true,
     };
 
     // Optimistically update local message list
@@ -276,11 +277,12 @@ export function PrivateProgressChat({ snapshot, user, isMock }) {
           </div>
           <div className="chat-messages" aria-live="polite">
             {groupChatMessages.map((message) => {
-              const isMine =
-                message.mine ||
-                message.shortName === user.shortName ||
-                message.author === user.displayName ||
-                message.author === user.shortName;
+              const isMine = Boolean(
+                (message.senderCode && message.senderCode === user.accountId) ||
+                (message.senderId && message.senderId === user.id) ||
+                (message.shortName && message.shortName === user.shortName) ||
+                (message.author && (message.author === user.displayName || message.author === user.name || message.author === user.shortName))
+              );
               return (
                 <article className={`chat-msg-row ${isMine ? 'mine' : 'peer'}`} key={message.id}>
                   <span className={`chat-msg-avatar ${message.isLeader ? 'leader' : 'member'}`} aria-hidden="true">

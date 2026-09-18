@@ -107,6 +107,8 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
 
 class GroupChatMessageInput(BaseModel):
     id: str | None = None
+    senderId: str | None = None
+    senderCode: str | None = None
     author: str
     shortName: str | None = None
     initial: str | None = None
@@ -120,42 +122,14 @@ class GroupChatMessageInput(BaseModel):
 @router.get("/groups/current/chat")
 def get_group_chat_history(group_id: str = "group-sloppers") -> list[dict[str, Any]]:
     store = get_json_store()
-    history = store.get_group_chat_messages(group_id)
-    if not history:
-        # Default seed messages
-        history = [
-            {
-                "id": "msg-init-1",
-                "groupId": group_id,
-                "author": "Phạm Hoàng Trọng",
-                "shortName": "Trọng",
-                "initial": "T",
-                "role": "Nhóm trưởng",
-                "isLeader": True,
-                "time": "10:00",
-                "text": "Mọi người kiểm tra lại task và tiêu chí hoàn thành trước khi bắt đầu nhé.",
-            },
-            {
-                "id": "msg-init-2",
-                "groupId": group_id,
-                "author": "Lê Thị Thùy Trang",
-                "shortName": "Trang",
-                "initial": "T",
-                "role": "Frontend · UI/UX",
-                "isLeader": False,
-                "time": "10:05",
-                "text": "Mình đang tiến hành dựng flow tương tác cho mockup rồi nhé.",
-            },
-        ]
-        for m in history:
-            store.add_group_chat_message(m)
-    return history
+    return store.get_group_chat_messages(group_id)
 
 
 @router.post("/groups/current/chat")
 async def post_group_chat_message(payload: GroupChatMessageInput) -> dict[str, Any]:
     store = get_json_store()
     msg_dict = payload.model_dump(exclude_none=True)
+    msg_dict.pop("mine", None)
     if "initial" not in msg_dict:
         msg_dict["initial"] = (payload.shortName or payload.author)[0].upper()
     if "time" not in msg_dict:
