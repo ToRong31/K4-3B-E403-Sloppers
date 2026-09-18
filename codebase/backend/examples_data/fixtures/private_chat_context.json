@@ -1,0 +1,22 @@
+{
+  "thread_id": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
+  "user_id": "11111111-1111-4111-8111-111111111111",
+  "group_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "lab_id": "K4-L3B-DAY05-06-MINI-HACKATHON",
+  "active_task_id": "cccccccc-cccc-4ccc-8ccc-ccccccccccc1",
+  "summary": "Người dùng đang hỏi về task chuẩn bị golden set cho CP3.",
+  "recent_messages": [
+    {
+      "message_id": "ffffffff-ffff-4fff-8fff-fffffffffff1",
+      "role": "user",
+      "content": "Task này cần làm gì?",
+      "reference_ids": []
+    },
+    {
+      "message_id": "ffffffff-ffff-4fff-8fff-fffffffffff2",
+      "role": "assistant",
+      "content": "Bạn cần tạo ít nhất 20 test case, mỗi case có input và expected result.",
+      "reference_ids": ["lab://K4-L3B-DAY05-06/v1/cp3/item-1"]
+    }
+  ]
+}

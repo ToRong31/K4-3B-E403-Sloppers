@@ -1,0 +1,15 @@
+{
+  "alert_id": "99999999-9999-4999-8999-999999999999",
+  "group_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "checkpoint_id": "cp3",
+  "fingerprint": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa:cp3:checkpoint_at_risk",
+  "severity": "warning",
+  "reason": "checkpoint_at_risk",
+  "incomplete_task_ids": [
+    "cccccccc-cccc-4ccc-8ccc-ccccccccccc2",
+    "cccccccc-cccc-4ccc-8ccc-ccccccccccc3"
+  ],
+  "first_detected_at": "2026-09-18T10:00:00+07:00",
+  "last_detected_at": "2026-09-18T10:00:00+07:00",
+  "status": "open"
+}

@@ -1,0 +1,35 @@
+{
+  "group_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "lab_id": "K4-L3B-DAY05-06-MINI-HACKATHON",
+  "lab_session_id": "session-2026-09-18",
+  "name": "Sloppers",
+  "members": [
+    {
+      "member_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Dương",
+      "skills": [
+        {"name": "AI", "source": "self_declared"},
+        {"name": "Evaluation", "source": "self_declared"}
+      ],
+      "available_effort": 4
+    },
+    {
+      "member_id": "22222222-2222-4222-8222-222222222222",
+      "name": "Dũng",
+      "skills": [
+        {"name": "Backend", "source": "self_declared"},
+        {"name": "Testing", "source": "self_declared"}
+      ],
+      "available_effort": 3
+    },
+    {
+      "member_id": "33333333-3333-4333-8333-333333333333",
+      "name": "Trang",
+      "skills": [
+        {"name": "Research", "source": "self_declared"},
+        {"name": "Presentation", "source": "self_declared"}
+      ],
+      "available_effort": 2
+    }
+  ]
+}

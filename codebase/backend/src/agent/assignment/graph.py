@@ -1,12 +1,12 @@
 from langgraph.graph import END, START, StateGraph
 
-from src.agent.nodes import (
+from src.agent.assignment.nodes import (
     assign_tasks,
     request_clarification,
     route_after_validation,
     validate_input,
 )
-from src.agent.state import AssignmentState
+from src.agent.assignment.state import AssignmentState
 
 
 def build_assignment_graph():
@@ -18,10 +18,7 @@ def build_assignment_graph():
     builder.add_conditional_edges(
         "validate_input",
         route_after_validation,
-        {
-            "clarify": "request_clarification",
-            "assign": "assign_tasks",
-        },
+        {"clarify": "request_clarification", "assign": "assign_tasks"},
     )
     builder.add_edge("request_clarification", END)
     builder.add_edge("assign_tasks", END)

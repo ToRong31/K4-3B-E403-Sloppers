@@ -1,4 +1,4 @@
-from src.agent.state import AssignmentState
+from src.agent.assignment.state import AssignmentState
 from src.agent.tools import skill_match_score
 from src.models.schemas import DraftStatus
 

@@ -1,4 +1,4 @@
-from src.agent.nodes import assign_tasks, validate_input
+from src.agent.assignment.nodes import assign_tasks, validate_input
 from src.models.schemas import DraftStatus
 
 

@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from src.agent.graph import assignment_graph
+from src.agent.assignment.graph import assignment_graph
 
 DATASET_PATH = Path(__file__).parents[1] / "datasets" / "assignment_golden.jsonl"
 

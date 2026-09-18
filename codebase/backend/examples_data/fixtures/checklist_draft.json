@@ -1,0 +1,62 @@
+{
+  "checklist_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+  "lab_id": "K4-L3B-DAY05-06-MINI-HACKATHON",
+  "lab_version": 1,
+  "status": "pending_review",
+  "checkpoints": [
+    {
+      "checkpoint_id": "cp3",
+      "checkpoint_order": 3,
+      "tasks": [
+        {
+          "id": "cccccccc-cccc-4ccc-8ccc-ccccccccccc1",
+          "task_key": "cp3-task-01",
+          "checkpoint_id": "cp3",
+          "task_order": 1,
+          "title": "Chuẩn bị golden set",
+          "description": "Tạo bộ câu thử dùng để đo chất lượng prototype.",
+          "deliverable": "eval/datasets/assignment_golden.jsonl",
+          "completion_criteria": [
+            "Có ít nhất 20 test case",
+            "Mỗi case có input và expected result"
+          ],
+          "required_skills": ["AI", "Evaluation"],
+          "estimated_effort": "medium",
+          "depends_on": [],
+          "reference_ids": ["lab://K4-L3B-DAY05-06/v1/cp3/item-1"],
+          "status": "proposed"
+        },
+        {
+          "id": "cccccccc-cccc-4ccc-8ccc-ccccccccccc2",
+          "task_key": "cp3-task-02",
+          "checkpoint_id": "cp3",
+          "task_order": 2,
+          "title": "Chạy eval và tổng hợp số đo",
+          "description": "Chạy toàn bộ golden set và lưu số case đạt chuẩn.",
+          "deliverable": "eval/results/cp3-result.json",
+          "completion_criteria": ["Kết quả ghi đủ tổng số case, pass và fail"],
+          "required_skills": ["Testing", "Evaluation"],
+          "estimated_effort": "medium",
+          "depends_on": ["cp3-task-01"],
+          "reference_ids": ["lab://K4-L3B-DAY05-06/v1/cp3/item-1"],
+          "status": "proposed"
+        },
+        {
+          "id": "cccccccc-cccc-4ccc-8ccc-ccccccccccc3",
+          "task_key": "cp3-task-03",
+          "checkpoint_id": "cp3",
+          "task_order": 3,
+          "title": "Quay video thao tác 30 giây",
+          "description": "Quay một lượt thao tác thật trên prototype.",
+          "deliverable": "presentation/cp3-demo.mp4",
+          "completion_criteria": ["Video thấy rõ input và kết quả sản phẩm"],
+          "required_skills": ["Presentation"],
+          "estimated_effort": "small",
+          "depends_on": ["cp3-task-02"],
+          "reference_ids": ["lab://K4-L3B-DAY05-06/v1/cp3/item-2"],
+          "status": "proposed"
+        }
+      ]
+    }
+  ]
+}

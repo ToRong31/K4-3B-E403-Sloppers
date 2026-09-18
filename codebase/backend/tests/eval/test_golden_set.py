@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from src.agent.graph import assignment_graph
+from src.agent.assignment.graph import assignment_graph
 
 DATASET_PATH = Path(__file__).parents[2] / "eval" / "datasets" / "assignment_golden.jsonl"
 
