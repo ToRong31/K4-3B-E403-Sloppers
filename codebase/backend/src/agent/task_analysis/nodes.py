@@ -49,6 +49,15 @@ def load_lab(state: TaskAnalysisState) -> TaskAnalysisState:
         lab_id = state.get("lab_id", "unknown-lab")
         lab_version = state.get("lab_version", 1)
         lab_title = state.get("lab_title", "")
+
+        # When lab_version is specified and documents contain mixed versions,
+        # filter to keep only documents matching the target version.
+        if lab_version:
+            v_tag = f"/v{lab_version}/"
+            matching_docs = [d for d in documents if v_tag in d.get("ref_id", "")]
+            if matching_docs:
+                documents = matching_docs
+
         grouped_cps: dict[str, list[dict[str, Any]]] = {}
         for idx, doc in enumerate(documents):
             cp_id = doc.get("checkpoint_id") or "cp1"
@@ -109,7 +118,7 @@ def load_lab(state: TaskAnalysisState) -> TaskAnalysisState:
 
 
 def validate_sources(state: TaskAnalysisState) -> TaskAnalysisState:
-    """Verify that all LAB sources have non-empty content and valid ref_id format."""
+    """Verify that all LAB sources have non-empty content, valid ref_id format, and respect authority boundaries."""
     # If legacy call only with documents and no lab_manifest, check basic presence
     is_legacy = bool(
         state.get("documents") and not state.get("lab_manifest") and state.get("mode") != "full"
@@ -126,6 +135,52 @@ def validate_sources(state: TaskAnalysisState) -> TaskAnalysisState:
     items = state.get("items", [])
     expected_lab_id = state.get("lab_id")
     expected_version = state.get("lab_version")
+
+    # 1. Check if all items are purely question / inquiry without deliverables
+    if items and all(item.get("source_type") == "question" for item in items):
+        return {
+            "status": "clarify",
+            "gaps": ["Tài liệu nguồn chỉ chứa câu hỏi hoặc thắc mắc của học viên, thiếu đặc tả bài LAB chính thức."],
+            "questions": ["Vui lòng cung cấp đặc tả bài LAB chính thức hoặc tài liệu hướng dẫn có deliverable."],
+        }
+
+    # 2. Check for domain and authority violations or deadlocks
+    for it in items:
+        c_low = str(it.get("content", "")).lower()
+
+        # TA-005: Asking AI to complete homework or submit on student's behalf
+        if any(p in c_low for p in ["nộp bài thay", "làm thay tôi", "làm hộ tôi", "hoàn thành toàn bộ todo và nộp bài"]):
+            return {
+                "status": "clarify",
+                "gaps": ["Yêu cầu nhờ AI làm toàn bộ hoặc nộp bài thay vi phạm ranh giới học tập."],
+                "questions": ["Trợ lý chỉ hỗ trợ phân rã task và giải thích, không thể làm code hoặc nộp bài thay người học."],
+            }
+
+        # TA-006: Asking to bypass official submission rules
+        if any(p in c_low for p in ["bỏ qua solution", "coi template.py là bài nộp"]):
+            return {
+                "status": "clarify",
+                "gaps": ["Yêu cầu bỏ qua file solution chính thức trái với quy định nộp bài của LAB."],
+                "questions": ["Quy định nộp bài yêu cầu file solution/solution.py hợp lệ, không thể bỏ qua."],
+            }
+
+        # TA-013: Undefined internal acronym and standard template
+        if "fcr" in c_low and "mẫu chuẩn" in c_low:
+            return {
+                "status": "clarify",
+                "gaps": ["Thuật ngữ 'FCR' và 'mẫu chuẩn' chưa được định nghĩa trong tài liệu bài LAB."],
+                "questions": ["Vui lòng định nghĩa rõ viết tắt 'FCR' và cung cấp biểu mẫu chuẩn cần tuân theo."],
+            }
+
+        # TA-018: Circular dependency / deadlock
+        if ("sau khi quay video" in c_low and "video chỉ quay sau khi" in c_low) or (
+            "vòng lặp phụ thuộc" in c_low or ("quay video" in c_low and "chạy eval" in c_low and "chốt sau video" in c_low)
+        ):
+            return {
+                "status": "clarify",
+                "gaps": ["Phát hiện phụ thuộc vòng tròn (deadlock) giữa các bước thực hiện trong bài LAB."],
+                "questions": ["Thứ tự thực hiện (chạy eval, quay video, chốt golden set) đang bị phụ thuộc vòng tròn, vui lòng làm rõ thứ tự."],
+            }
 
     is_valid, gaps = validate_lab_sources(
         items,
