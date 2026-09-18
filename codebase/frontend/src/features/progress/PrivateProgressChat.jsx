@@ -48,7 +48,7 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
   const [isResponding, setIsResponding] = useState(false);
   const [groupInput, setGroupInput] = useState('');
   const [groupChatMessages, setGroupChatMessages] = useState(() =>
-    createGroupChatDemoMessages({ members: snapshot.members, tasks: snapshot.tasks, user }),
+    isMock ? createGroupChatDemoMessages({ members: snapshot.members, tasks: snapshot.tasks, user }) : [],
   );
   const inputRef = useRef(null);
   const groupInputRef = useRef(null);

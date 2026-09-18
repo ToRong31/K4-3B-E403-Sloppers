@@ -115,7 +115,7 @@ def seed(app, *, with_group=True):
             )
         )
         session.commit()
-        return {"group_id": group.id, "invitation_id": invitation.id}
+        return {"group_id": group.id, "invitation_id": invitation.id, "task_id": task.id}
 
 
 def login(client: TestClient, email: str):
@@ -159,6 +159,9 @@ def test_leader_creates_group_and_invitations_atomically():
         assert len(created.json()["invitations"]) == 1
 
         assert login(member_client, "member@test.local").status_code == 200
+        leader_snapshot = leader_client.get("/api/v1/groups/current")
+        assert leader_snapshot.status_code == 200
+        assert leader_snapshot.json()["tasks"] == []
         snapshot = member_client.get("/api/v1/groups/current")
         assert snapshot.status_code == 200
         member = next(
@@ -231,7 +234,8 @@ def test_member_cannot_mutate_before_approved_plan():
         assert login(client, "member@test.local").status_code == 200
         assert client.post(f"/api/v1/invitations/{ids['invitation_id']}/accept").status_code == 200
         snapshot = client.get("/api/v1/groups/current").json()
-        task_id = snapshot["tasks"][0]["id"]
+        assert snapshot["tasks"] == []
+        task_id = str(ids["task_id"])
         response = client.patch(
             f"/api/v1/groups/current/tasks/{task_id}",
             json={"status": "done"},

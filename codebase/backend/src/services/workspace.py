@@ -94,28 +94,29 @@ class WorkspaceService:
         progress_by_task = {item.task_id: item for item in plan.task_progress} if plan else {}
         users_by_id = {member.user_id: member.user for member in group.members}
         tasks = []
-        for task in group.lab.canonical_tasks:
-            progress = progress_by_task.get(task.id)
-            owner = users_by_id.get(progress.owner_id) if progress else None
-            tasks.append(
-                {
-                    "id": str(task.id),
-                    "task_key": task.task_key,
-                    "category": task.category,
-                    "title": task.title,
-                    "description": task.description,
-                    "deliverable": task.deliverable,
-                    "required_skills": task.required_skills,
-                    "checkpoint_id": task.checkpoint_id,
-                    "depends_on": task.depends_on,
-                    "reference_ids": task.reference_ids,
-                    "owner": owner.short_name if owner else "Chưa phân công",
-                    "owner_id": str(owner.id) if owner else None,
-                    "status": progress.status if progress else "todo",
-                    "blocked_reason": progress.blocked_reason if progress else None,
-                    "version": progress.version if progress else 0,
-                }
-            )
+        if plan:
+            for task in group.lab.canonical_tasks:
+                progress = progress_by_task.get(task.id)
+                owner = users_by_id.get(progress.owner_id) if progress else None
+                tasks.append(
+                    {
+                        "id": str(task.id),
+                        "task_key": task.task_key,
+                        "category": task.category,
+                        "title": task.title,
+                        "description": task.description,
+                        "deliverable": task.deliverable,
+                        "required_skills": task.required_skills,
+                        "checkpoint_id": task.checkpoint_id,
+                        "depends_on": task.depends_on,
+                        "reference_ids": task.reference_ids,
+                        "owner": owner.short_name if owner else "Chưa phân công",
+                        "owner_id": str(owner.id) if owner else None,
+                        "status": progress.status if progress else "todo",
+                        "blocked_reason": progress.blocked_reason if progress else None,
+                        "version": progress.version if progress else 0,
+                    }
+                )
         return {
             "source": "postgres",
             "version": group.version,
