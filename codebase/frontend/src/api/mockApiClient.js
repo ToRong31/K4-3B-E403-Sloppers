@@ -6,7 +6,12 @@ const wait = (value, delay = 180) =>
   new Promise((resolve) => window.setTimeout(() => resolve(structuredClone(value)), delay));
 
 function createAssignmentDraft({ members, tasks }) {
-  const eligibleMembers = members.filter((member) => member.skills?.length);
+  // Pending invitees must not receive work before they accept the invitation.
+  // This mirrors the backend workflow and keeps the mock path honest during
+  // full-group approval tests.
+  const eligibleMembers = members.filter(
+    (member) => member.status !== 'pending' && member.status !== 'declined' && member.skills?.length,
+  );
   if (!eligibleMembers.length) {
     return { status: 'clarify', assignments: [], gaps: ['Ít nhất một thành viên cần khai báo kỹ năng trước khi phân công.'] };
   }

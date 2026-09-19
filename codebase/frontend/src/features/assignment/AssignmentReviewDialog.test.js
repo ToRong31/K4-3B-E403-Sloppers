@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { buildDraftAssignments, calculateWorkload } from './AssignmentReviewDialog';
+import { buildDraftAssignments, calculateWorkload, isAssignmentDraftApprovable } from './AssignmentReviewDialog';
 
 const tasks = [
   { id: 't1', title: 'Evidence', category: 'EVIDENCE', owner: 'Trọng' },
@@ -41,5 +41,29 @@ describe('AI assignment review UI helpers', () => {
       category: 'PREPARE',
       taskId: 'canonical-1',
     });
+  });
+
+  it('allows a READY draft even when the hydrated task list is incomplete', () => {
+    expect(isAssignmentDraftApprovable({
+      draftLoading: false,
+      draftStatus: 'ready',
+      draftError: '',
+      assignments: [{ taskId: 'canonical-1', owner: 'Trọng' }],
+    })).toBe(true);
+  });
+
+  it('keeps approval disabled until the draft is ready and non-empty', () => {
+    expect(isAssignmentDraftApprovable({
+      draftLoading: false,
+      draftStatus: 'clarify',
+      draftError: '',
+      assignments: [{ taskId: 'canonical-1', owner: 'Trọng' }],
+    })).toBe(false);
+    expect(isAssignmentDraftApprovable({
+      draftLoading: false,
+      draftStatus: 'ready',
+      draftError: '',
+      assignments: [],
+    })).toBe(false);
   });
 });
