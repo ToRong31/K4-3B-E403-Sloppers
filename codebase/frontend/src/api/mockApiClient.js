@@ -6,6 +6,20 @@ const wait = (value, delay = 180) =>
   new Promise((resolve) => window.setTimeout(() => resolve(structuredClone(value)), delay));
 
 function createAssignmentDraft({ members, tasks }) {
+  const pendingMembers = members.filter((member) => member.status === 'pending');
+  const incompleteProfiles = members.filter(
+    (member) => member.status === 'accepted' && member.profileReady === false,
+  );
+  if (pendingMembers.length || incompleteProfiles.length) {
+    const gaps = [];
+    if (pendingMembers.length) {
+      gaps.push(`Các thành viên chưa phản hồi lời mời: ${pendingMembers.map((member) => member.name).join(', ')}`);
+    }
+    if (incompleteProfiles.length) {
+      gaps.push(`Các thành viên chưa hoàn tất profile: ${incompleteProfiles.map((member) => member.name).join(', ')}`);
+    }
+    return { status: 'clarify', assignments: [], gaps };
+  }
   // Pending invitees must not receive work before they accept the invitation.
   // This mirrors the backend workflow and keeps the mock path honest during
   // full-group approval tests.

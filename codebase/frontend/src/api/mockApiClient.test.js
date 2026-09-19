@@ -62,5 +62,19 @@ describe('mockApiClient', () => {
       assignments: [{ task_id: 'task-1', owner_id: 'ai', matched_skills: ['AI'], confidence: 'high' }],
     });
   });
+
+  it('keeps assignment approval in clarify while an invite is pending', async () => {
+    const client = createMockApiClient();
+    const draft = await client.assignTasks({
+      members: [
+        { id: 'leader', name: 'Leader', status: 'accepted', profileReady: true, skills: ['AI'] },
+        { id: 'pending', name: 'Pending', status: 'pending', profileReady: false, skills: ['AI'] },
+      ],
+      tasks: [{ id: 'task-1', title: 'AI task', deliverable: 'result' }],
+    });
+
+    expect(draft).toMatchObject({ status: 'clarify', assignments: [] });
+    expect(draft.gaps.join(' ')).toContain('Pending');
+  });
 });
 
