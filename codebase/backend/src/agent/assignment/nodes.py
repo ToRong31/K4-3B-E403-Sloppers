@@ -13,6 +13,29 @@ from src.models.schemas import AssignmentConfidence, AssignmentDraftResponse, Dr
 logger = logging.getLogger(__name__)
 
 
+# Defensive aliases for occasional translated labels from the model. An alias
+# is accepted only when its canonical skill exists in that owner's profile.
+_SKILL_TRANSLATION_ALIASES = {
+    "học máy": "machine learning",
+    "xử lý ngôn ngữ tự nhiên": "nlp",
+    "thị giác máy tính": "computer vision",
+    "phân tích dữ liệu": "data analysis",
+    "kỹ thuật dữ liệu": "data engineering",
+    "kỹ thuật prompt": "prompt engineering",
+    "thiết kế prompt": "prompt engineering",
+    "quản lý sản phẩm": "product management",
+    "phân tích nghiệp vụ": "business analysis",
+    "nghiên cứu người dùng/thị trường": "user/market research",
+    "nghiên cứu người dùng và thị trường": "user/market research",
+    "thiết kế ui/ux": "ui/ux design",
+    "thiết kế đồ họa": "graphic design",
+    "quản lý dự án": "project management",
+    "lãnh đạo nhóm": "team leadership",
+    "dẫn dắt nhóm": "team leadership",
+    "giao tiếp": "communication",
+}
+
+
 def _matched_skills(task_text: str, skills: list[str]) -> list[str]:
     """Return only the self-declared skills explicitly present in the task."""
     normalized_task = task_text.casefold()
@@ -59,7 +82,43 @@ def _validate_llm_draft(
 
     task_ids = [str(task["id"]) for task in state["tasks"]]
     member_by_id = {str(member["id"]): member for member in state["members"]}
-    draft_task_ids = [str(item.task_id) for item in draft.assignments]
+    draft_assignments = list(draft.assignments)
+    draft_task_ids = [str(item.task_id) for item in draft_assignments]
+
+    # Models occasionally copy a long opaque task ID with a few wrong
+    # characters while preserving the exact task order. Repair only that
+    # narrow case: same item count, unique returned IDs, and every unknown ID
+    # occupies the position of the corresponding missing canonical ID.
+    if (
+        len(draft_task_ids) == len(task_ids)
+        and len(set(draft_task_ids)) == len(draft_task_ids)
+        and set(draft_task_ids) != set(task_ids)
+    ):
+        expected_set = set(task_ids)
+        received_set = set(draft_task_ids)
+        missing_ids = expected_set - received_set
+        unknown_indexes = [
+            index for index, task_id in enumerate(draft_task_ids)
+            if task_id not in expected_set
+        ]
+        if (
+            len(missing_ids) == len(unknown_indexes)
+            and all(task_ids[index] in missing_ids for index in unknown_indexes)
+        ):
+            repairs = []
+            for index in unknown_indexes:
+                wrong_id = draft_task_ids[index]
+                correct_id = task_ids[index]
+                draft_assignments[index] = draft_assignments[index].model_copy(
+                    update={"task_id": correct_id}
+                )
+                draft_task_ids[index] = correct_id
+                repairs.append(f"{wrong_id}->{correct_id}")
+            logger.warning(
+                "Repaired copied task IDs in assignment draft | %s",
+                "; ".join(repairs),
+            )
+
     if len(draft_task_ids) != len(task_ids) or set(draft_task_ids) != set(task_ids):
         return None, (
             "task_coverage_mismatch "
@@ -67,7 +126,8 @@ def _validate_llm_draft(
         )
 
     normalized_assignments = []
-    for assignment in draft.assignments:
+    sanitized_skill_details: list[str] = []
+    for assignment in draft_assignments:
         owner = member_by_id.get(str(assignment.owner_id))
         if owner is None:
             return None, (
@@ -91,30 +151,68 @@ def _validate_llm_draft(
                 if skill.strip()
             )
         )
-        unknown_skills = set(returned_skill_keys) - declared_skills.keys()
-        if unknown_skills:
-            return None, (
-                f"undeclared_skills task_id={assignment.task_id!s} "
-                f"owner_id={assignment.owner_id!s} "
-                f"skills={sorted(unknown_skills)!r}"
-            )
-        if not assignment.matched_skills and assignment.confidence != AssignmentConfidence.LOW:
-            return None, (
-                f"unmatched_assignment_not_low_confidence task_id={assignment.task_id!s} "
-                f"confidence={assignment.confidence.value}"
-            )
+        resolved_skill_keys = [
+            key
+            if key in declared_skills
+            else _SKILL_TRANSLATION_ALIASES.get(key)
+            for key in returned_skill_keys
+        ]
+        valid_skill_keys = list(
+            dict.fromkeys(key for key in resolved_skill_keys if key in declared_skills)
+        )
+        unknown_skills = sorted(
+            returned_skill_keys[index]
+            for index, key in enumerate(resolved_skill_keys)
+            if key not in declared_skills
+        )
 
         item = assignment.model_dump(mode="json")
         item["matched_skills"] = [
-            declared_skills[key] for key in returned_skill_keys
+            declared_skills[key] for key in valid_skill_keys
         ]
+        if unknown_skills:
+            sanitized_skill_details.append(
+                f"task_id={assignment.task_id!s} owner_id={assignment.owner_id!s} "
+                f"skills={unknown_skills!r}"
+            )
+
+        # Model-inferred skill labels are useful hints, but the member's
+        # self-declared profile remains the source of truth.  Sanitise those
+        # labels instead of discarding an otherwise complete assignment draft.
+        if not valid_skill_keys:
+            item["confidence"] = AssignmentConfidence.LOW.value
+            item["reason"] = (
+                "Chưa có skill tự khai khớp trực tiếp; đề xuất owner cần "
+                "Nhóm trưởng kiểm tra."
+            )
+        elif unknown_skills:
+            if assignment.confidence == AssignmentConfidence.HIGH:
+                item["confidence"] = AssignmentConfidence.MEDIUM.value
+            item["reason"] = (
+                "Skill tự khai được xác thực: "
+                f"{', '.join(item['matched_skills'])}. "
+                "Đã bỏ qua skill AI suy diễn; Nhóm trưởng cần kiểm tra."
+            )
         normalized_assignments.append(item)
+
+    gaps = list(draft.gaps)
+    if sanitized_skill_details:
+        logger.warning(
+            "Sanitized undeclared skills from assignment draft | %s",
+            "; ".join(sanitized_skill_details),
+        )
+        skill_gap = (
+            "Một số skill do AI suy diễn không có trong hồ sơ tự khai đã được "
+            "bỏ qua; Nhóm trưởng cần kiểm tra các task confidence thấp/trung bình."
+        )
+        if skill_gap not in gaps:
+            gaps.append(skill_gap)
 
     return (
         {
             "status": DraftStatus.READY,
             "assignments": normalized_assignments,
-            "gaps": draft.gaps,
+            "gaps": gaps,
         },
         None,
     )

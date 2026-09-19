@@ -3,7 +3,7 @@ import { createHttpApiClient } from './httpApiClient';
 import { createMockApiClient } from './mockApiClient';
 
 const httpApiClient = createHttpApiClient({ baseUrl: config.apiBaseUrl });
-const mockApiClient = createMockApiClient();
+const mockApiClient = createMockApiClient({ baseUrl: config.apiBaseUrl });
 
 // The workspace fixture is intentionally kept in mock mode until the group and
 // auth APIs exist. Task analysis and assignment generation are backed by FastAPI & LLM,
@@ -15,4 +15,3 @@ export const apiClient = config.isMock
       analyzeLab: httpApiClient.analyzeLab,
     }
   : httpApiClient;
-

@@ -91,7 +91,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
     setAnalyzeLog(`1/4: Nạp dữ liệu bài LAB [${currentLabId}] & kiểm tra ref_id…`);
 
     const steps = [
-      { at: 2000, pct: 28, msg: '2/4: Đang gọi mô hình gpt-4o-mini qua LangGraph task_analysis…' },
+      { at: 2000, pct: 28, msg: '2/4: Đang gọi mô hình gpt-5.6-luna qua LangGraph task_analysis…' },
       { at: 6000, pct: 55, msg: '3/4: LLM đang bóc tách items & xác định deliverables…' },
       { at: 12000, pct: 75, msg: '3/4: LLM đang trích xuất completion_criteria & reference_ids…' },
       { at: 18000, pct: 88, msg: '3/4: LLM đang tối ưu hóa dependency graph…' },
@@ -155,7 +155,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
           setWorkspaceData((current) => ({
             ...current,
             tasks: analyzedTasks,
-            checklistSource: `${draft?.lab_id ?? currentLabId} · AI Task Analysis (gpt-4o-mini)`,
+            checklistSource: `${draft?.lab_id ?? currentLabId} · AI Task Analysis (gpt-5.6-luna)`,
           }));
           setIsAnalyzing(false);
         }, 400);
