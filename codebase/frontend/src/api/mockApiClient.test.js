@@ -46,6 +46,15 @@ describe('mockApiClient', () => {
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
+  it('does not reuse another group chat when a new group is opened', async () => {
+    const client = createMockApiClient();
+    const oldMessages = await client.getGroupChatMessages('group-sloppers');
+    const newMessages = await client.getGroupChatMessages('mock-new-group');
+
+    expect(oldMessages).toHaveLength(2);
+    expect(newMessages).toEqual([]);
+  });
+
   it('creates a skill-based draft through the assignTasks client operation', async () => {
     const client = createMockApiClient();
     const draft = await client.assignTasks({

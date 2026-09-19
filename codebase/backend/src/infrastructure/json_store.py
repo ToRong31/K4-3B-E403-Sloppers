@@ -226,9 +226,7 @@ class JsonStore:
         data = self.read_all()
         messages = data.get("group_chat_messages", [])
         if group_id:
-            filtered = [m for m in messages if m.get("groupId") == group_id]
-            if filtered:
-                return filtered
+            return [m for m in messages if m.get("groupId") == group_id]
         return messages
 
     def add_group_chat_message(self, message: dict[str, Any]) -> dict[str, Any]:

@@ -155,6 +155,9 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
     const unsubscribe = realtimeClient.subscribe((event) => {
       if (event.type === 'chat.message_sent' && event.payload) {
         const incoming = event.payload;
+        const currentGroupId = String(snapshot?.group?.id ?? '');
+        const eventGroupId = String(event.scope_id ?? incoming.groupId ?? '');
+        if (!currentGroupId || eventGroupId !== currentGroupId) return;
         setGroupChatMessages((prev) => {
           if (prev.some((m) => m.id === incoming.id)) return prev;
           const isDuplicate = prev.some(
@@ -169,7 +172,7 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
       }
     });
     return () => unsubscribe();
-  }, [realtimeClient]);
+  }, [realtimeClient, snapshot?.group?.id]);
 
   useEffect(() => {
     document.body.classList.toggle('chat-sidebar-open', open);

@@ -386,6 +386,24 @@ def test_group_chat_message_and_attachment_persisted_to_db() -> None:
     assert any(m.get("id") == "msg-test-1001" and m.get("file", {}).get("name") == "bao_cao_lab.pdf" for m in messages)
 
 
+def test_group_chat_history_is_scoped_to_requested_group() -> None:
+    with make_client() as client:
+        for group_id, message_id in (("group-a", "msg-group-a"), ("group-b", "msg-group-b")):
+            response = client.post(
+                "/api/v1/groups/current/chat",
+                json={"id": message_id, "groupId": group_id, "author": group_id, "text": message_id},
+            )
+            assert response.status_code == 200
+
+        group_a = client.get("/api/v1/groups/current/chat?groupId=group-a")
+        group_b = client.get("/api/v1/groups/current/chat?groupId=group-b")
+        new_group = client.get("/api/v1/groups/current/chat?groupId=group-new")
+
+        assert [item["id"] for item in group_a.json()] == ["msg-group-a"]
+        assert [item["id"] for item in group_b.json()] == ["msg-group-b"]
+        assert new_group.json() == []
+
+
 def test_file_upload_and_list_endpoints() -> None:
     client = make_client()
     upload_res = client.post(

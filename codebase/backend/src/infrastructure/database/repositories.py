@@ -374,13 +374,6 @@ class WorkspaceRepository:
         records = list(
             self.session.scalars(query.order_by(GroupChatMessageRecord.created_at.asc()))
         )
-        if not records and target_ids:
-            # If no messages found for specific target IDs, fallback to returning all messages
-            records = list(
-                self.session.scalars(
-                    select(GroupChatMessageRecord).order_by(GroupChatMessageRecord.created_at.asc())
-                )
-            )
         result = []
         for r in records:
             item: dict[str, Any] = {

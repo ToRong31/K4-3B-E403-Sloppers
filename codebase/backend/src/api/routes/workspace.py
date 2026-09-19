@@ -363,9 +363,15 @@ def get_current_group_chat(
         if group.code:
             target_ids.add(group.code)
             target_ids.add(group.code.lower())
+            # Keep the original demo chat visible only for its own demo group.
+            if group.code.upper() == "SLOP-3B":
+                target_ids.add("group-sloppers")
 
     db_messages = repo.list_group_chat_messages(group_ids=target_ids if target_ids else None)
-    if db_messages:
+    if target_ids:
+        if db_messages:
+            return db_messages
+    elif db_messages:
         return db_messages
 
     # Check json store for matching target_ids
@@ -374,7 +380,9 @@ def get_current_group_chat(
         if store_msgs:
             return store_msgs
 
-    return get_json_store().get_group_chat_messages()
+    # A group with no messages must render an empty channel. Never fall back to
+    # another group's history just because the requested group is new.
+    return [] if target_ids else get_json_store().get_group_chat_messages()
 
 
 @router.post("/groups/current/chat")
