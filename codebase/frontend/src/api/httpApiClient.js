@@ -1,3 +1,5 @@
+const AI_TIMEOUT_MS = 180000;
+
 async function request(baseUrl, path, options = {}) {
   const { timeoutMs = 30000, ...fetchOptions } = options;
   const controller = new AbortController();
@@ -16,7 +18,7 @@ async function request(baseUrl, path, options = {}) {
     });
   } catch (error) {
     if (error.name === 'AbortError') {
-      throw new Error('Không thể kết nối API. Hãy kiểm tra backend đang chạy ở cổng 8000.');
+      throw new Error('API xử lý quá thời gian cho phép. Vui lòng thử lại.');
     }
     throw error;
   } finally {
@@ -50,6 +52,7 @@ export function createHttpApiClient({ baseUrl }) {
       request(baseUrl, '/labs/analyze', {
         method: 'POST',
         body: JSON.stringify(payload),
+        timeoutMs: AI_TIMEOUT_MS,
       }),
     getWorkspaceSnapshot: () => request(baseUrl, '/groups/current'),
     getUserDirectory: () => request(baseUrl, '/users/directory'),
@@ -81,7 +84,10 @@ export function createHttpApiClient({ baseUrl }) {
       request(baseUrl, '/groups/current/plan/approve', {
         method: 'POST',
       }),
-    createGroupAssignmentDraft: (groupId) => request(baseUrl, `/groups/${groupId}/assignment-drafts`, { method: 'POST' }),
+    createGroupAssignmentDraft: (groupId) => request(baseUrl, `/groups/${groupId}/assignment-drafts`, {
+      method: 'POST',
+      timeoutMs: AI_TIMEOUT_MS,
+    }),
     overrideAssignment: (draftId, taskId, ownerId) => request(baseUrl, `/assignment-drafts/${draftId}/items/${taskId}`, {
       method: 'PATCH', body: JSON.stringify({ owner_id: ownerId }),
     }),
@@ -90,6 +96,7 @@ export function createHttpApiClient({ baseUrl }) {
     assignTasks: (payload) => request(baseUrl, '/assignments/assign_tasks', {
       method: 'POST',
       body: JSON.stringify(payload),
+      timeoutMs: AI_TIMEOUT_MS,
     }),
     getSupportRequests: () => request(baseUrl, '/coach/support-requests'),
     createSupportRequest: (payload) =>
@@ -111,6 +118,7 @@ export function createHttpApiClient({ baseUrl }) {
       request(baseUrl, '/chat', {
         method: 'POST',
         body: JSON.stringify(payload),
+        timeoutMs: AI_TIMEOUT_MS,
       }),
     getAiChatHistory: ({ threadId, userId, groupId } = {}) => {
       const params = new URLSearchParams();
@@ -141,6 +149,7 @@ export function createHttpApiClient({ baseUrl }) {
       request(baseUrl, '/assignments/draft', {
         method: 'POST',
         body: JSON.stringify(payload),
+        timeoutMs: AI_TIMEOUT_MS,
       }),
   };
 }

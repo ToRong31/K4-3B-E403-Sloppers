@@ -64,6 +64,7 @@ export function isAssignmentDraftApprovable({ draftLoading, draftStatus, draftEr
 export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerateDraft, open, tasks }) {
   const dialogRef = useRef(null);
   const latestTasksRef = useRef(tasks);
+  const latestMembersRef = useRef(members);
   const [phase, setPhase] = useState('analyzing');
   const [progress, setProgress] = useState(0);
   const [logs, setLogs] = useState([]);
@@ -73,6 +74,7 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
   const [gaps, setGaps] = useState([]);
   const [draftError, setDraftError] = useState('');
   const [draftLoading, setDraftLoading] = useState(false);
+  const [approving, setApproving] = useState(false);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -86,6 +88,10 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
   }, [tasks]);
 
   useEffect(() => {
+    latestMembersRef.current = members;
+  }, [members]);
+
+  useEffect(() => {
     if (!open) return undefined;
     setPhase('analyzing');
     setProgress(0);
@@ -95,6 +101,7 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
     setGaps([]);
     setDraftError('');
     setDraftLoading(true);
+    setApproving(false);
     return undefined;
   }, [draftVersion, open]);
 
@@ -107,7 +114,11 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
         if (!active) return;
         setDraftStatus(draft.status);
         setGaps(draft.gaps ?? []);
-        setAssignments(buildDraftAssignments(latestTasksRef.current, draft.assignments, members));
+        setAssignments(buildDraftAssignments(
+          latestTasksRef.current,
+          draft.assignments,
+          latestMembersRef.current,
+        ));
         setDraftLoading(false);
         setProgress(100);
         setLogs((current) => [
@@ -128,7 +139,7 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
     return () => {
       active = false;
     };
-  }, [draftVersion, members, onGenerateDraft, open]);
+  }, [draftVersion, onGenerateDraft, open]);
 
   useEffect(() => {
     if (!open || phase !== 'analyzing') return undefined;
@@ -174,12 +185,17 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
   };
 
   const approve = async () => {
+    if (approving) return;
+    setApproving(true);
+    setDraftError('');
     try {
       await onApprove(assignments);
       setPhase('approved');
     } catch (error) {
       setDraftError(error.message ?? 'Không thể phê duyệt kế hoạch.');
       setPhase('review');
+    } finally {
+      setApproving(false);
     }
   };
 
@@ -254,7 +270,7 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
           <h3>Xác nhận phê duyệt kế hoạch?</h3>
           <p>{assignments.length} task sẽ được cập nhật owner trên board sau khi bạn xác nhận. Bản nháp AI chưa tự thay đổi task.</p>
           <div className="assignment-confirm-list">{assignments.map((item) => <span key={item.taskId}><b>{item.title}</b><em>{item.owner}</em></span>)}</div>
-          <footer className="group-dialog-actions"><button className="secondary-button" type="button" onClick={() => setPhase('review')}>← Quay lại</button><button className="primary-button" type="button" onClick={approve}>✓ Xác nhận phê duyệt</button></footer>
+          <footer className="group-dialog-actions"><button className="secondary-button" type="button" onClick={() => setPhase('review')} disabled={approving}>← Quay lại</button><button className="primary-button" type="button" onClick={approve} disabled={approving}>{approving ? 'Đang phê duyệt…' : '✓ Xác nhận phê duyệt'}</button></footer>
         </section>
       )}
 

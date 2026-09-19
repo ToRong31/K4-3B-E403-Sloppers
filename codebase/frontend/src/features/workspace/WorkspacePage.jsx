@@ -36,6 +36,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
   const [coachHelpOpen, setCoachHelpOpen] = useState(false);
   const [supportRequests, setSupportRequests] = useState([]);
   const groupDialogTriggerRef = useRef(null);
+  const workspaceSnapshotRef = useRef(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analyzeProgress, setAnalyzeProgress] = useState(0);
   const [analyzeLog, setAnalyzeLog] = useState('');
@@ -92,6 +93,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
   }, [data?.group?.id, workspaceData?.group?.id]);
 
   const snapshot = workspaceData ?? data;
+  workspaceSnapshotRef.current = snapshot;
   const currentLabId = useMemo(() => {
     return (
       propCurrentLabId ||
@@ -327,23 +329,27 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
   };
 
   const generateAssignmentDraft = useCallback(() => {
+    const currentSnapshot = workspaceSnapshotRef.current;
+    if (!currentSnapshot?.group?.id) {
+      return Promise.reject(new Error('Không tìm thấy nhóm hiện tại để tạo bản nháp.'));
+    }
     if (apiClient.source === 'http') {
-      return apiClient.createGroupAssignmentDraft(snapshot.group.id).then((draft) => {
+      return apiClient.createGroupAssignmentDraft(currentSnapshot.group.id).then((draft) => {
         latestDraftIdRef.current = draft.id;
         setLatestDraftId(draft.id);
         return draft;
       });
     }
     const payload = {
-      group_name: snapshot.group.name,
-      members: snapshot.members.map((member) => ({
+      group_name: currentSnapshot.group.name,
+      members: currentSnapshot.members.map((member) => ({
         id: member.id,
         name: member.name,
         skills: member.skills ?? [],
       })),
     };
-    if (snapshot.tasks && snapshot.tasks.length > 0) {
-      payload.tasks = snapshot.tasks.map((task) => ({
+    if (currentSnapshot.tasks && currentSnapshot.tasks.length > 0) {
+      payload.tasks = currentSnapshot.tasks.map((task) => ({
         id: task.id,
         title: task.title,
         deliverable: task.deliverable ?? '',
@@ -357,7 +363,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
       payload.version = 1;
     }
     return apiClient.assignTasks(payload);
-  }, [snapshot, currentLabId]);
+  }, [currentLabId]);
 
   const handleTaskStatus = async (task) => {
     const nextStatus = task.status === 'done' ? 'todo' : 'done';
