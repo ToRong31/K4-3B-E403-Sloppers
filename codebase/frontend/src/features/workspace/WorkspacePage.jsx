@@ -135,6 +135,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
       if (!current) return current;
       const leader = current.members.find((member) => member.studentCode === user.accountId)
         ?? current.members.find((member) => member.role === 'Nhóm trưởng');
+      const newGroupId = `mock-${group.code.toLowerCase()}`;
       const invitedMembers = group.invitees.map((student) => ({
         ...student,
         id: student.id ?? `invite-${student.studentCode}`,
@@ -143,7 +144,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
       }));
       return {
         ...current,
-        group: { ...current.group, name: group.name, code: group.code },
+        group: { ...current.group, id: newGroupId, name: group.name, code: group.code },
         members: leader ? [leader, ...invitedMembers] : invitedMembers,
         tasks: [],
         checklistSource: 'Chưa phân tích checklist từ bài Lab',

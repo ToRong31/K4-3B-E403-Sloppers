@@ -59,6 +59,12 @@ function createAssignmentDraft({ members, tasks }) {
 }
 
 export function createMockApiClient({ baseUrl = 'http://127.0.0.1:8000/api/v1' } = {}) {
+  const initialGroupMessages = [
+    { id: 'msg-init-1', author: 'Phạm Hoàng Trọng', shortName: 'Trọng', initial: 'T', role: 'Nhóm trưởng', isLeader: true, time: '10:00', text: 'Mọi người kiểm tra lại task và tiêu chí hoàn thành trước khi bắt đầu nhé.' },
+    { id: 'msg-init-2', author: 'Lê Thị Thùy Trang', shortName: 'Trang', initial: 'T', role: 'Frontend · UI/UX', isLeader: false, time: '10:05', text: 'Mình đang tiến hành dựng flow tương tác cho mockup rồi nhé.' },
+  ];
+  const groupChatMessages = new Map([[workspaceFixture.group.id, initialGroupMessages]]);
+
   return {
     source: 'mock',
     async login({ accountId, email }) {
@@ -225,10 +231,9 @@ export function createMockApiClient({ baseUrl = 'http://127.0.0.1:8000/api/v1' }
         const response = await fetch(`${baseUrl}/groups/current/chat${groupId ? `?groupId=${encodeURIComponent(groupId)}` : ''}`);
         if (response.ok) return await response.json();
       } catch {}
-      return wait([
-        { id: 'msg-init-1', author: 'Phạm Hoàng Trọng', shortName: 'Trọng', initial: 'T', role: 'Nhóm trưởng', isLeader: true, time: '10:00', text: 'Mọi người kiểm tra lại task và tiêu chí hoàn thành trước khi bắt đầu nhé.' },
-        { id: 'msg-init-2', author: 'Lê Thị Thùy Trang', shortName: 'Trang', initial: 'T', role: 'Frontend · UI/UX', isLeader: false, time: '10:05', text: 'Mình đang tiến hành dựng flow tương tác cho mockup rồi nhé.' },
-      ]);
+      const key = groupId || workspaceFixture.group.id;
+      if (!groupChatMessages.has(key)) groupChatMessages.set(key, []);
+      return wait(groupChatMessages.get(key));
     },
     sendGroupChatMessage: async (payload) => {
       try {
@@ -239,11 +244,15 @@ export function createMockApiClient({ baseUrl = 'http://127.0.0.1:8000/api/v1' }
         });
         if (response.ok) return await response.json();
       } catch {}
-      return wait({
+      const key = payload.groupId || workspaceFixture.group.id;
+      const messages = groupChatMessages.get(key) ?? [];
+      const saved = {
         id: `msg-${Date.now()}`,
         time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
         ...payload,
-      });
+      };
+      groupChatMessages.set(key, [...messages, saved]);
+      return wait(saved);
     },
   };
 }

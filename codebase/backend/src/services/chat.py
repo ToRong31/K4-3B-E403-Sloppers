@@ -159,7 +159,7 @@ class ChatService:
                 "\n".join(task_lines) or "- Chưa có task nào được giao."
             )
 
-            student_label = user_id if user_id else "học viên"
+            student_label = (request.user_label or user_id or "học viên").strip()
             group_label = f" (thuộc nhóm {group_id})" if group_id else ""
             system_prompt = (
                 "Bạn là Trợ lý Lab AI 1:1 của VLearn LabSpace.\n"

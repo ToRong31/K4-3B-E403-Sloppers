@@ -3,7 +3,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { apiClient } from '../../api/createApiClient';
 import { useRealtime } from '../../realtime/useRealtime';
 import { ChatMessageContent } from './ChatMessageContent';
-import { buildPrivateChatRequest } from './privateChatRequest';
+import { buildPrivateChatRequest, resolveChatUserId } from './privateChatRequest';
 import { createGroupChatDemoMessages, createProgressChatDemoReply } from './progressChatDemo';
 
 const quickQuestions = [
@@ -77,6 +77,7 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
     [snapshot.tasks, user.shortName],
   );
   const selectedTaskId = ownTasks[0]?.id ?? '';
+  const chatUserId = resolveChatUserId({ user, snapshot });
 
   // Close lightbox on Escape key
   useEffect(() => {
@@ -118,7 +119,7 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
       try {
         if (apiClient.getAiChatHistory) {
           const gid = snapshot?.group?.id || snapshot?.groupId || '';
-          const uid = user?.accountId || user?.shortName || user?.name || user?.id || '';
+          const uid = chatUserId;
           const tid = `${gid}:${uid}`;
           const history = await apiClient.getAiChatHistory({ threadId: tid, userId: uid, groupId: gid });
           if (!ignore && history && Array.isArray(history) && history.length > 0) {
@@ -147,7 +148,7 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
     return () => {
       ignore = true;
     };
-  }, [snapshot?.group?.id, snapshot?.groupId, user?.accountId, user?.shortName, user?.name, user?.id, isMock]);
+  }, [snapshot?.group?.id, snapshot?.groupId, chatUserId, isMock]);
 
   // Listen to realtime websocket broadcasts
   useEffect(() => {
@@ -155,6 +156,9 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
     const unsubscribe = realtimeClient.subscribe((event) => {
       if (event.type === 'chat.message_sent' && event.payload) {
         const incoming = event.payload;
+        const currentGroupId = String(snapshot?.group?.id ?? '');
+        const eventGroupId = String(event.scope_id ?? incoming.groupId ?? '');
+        if (!currentGroupId || eventGroupId !== currentGroupId) return;
         setGroupChatMessages((prev) => {
           if (prev.some((m) => m.id === incoming.id)) return prev;
           const isDuplicate = prev.some(
@@ -169,7 +173,7 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
       }
     });
     return () => unsubscribe();
-  }, [realtimeClient]);
+  }, [realtimeClient, snapshot?.group?.id]);
 
   useEffect(() => {
     document.body.classList.toggle('chat-sidebar-open', open);
@@ -295,7 +299,7 @@ export function PrivateProgressChat({ snapshot, user, isMock, labId }) {
     try {
       if (apiClient.clearAiChatHistory) {
         const gid = snapshot?.group?.id || snapshot?.groupId || '';
-        const uid = user?.accountId || user?.shortName || user?.name || user?.id || '';
+        const uid = chatUserId;
         const tid = `${gid}:${uid}`;
         await apiClient.clearAiChatHistory({ threadId: tid, userId: uid, groupId: gid });
       }
