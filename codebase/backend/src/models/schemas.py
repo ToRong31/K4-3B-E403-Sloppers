@@ -93,6 +93,7 @@ class ReadinessResponse(BaseModel):
 class ChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=2000)
     user_id: str = Field(default="")
+    user_label: str = Field(default="", max_length=120)
     group_id: str = Field(default="")
     thread_id: str = Field(default="")
     lab_id: str = Field(default="")

@@ -9,6 +9,7 @@ describe('buildPrivateChatRequest', () => {
       user: { accountId: 'student-1', shortName: 'Trọng' },
       snapshot: {
         group: { id: 'group-current' },
+        members: [{ id: 'member-1', studentCode: 'student-1', name: 'Trọng' }],
         tasks: [
           {
             id: 'actual-task',
@@ -25,11 +26,13 @@ describe('buildPrivateChatRequest', () => {
     expect(request.tasks).toEqual([
       expect.objectContaining({
         id: 'actual-task',
-        owner_id: 'Trọng',
+        owner_id: 'member-1',
         group_id: 'group-current',
         completion_criteria: ['Repository truy cập công khai'],
       }),
     ]);
+    expect(request.user_id).toBe('member-1');
+    expect(request.user_label).toBe('Trọng');
     expect(request.thread_id).toBe('group-current:student-1');
   });
 
@@ -37,7 +40,7 @@ describe('buildPrivateChatRequest', () => {
     const request = buildPrivateChatRequest({
       question: 'Tôi đang có task gì?',
       user: { accountId: 'student-1', shortName: 'Trọng' },
-      snapshot: { group: { id: 'group-current' }, tasks: [] },
+      snapshot: { group: { id: 'group-current' }, members: [{ id: 'member-1', studentCode: 'student-1', name: 'Trọng' }], tasks: [] },
     });
 
     expect(request.tasks).toEqual([]);
@@ -47,7 +50,7 @@ describe('buildPrivateChatRequest', () => {
     const request = buildPrivateChatRequest({
       question: '',
       user: { accountId: 'student-1', shortName: 'Trọng' },
-      snapshot: { group: { id: 'group-current' }, tasks: [] },
+      snapshot: { group: { id: 'group-current' }, members: [{ id: 'member-1', studentCode: 'student-1', name: 'Trọng' }], tasks: [] },
       attachment: {
         name: 'design-mockup.png',
         type: 'image/png',

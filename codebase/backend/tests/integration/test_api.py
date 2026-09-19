@@ -321,6 +321,34 @@ def test_chat_grounds_llm_with_current_request_tasks_only() -> None:
     assert response.json()["task_ids"] == ["repo-task"]
 
 
+def test_chat_matches_canonical_member_id_to_assigned_tasks() -> None:
+    model = CapturingChatModel()
+    with make_client(model) as client:
+        response = client.post(
+            "/api/v1/chat",
+            json={
+                "message": "Tôi đang có task gì?",
+                "user_id": "member-uuid-1",
+                "user_label": "Độ",
+                "group_id": "group-current",
+                "tasks": [
+                    {
+                        "id": "assigned-task",
+                        "title": "Thiết lập README",
+                        "owner_id": "member-uuid-1",
+                        "group_id": "group-current",
+                        "status": "todo",
+                        "deliverable": "README.md",
+                    }
+                ],
+            },
+        )
+
+    assert response.status_code == 200
+    assert response.json()["task_ids"] == ["assigned-task"]
+    assert "Thiết lập README" in model.messages[0].content
+
+
 def test_chat_does_not_fall_back_to_seed_tasks() -> None:
     model = CapturingChatModel()
     with make_client(model) as client:
