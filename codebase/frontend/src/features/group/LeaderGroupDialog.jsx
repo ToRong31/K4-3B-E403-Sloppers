@@ -37,6 +37,8 @@ export function LeaderGroupDialog({ directory, initialGroupName, labTitle, leade
   const [groupName, setGroupName] = useState(initialGroupName);
   const [slots, setSlots] = useState(() => createSlots(directory.slice(0, 3).map((member) => member.studentCode)));
   const [createdGroup, setCreatedGroup] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -45,6 +47,8 @@ export function LeaderGroupDialog({ directory, initialGroupName, labTitle, leade
       setGroupName(initialGroupName);
       setSlots(createSlots(directory.slice(0, 3).map((member) => member.studentCode)));
       setCreatedGroup(null);
+      setSubmitting(false);
+      setSubmitError('');
       dialog.showModal();
     }
     if (!open && dialog.open) dialog.close();
@@ -90,15 +94,23 @@ export function LeaderGroupDialog({ directory, initialGroupName, labTitle, leade
     }
   };
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (!canCreate) return;
     const group = {
       name: groupName.trim(),
       code: buildDemoGroupCode(groupName),
       invitees: matchedStudents,
     };
-    setCreatedGroup(group);
-    onCreated(group);
+    setSubmitting(true);
+    setSubmitError('');
+    try {
+      const persisted = await onCreated(group);
+      setCreatedGroup({ ...group, ...(persisted ?? {}) });
+    } catch (error) {
+      setSubmitError(error.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -127,7 +139,7 @@ export function LeaderGroupDialog({ directory, initialGroupName, labTitle, leade
 
           <section className="student-blocks" aria-labelledby="student-blocks-title">
             <header>
-              <div><b id="student-blocks-title">🪪 MÃ HỌC VIÊN THÀNH VIÊN</b><p>Hệ thống tự động đối chiếu fixture và hiển thị họ tên ngay khi nhập.</p></div>
+              <div><b id="student-blocks-title">🪪 MÃ HỌC VIÊN THÀNH VIÊN</b><p>Hệ thống đối chiếu danh sách lớp từ backend và hiển thị họ tên ngay khi nhập.</p></div>
               <button type="button" onClick={addSlot} disabled={slots.length >= 3}>＋ Thêm ô mời</button>
             </header>
 
@@ -168,17 +180,18 @@ export function LeaderGroupDialog({ directory, initialGroupName, labTitle, leade
             </div>
           </section>
 
-          <div className="leader-setup-notice">⌁ Sau khi tạo nhóm, hệ thống sẽ gửi <b>{matchedStudents.length} lời mời</b>{matchedStudents.length ? ` tới ${matchedStudents.map((student) => student.name).join(', ')}` : ''}. Đây là thao tác mô phỏng frontend.</div>
+          <div className="leader-setup-notice">⌁ Sau khi tạo nhóm, hệ thống sẽ lưu nhóm và gửi <b>{matchedStudents.length} lời mời</b>{matchedStudents.length ? ` tới ${matchedStudents.map((student) => student.name).join(', ')}` : ''}.</div>
+          {submitError && <p className="form-error" role="alert">{submitError}</p>}
           <footer className="group-dialog-actions">
             <button className="secondary-button" type="button" onClick={onClose}>Hủy</button>
-            <button className="primary-button" type="button" disabled={!canCreate} onClick={handleCreate}>Tạo nhóm & gửi {matchedStudents.length} lời mời →</button>
+            <button className="primary-button" type="button" disabled={!canCreate || submitting} onClick={handleCreate}>{submitting ? 'Đang lưu…' : `Tạo nhóm & gửi ${matchedStudents.length} lời mời →`}</button>
           </footer>
         </section>
       ) : (
         <section className="group-created-state">
           <span className="group-created-check">✓</span>
           <h3>{createdGroup.name}</h3>
-          <p>Nhóm <b>{createdGroup.code}</b> đã được tạo trong giao diện mô phỏng.</p>
+          <p>Nhóm <b>{createdGroup.code}</b> đã được lưu và sẵn sàng trong LabSpace.</p>
           <div className="sent-invitation-list">
             {createdGroup.invitees.map((student) => (
               <div key={student.studentCode}>
@@ -188,7 +201,7 @@ export function LeaderGroupDialog({ directory, initialGroupName, labTitle, leade
               </div>
             ))}
           </div>
-          <div className="leader-setup-notice">Các trạng thái trên chỉ phục vụ demo UI. Backend và realtime sẽ là nguồn xác nhận cuối cùng.</div>
+          <div className="leader-setup-notice">Lời mời đã được lưu; thành viên sẽ tự xác nhận trong phiên đăng nhập của mình.</div>
           <footer className="group-dialog-actions"><button className="primary-button" type="button" onClick={onEnterLabSpace ?? onClose}>Vào LabSpace →</button></footer>
         </section>
       )}

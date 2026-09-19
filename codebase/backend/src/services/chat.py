@@ -179,10 +179,13 @@ class ChatService:
                 "5. Khi hỏi về tiến độ nhóm: Hãy dựa vào TIẾN ĐỘ & PHÂN CÔNG TOÀN NHÓM để phân tích xem nhóm còn bao nhiêu task chưa xong, mốc nào sắp đến hạn và cần ưu tiên giải quyết phần nào.\n"
                 "6. Chỉ dựa trên dữ liệu chính thức được cung cấp, không bịa đặt thông tin; không tự ý đổi owner hay trạng thái task."
             )
+            user_content = request.message
+            if request.attachment_name:
+                user_content = f"{user_content}\n\n[Đính kèm: {request.attachment_name}]"
             ai_reply = self.llm.invoke(
                 [
                     SystemMessage(content=system_prompt),
-                    HumanMessage(content=request.message),
+                    HumanMessage(content=user_content),
                 ]
             )
             llm_text = (

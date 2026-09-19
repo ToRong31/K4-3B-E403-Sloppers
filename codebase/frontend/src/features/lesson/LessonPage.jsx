@@ -80,8 +80,21 @@ export function LessonPage() {
   const [groupDialogOpen, setGroupDialogOpen] = useState(false);
   const [createdGroup, setCreatedGroup] = useState(null);
   const groupCtaRef = useRef(null);
-  const workspaceLoader = useCallback(() => apiClient.getWorkspaceSnapshot(), []);
+  const workspaceLoader = useCallback(
+    () => apiClient.getWorkspaceSnapshot().catch((error) => {
+      if (error.status === 404) return null;
+      throw error;
+    }),
+    [],
+  );
   const { data: workspaceSnapshot } = useAsyncResource(workspaceLoader);
+  const directoryLoader = useCallback(
+    () => apiClient.source === 'http' && user.role === 'leader'
+      ? apiClient.getUserDirectory()
+      : Promise.resolve([]),
+    [user.role],
+  );
+  const { data: directoryData } = useAsyncResource(directoryLoader);
   const requestedLesson = searchParams.get('lesson') ?? labLessons[0].id;
   const activeIndex = Math.max(0, labLessons.findIndex((lesson) => lesson.id === requestedLesson));
   const activeLesson = labLessons[activeIndex];
@@ -90,8 +103,10 @@ export function LessonPage() {
   const isPreparation = activeLesson.id === 'prepare';
   const group = createdGroup ?? workspaceSnapshot?.group;
   const directory = useMemo(
-    () => (workspaceSnapshot?.members ?? []).filter((member) => member.studentCode !== user.accountId),
-    [workspaceSnapshot?.members, user.accountId],
+    () => apiClient.source === 'http'
+      ? (directoryData ?? [])
+      : (workspaceSnapshot?.members ?? []).filter((member) => member.studentCode !== user.accountId),
+    [directoryData, workspaceSnapshot?.members, user.accountId],
   );
 
   const completedCount = 0;
@@ -116,6 +131,22 @@ export function LessonPage() {
     window.requestAnimationFrame(() => groupCtaRef.current?.focus());
   };
 
+  const handleGroupCreated = async (newGroup) => {
+    if (apiClient.source !== 'http') {
+      setCreatedGroup(newGroup);
+      return newGroup;
+    }
+    const persisted = await apiClient.createGroup({
+      lab_id: 'K4-L3B-DAY05-06-MINI-HACKATHON',
+      name: newGroup.name,
+      code: newGroup.code,
+      invitee_codes: newGroup.invitees.map((student) => student.studentCode),
+    });
+    const savedGroup = { ...newGroup, ...persisted };
+    setCreatedGroup(savedGroup);
+    return savedGroup;
+  };
+
   return (
     <main className="course-reader">
       <header className="course-topbar">
@@ -123,7 +154,7 @@ export function LessonPage() {
         <b>Bài 16 · MINI HACKATHON</b>
         <button className="course-menu-button" type="button" onClick={() => setSidebarOpen(true)}>☰ Mục lục</button>
         <div className="course-progress"><b>{completedCount}/21 bài</b><span><i style={{ width: `${(completedCount / 21) * 100}%` }} /></span></div>
-        {isLeader && <button ref={groupCtaRef} className="course-labspace-button" type="button" onClick={() => setGroupDialogOpen(true)}>＋ Lập nhóm Lab</button>}
+        {isLeader && <button ref={groupCtaRef} className="course-labspace-button" type="button" onClick={() => group ? navigate('/workspace') : setGroupDialogOpen(true)}>{group ? 'Mở LabSpace' : '＋ Lập nhóm Lab'}</button>}
         <button className="course-tool" type="button" onClick={() => showComingSoon('Trợ lý AI sẽ được kết nối ở bước tích hợp backend.')}><span>✦</span> Đặt câu hỏi với AI</button>
         <button className="course-tool" type="button" onClick={() => showComingSoon('Tính năng gửi yêu cầu sẽ được nối với Coach ở bước realtime.')}><span>♨</span> Gửi yêu cầu</button>
         <span className="course-avatar">L</span>
@@ -147,7 +178,13 @@ export function LessonPage() {
               </div>
               {isLeader ? (
                 <p className="lesson-labspace-hint">{createdGroup ? `✓ Nhóm ${createdGroup.code} đã được tạo. ` : ''}Dùng nút <b>“Lập nhóm Lab”</b> trên thanh bài học để mở thao tác ở bất kỳ checkpoint nào.</p>
-              ) : <button className="secondary-button" type="button" onClick={() => navigate('/workspace')}>Mở LabSpace</button>}
+              ) : workspaceSnapshot?.members?.some(
+                (member) => member.studentCode === user.accountId && member.status === 'accepted',
+              ) ? (
+                <button className="secondary-button" type="button" onClick={() => navigate('/workspace')}>Mở LabSpace</button>
+              ) : (
+                <button className="secondary-button" type="button" onClick={() => navigate('/workspace')}>Xem lời mời vào nhóm</button>
+              )}
             </aside>
           )}
           {LessonContent ? <LessonContent /> : <SubmissionPage />}
@@ -159,14 +196,14 @@ export function LessonPage() {
           </footer>
         </article>
       </div>
-      {isLeader && workspaceSnapshot && (
+      {isLeader && (
         <LeaderGroupDialog
           open={groupDialogOpen}
           directory={directory}
-          initialGroupName={group?.name ?? 'Nhóm mới'}
+          initialGroupName="Nhóm mới"
           labTitle="K4–L3B–DAY05–06–MINI–HACKATHON"
           leaderCode={user.accountId}
-          onCreated={(newGroup) => setCreatedGroup(newGroup)}
+          onCreated={handleGroupCreated}
           onEnterLabSpace={() => {
             closeGroupDialog();
             navigate('/workspace');

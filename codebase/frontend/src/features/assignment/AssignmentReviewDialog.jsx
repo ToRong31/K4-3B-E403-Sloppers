@@ -164,9 +164,14 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
     setAssignments((current) => current.map((item) => item.taskId === taskId ? { ...item, owner } : item));
   };
 
-  const approve = () => {
-    onApprove(assignments);
-    setPhase('approved');
+  const approve = async () => {
+    try {
+      await onApprove(assignments);
+      setPhase('approved');
+    } catch (error) {
+      setDraftError(error.message ?? 'Không thể phê duyệt kế hoạch.');
+      setPhase('review');
+    }
   };
 
   return (
@@ -203,7 +208,7 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
             : draftError ? <div className="ai-output-status clarify"><b>⚠ LỖI</b><span>{draftError}</span></div>
             : draftStatus === 'clarify' ? <div className="ai-output-status clarify"><b>⚠ CLARIFY</b><span>{gaps.join(' ')}</span></div>
               : <div className="ai-output-status ready"><b>✓ READY</b><span>Bản nháp được tạo từ endpoint `assign_tasks`; Leader có thể kiểm tra và chỉnh sửa.</span></div>}
-          <div className="ai-human-boundary">⚖️ <span><b>Ranh giới AI & con người:</b> AI đề xuất dựa trên dữ liệu demo. Quyết định cuối cùng và trách nhiệm phân công thuộc về Nhóm trưởng.</span></div>
+          <div className="ai-human-boundary">⚖️ <span><b>Ranh giới AI & con người:</b> AI đề xuất dựa trên checklist và kỹ năng tự khai đã lưu. Quyết định cuối cùng và trách nhiệm phân công thuộc về Nhóm trưởng.</span></div>
           <div className="assignment-task-list">
             {assignments.map((item) => {
               const overridden = item.owner !== item.proposedOwner;
@@ -229,7 +234,7 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
             <div>⚖️ <span><b>Khối lượng hiện tại:</b> {Object.entries(workload).map(([owner, count]) => `${owner} ${count} task`).join(' · ')}.</span></div>
           </div>
           {workloadImbalanced && <p className="workload-warning">⚠ Cảnh báo workload: chênh lệch đang là {workloadGap} task giữa các thành viên. Hãy cân nhắc cân bằng lại trước khi phê duyệt.</p>}
-          {changedCount > 0 && <p className="assignment-audit">Đã ghi nhận {changedCount} thay đổi do Leader thực hiện trong UI demo.</p>}
+          {changedCount > 0 && <p className="assignment-audit">Đã ghi nhận {changedCount} thay đổi do Leader thực hiện trước khi phê duyệt.</p>}
           <footer className="group-dialog-actions"><button className="secondary-button" type="button" onClick={regenerate}>↻ Tạo lại bản nháp</button><button className="primary-button" type="button" disabled={!canApprove} onClick={() => setPhase('confirm')}>Phê duyệt phân công này →</button></footer>
         </section>
       )}

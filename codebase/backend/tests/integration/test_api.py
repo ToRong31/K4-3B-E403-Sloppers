@@ -354,3 +354,103 @@ def test_chat_endpoint_reports_model_failure() -> None:
     assert response.json()["detail"] == (
         "Không thể nhận phản hồi từ mô hình AI. Vui lòng thử lại."
     )
+
+
+def test_group_chat_message_and_attachment_persisted_to_db() -> None:
+    client = make_client()
+    msg_payload = {
+        "id": "msg-test-1001",
+        "groupId": "group-sloppers",
+        "senderId": "user-test-1",
+        "senderCode": "21010001",
+        "author": "Nguyễn Văn A",
+        "shortName": "A",
+        "initial": "A",
+        "role": "Thành viên",
+        "isLeader": False,
+        "time": "14:30",
+        "text": "Mình gửi file báo cáo nè",
+        "file": {
+            "name": "bao_cao_lab.pdf",
+            "size": "1.2 MB",
+            "type": "application/pdf",
+            "dataUrl": "data:application/pdf;base64,JVBERi0xLjQK...",
+        },
+    }
+    post_res = client.post("/api/v1/groups/current/chat", json=msg_payload)
+    assert post_res.status_code == 200
+
+    get_res = client.get("/api/v1/groups/current/chat")
+    assert get_res.status_code == 200
+    messages = get_res.json()
+    assert any(m.get("id") == "msg-test-1001" and m.get("file", {}).get("name") == "bao_cao_lab.pdf" for m in messages)
+
+
+def test_file_upload_and_list_endpoints() -> None:
+    client = make_client()
+    upload_res = client.post(
+        "/api/v1/files/upload",
+        json={
+            "filename": "diagram.png",
+            "content_type": "image/png",
+            "file_url": "data:image/png;base64,iVBORw0KGgo...",
+            "size_bytes": 1024,
+            "group_id": "group-sloppers",
+            "channel": "group",
+            "is_image": True,
+        },
+    )
+    assert upload_res.status_code == 200
+    data = upload_res.json()
+    assert data["filename"] == "diagram.png"
+    assert data["is_image"] is True
+    assert "id" in data
+
+    list_res = client.get("/api/v1/groups/current/files")
+    assert list_res.status_code == 200
+    files = list_res.json()
+    assert any(f.get("filename") == "diagram.png" for f in files)
+
+
+def test_ai_chat_history_persistence_and_clear() -> None:
+    model = CapturingChatModel()
+    with make_client(model) as client:
+        # 1. Send chat message
+        post_res = client.post(
+            "/api/v1/chat",
+            json={
+                "message": "Làm thế nào để chạy kiểm thử backend?",
+                "user_id": "test-user-01",
+                "group_id": "group-test-01",
+                "thread_id": "group-test-01:test-user-01",
+                "attachment_name": "note.txt",
+                "attachment_type": "text/plain",
+                "attachment_url": "data:text/plain;base64,SGVsbG8=",
+                "tasks": [],
+            },
+        )
+        assert post_res.status_code == 200
+
+        # 2. Get history
+        hist_res = client.get("/api/v1/chat/history?thread_id=group-test-01:test-user-01")
+        assert hist_res.status_code == 200
+        history = hist_res.json()
+        assert len(history) >= 2
+        user_msg = next((m for m in history if m["role"] == "user"), None)
+        bot_msg = next((m for m in history if m["role"] == "assistant"), None)
+        assert user_msg is not None
+        assert "Làm thế nào để chạy kiểm thử backend?" in user_msg["answer"]
+        assert user_msg["file"]["name"] == "note.txt"
+        assert bot_msg is not None
+
+        # 3. Clear history
+        del_res = client.delete("/api/v1/chat/history?thread_id=group-test-01:test-user-01")
+        assert del_res.status_code == 200
+        assert del_res.json()["status"] == "cleared"
+
+        # 4. Check history after clear
+        empty_res = client.get("/api/v1/chat/history?thread_id=group-test-01:test-user-01")
+        assert empty_res.status_code == 200
+        assert len(empty_res.json()) == 0
+
+

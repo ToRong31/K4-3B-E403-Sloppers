@@ -104,9 +104,9 @@ export function MemberSkillProfileDialog({
     setSelectedSkills((current) => current.filter((item) => item !== skill));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (onSave) {
-      onSave({
+      await onSave({
         industry,
         skills: selectedSkills,
         skillLevels: levels,
@@ -303,14 +303,14 @@ export function MemberInviteFlow({ currentUser, group, invitationStatus, labTitl
     window.requestAnimationFrame(() => triggerRef.current?.focus());
   };
 
-  const acceptInvitation = () => {
-    onInvitationChange('accepted');
+  const acceptInvitation = async () => {
+    await onInvitationChange('accepted');
     setPanelOpen(false);
     setOnboardingOpen(true);
   };
 
-  const declineInvitation = () => {
-    onInvitationChange('declined');
+  const declineInvitation = async () => {
+    await onInvitationChange('declined');
     setPanelOpen(false);
     window.requestAnimationFrame(() => triggerRef.current?.focus());
   };

@@ -1,4 +1,5 @@
 import logging
+from collections.abc import Callable
 from functools import lru_cache
 from typing import Annotated, Any
 
@@ -9,10 +10,16 @@ from src.agent.assignment.graph import build_assignment_graph
 from src.agent.progress.graph import build_progress_graph
 from src.agent.router_graph import build_router_graph
 from src.infrastructure.checklist_store import ChecklistStore
-from src.infrastructure.database.repositories import AssignmentDraftRepository
+from src.infrastructure.database.models import UserRecord
+from src.infrastructure.database.repositories import (
+    AssignmentDraftRepository,
+    AuthRepository,
+    WorkspaceRepository,
+)
 from src.infrastructure.lab_manifest_store import LabManifestStore
 from src.infrastructure.llm.factory import build_chat_model
 from src.services.assignment_drafts import AssignmentDraftService
+from src.services.auth import AuthService, InvalidSessionError
 from src.services.chat import ChatService
 
 logger = logging.getLogger(__name__)
@@ -72,6 +79,42 @@ def get_db_session(request: Request):
 
 
 DatabaseSession = Annotated[Session, Depends(get_db_session)]
+
+
+def get_auth_service(request: Request, session: DatabaseSession) -> AuthService:
+    return AuthService(AuthRepository(session), request.app.state.settings.session_ttl_hours)
+
+
+def get_workspace_repository(session: DatabaseSession) -> WorkspaceRepository:
+    return WorkspaceRepository(session)
+
+
+def get_current_user(
+    request: Request, service: Annotated[AuthService, Depends(get_auth_service)]
+) -> UserRecord:
+    token = request.cookies.get(request.app.state.settings.session_cookie_name)
+    try:
+        return service.authenticate(token).user
+    except InvalidSessionError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Phiên đăng nhập không hợp lệ hoặc đã hết hạn.",
+        ) from exc
+
+
+CurrentUser = Annotated[UserRecord, Depends(get_current_user)]
+
+
+def require_roles(*roles: str) -> Callable[[CurrentUser], UserRecord]:
+    def dependency(user: CurrentUser) -> UserRecord:
+        if user.role not in roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Bạn không có quyền thực hiện thao tác này.",
+            )
+        return user
+
+    return dependency
 
 
 def get_assignment_draft_service(

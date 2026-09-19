@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { apiClient } from '../../api/createApiClient';
 import { useAuth } from '../../auth/useAuth';
@@ -8,9 +8,12 @@ import { useAsyncResource } from '../../hooks/useAsyncResource';
 import { canonicalTasksFixture, defaultLabManifest } from '../../api/mockData';
 import { AssignmentReviewDialog } from '../assignment/AssignmentReviewDialog';
 import { LeaderGroupDialog } from '../group/LeaderGroupDialog';
+import { GroupSettingsDialog } from '../group/GroupSettingsDialog';
 import { MemberInviteFlow, MemberSkillProfileDialog } from '../profile/MemberInviteFlow';
 import { PrivateProgressChat } from '../progress/PrivateProgressChat';
 import { LabReferenceBadge } from '../labs/LabReferenceBadge';
+import { CoachHelpDialog } from '../coach/CoachHelpDialog';
+import { useRealtime } from '../../realtime/useRealtime';
 
 const statusLabel = {
   accepted: 'Đã vào',
@@ -20,21 +23,72 @@ const statusLabel = {
 
 export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId } = {}) {
   const { user } = useAuth();
+  const { client: realtimeClient } = useRealtime();
   const [searchParams] = useSearchParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const loader = useCallback(() => apiClient.getWorkspaceSnapshot(), []);
   const { status, data, error, reload } = useAsyncResource(loader);
   const [workspaceData, setWorkspaceData] = useState(null);
   const [assignmentDialogOpen, setAssignmentDialogOpen] = useState(false);
   const [groupDialogOpen, setGroupDialogOpen] = useState(false);
+  const [groupSettingsOpen, setGroupSettingsOpen] = useState(false);
+  const [coachHelpOpen, setCoachHelpOpen] = useState(false);
+  const [supportRequests, setSupportRequests] = useState([]);
   const groupDialogTriggerRef = useRef(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analyzeProgress, setAnalyzeProgress] = useState(0);
   const [analyzeLog, setAnalyzeLog] = useState('');
+  const [latestDraftId, setLatestDraftId] = useState(null);
 
   useEffect(() => {
     if (data) setWorkspaceData(data);
   }, [data]);
+
+  useEffect(() => {
+    if (!realtimeClient?.subscribe) return undefined;
+    return realtimeClient.subscribe((event) => {
+      if (event.type === 'snapshot' && event.payload?.group) {
+        setWorkspaceData(event.payload);
+        return;
+      }
+      if (event.type !== 'chat.message_sent') {
+        apiClient.getWorkspaceSnapshot().then(setWorkspaceData).catch(() => undefined);
+      }
+      if (
+        event.type === 'help_request.created' ||
+        event.type === 'help_request.replied' ||
+        event.type === 'help_request.resolved'
+      ) {
+        if (apiClient.getSupportRequests) {
+          apiClient.getSupportRequests().then((reqs) => {
+            if (reqs && Array.isArray(reqs)) setSupportRequests(reqs);
+          }).catch(() => undefined);
+        }
+      }
+    });
+  }, [realtimeClient]);
+
+  // Load support requests on mount & group change
+  useEffect(() => {
+    let ignore = false;
+    async function loadSupportRequests() {
+      try {
+        if (apiClient.getSupportRequests) {
+          const reqs = await apiClient.getSupportRequests();
+          if (!ignore && reqs && Array.isArray(reqs)) {
+            setSupportRequests(reqs);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load support requests:', err);
+      }
+    }
+    loadSupportRequests();
+    return () => {
+      ignore = true;
+    };
+  }, [data?.group?.id, workspaceData?.group?.id]);
 
   const snapshot = workspaceData ?? data;
   const currentLabId = useMemo(() => {
@@ -63,7 +117,17 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
     window.requestAnimationFrame(() => groupDialogTriggerRef.current?.focus());
   };
 
-  const handleGroupCreated = (group) => {
+  const handleGroupCreated = async (group) => {
+    if (apiClient.source === 'http') {
+      const created = await apiClient.createGroup({
+        lab_id: currentLabId,
+        name: group.name,
+        code: group.code,
+        invitee_codes: group.invitees.map((student) => student.studentCode),
+      });
+      setWorkspaceData(await apiClient.getWorkspaceSnapshot());
+      return { ...group, ...created };
+    }
     setWorkspaceData((current) => {
       if (!current) return current;
       const leader = current.members.find((member) => member.studentCode === user.accountId)
@@ -83,6 +147,37 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
         planStatus: 'draft',
       };
     });
+  };
+
+  const handleGroupUpdated = async (changes) => {
+    if (apiClient.source === 'http') {
+      const updated = await apiClient.updateGroup(snapshot.group.id, changes);
+      setWorkspaceData(await apiClient.getWorkspaceSnapshot());
+      return updated;
+    }
+    setWorkspaceData((current) => current ? {
+      ...current,
+      group: { ...current.group, ...changes },
+    } : current);
+    return { ...snapshot.group, ...changes };
+  };
+
+  const handleGroupDeleted = async () => {
+    if (apiClient.source === 'http') await apiClient.deleteGroup(snapshot.group.id);
+    setGroupSettingsOpen(false);
+    navigate('/labs');
+  };
+
+  const handleRemoveMember = async (userId) => {
+    if (apiClient.source === 'http') {
+      await apiClient.removeGroupMember(snapshot.group.id, userId);
+      setWorkspaceData(await apiClient.getWorkspaceSnapshot());
+      return;
+    }
+    setWorkspaceData((current) => current ? {
+      ...current,
+      members: current.members.filter((member) => member.id !== userId),
+    } : current);
   };
 
   const handleAnalyzeTask = async () => {
@@ -184,11 +279,21 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
     } : current);
   };
 
-  const handleInvitationChange = (invitationStatus) => {
+  const handleInvitationChange = async (invitationStatus) => {
+    if (apiClient.source === 'http') {
+      await apiClient.respondInvitation(currentMember.membershipId, invitationStatus === 'accepted' ? 'accept' : 'decline');
+      setWorkspaceData(await apiClient.getWorkspaceSnapshot());
+      return;
+    }
     updateCurrentMember({ status: invitationStatus, profileReady: false });
   };
 
-  const handleProfileSaved = (profileData) => {
+  const handleProfileSaved = async (profileData) => {
+    if (apiClient.source === 'http') {
+      await apiClient.saveSkillProfile(snapshot.group.id, profileData);
+      setWorkspaceData(await apiClient.getWorkspaceSnapshot());
+      return;
+    }
     updateCurrentMember({
       status: 'accepted',
       profileReady: true,
@@ -199,30 +304,17 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
     });
   };
 
-  const handleSaveMemberSkills = (profileData) => {
-    if (!editingMember) return;
-    setWorkspaceData((current) => {
-      if (!current) return current;
-      return {
-        ...current,
-        members: current.members.map((m) =>
-          m.id === editingMember.id
-            ? {
-                ...m,
-                industry: profileData.industry,
-                skills: profileData.skills,
-                skillLevels: profileData.skillLevels,
-                skillsWithLevel: profileData.skillsWithLevel,
-                profileReady: true,
-                status: 'accepted',
-              }
-            : m
-        ),
-      };
-    });
-  };
-
-  const handlePlanApproved = (assignments) => {
+  const handlePlanApproved = async (assignments) => {
+    if (apiClient.source === 'http') {
+      const memberByName = new Map(snapshot.members.map((member) => [member.name, member]));
+      for (const assignment of assignments.filter((item) => item.owner !== item.proposedOwner)) {
+        const owner = memberByName.get(assignment.owner);
+        if (owner) await apiClient.overrideAssignment(latestDraftId, assignment.taskId, owner.id);
+      }
+      await apiClient.approveAssignmentDraft(latestDraftId);
+      setWorkspaceData(await apiClient.getWorkspaceSnapshot());
+      return;
+    }
     const ownerByTask = new Map(assignments.map((assignment) => [assignment.taskId, assignment.owner]));
     setWorkspaceData((current) => current ? {
       ...current,
@@ -232,6 +324,12 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
   };
 
   const generateAssignmentDraft = useCallback(() => {
+    if (apiClient.source === 'http') {
+      return apiClient.createGroupAssignmentDraft(snapshot.group.id).then((draft) => {
+        setLatestDraftId(draft.id);
+        return draft;
+      });
+    }
     const payload = {
       group_name: snapshot.group.name,
       members: snapshot.members.map((member) => ({
@@ -257,6 +355,18 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
     return apiClient.assignTasks(payload);
   }, [snapshot, currentLabId]);
 
+  const handleTaskStatus = async (task) => {
+    const nextStatus = task.status === 'done' ? 'todo' : 'done';
+    const updated = await apiClient.updateTask(task.id, {
+      status: nextStatus,
+      expected_version: task.version || undefined,
+    });
+    setWorkspaceData((current) => current ? {
+      ...current,
+      tasks: current.tasks.map((item) => item.id === task.id ? { ...item, ...updated } : item),
+    } : current);
+  };
+
   if (status === 'loading') return <main className="page-shell"><LoadingState label="Đang tải LabSpace…" /></main>;
   if (status === 'error') return <main className="page-shell"><ErrorState message={error.message} onRetry={reload} /></main>;
 
@@ -266,6 +376,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
   const isLeader = user.role === 'leader';
   const isMember = user.role === 'member';
   const currentMember = snapshot.members.find((member) => member.studentCode === user.accountId);
+  const isPendingMember = isMember && currentMember?.status !== 'accepted';
 
   return (
     <>
@@ -273,7 +384,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
         <header className="workspace-header">
           <div>
             <p className="breadcrumbs">Lab › {currentLabId} › Nhóm {snapshot.group.name}</p>
-            <h1>LABSPACE · {snapshot.group.name.toUpperCase()}</h1>
+            <h1>{isPendingMember ? 'LỜI MỜI LABSPACE' : `LABSPACE · ${snapshot.group.name.toUpperCase()}`}</h1>
             <p><span className="role-tag">VIEW {user.roleLabel.toUpperCase()}</span> Mini Hackathon AI</p>
           </div>
           <div className="workspace-actions">
@@ -288,10 +399,26 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
                 onProfileSaved={handleProfileSaved}
               />
             )}
-            <button className="secondary-button" type="button">Mã nhóm: <b>{snapshot.group.code}</b> ⧉</button>
+            {!isPendingMember && <button className="secondary-button" type="button">Mã nhóm: <b>{snapshot.group.code}</b> ⧉</button>}
+            {isLeader && <button className="secondary-button" type="button" onClick={() => setGroupSettingsOpen(true)}>⚙ Quản lý nhóm</button>}
           </div>
         </header>
 
+        {isPendingMember ? (
+          <section className="card pending-workspace-gate" aria-live="polite">
+            <div className="pending-workspace-icon" aria-hidden="true">✉</div>
+            <h2>{currentMember?.status === 'declined' ? 'Bạn đã từ chối lời mời' : 'Bạn chưa thể vào LabSpace'}</h2>
+            <p>
+              {currentMember?.status === 'declined'
+                ? 'Nhóm trưởng có thể gửi một lời mời mới nếu bạn muốn tham gia.'
+                : 'Hãy mở Thông báo để xác nhận lời mời. Chỉ thành viên đã xác nhận mới xem được kế hoạch và tiến độ nhóm.'}
+            </p>
+            <div className="pending-workspace-actions">
+              <button className="secondary-button" type="button" onClick={() => navigate('/labs')}>Quay lại danh sách Lab</button>
+              {currentMember?.status === 'pending' && <span>Đang chờ bạn phản hồi lời mời</span>}
+            </div>
+          </section>
+        ) : (
         <div className="workspace-grid">
           <aside className="card team-panel">
             <div className="card-heading"><h2>Thành viên</h2><span>{snapshot.members.filter((m) => m.status === 'accepted').length}/{snapshot.members.length} xác nhận</span></div>
@@ -323,13 +450,13 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
                       ))}
                     </div>
                   ) : null}
-                  <button
+                  {member.id === user.id && <button
                     type="button"
                     className="member-edit-skills-btn"
                     onClick={() => setEditingMember(member)}
                   >
                     ✎ Đổi kỹ năng & mức độ (1–5)
-                  </button>
+                  </button>}
                 </li>
               ))}
             </ul>
@@ -381,7 +508,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
 
           <section className="card board-panel">
             <div className="card-heading">
-              <div><h2>Kế hoạch của nhóm</h2><p>Shell UI đang đọc qua API adapter; mutation sẽ được nối ở bước tiếp theo.</p></div>
+              <div><h2>Kế hoạch của nhóm</h2><p>Dữ liệu được lưu trong workspace và đồng bộ theo thời gian thực.</p></div>
               <span className="status-chip">{snapshot.planStatus === 'draft' ? 'Bản nháp' : snapshot.planStatus === 'approved' ? 'Đã duyệt' : snapshot.planStatus}</span>
             </div>
             <div className="overall-progress"><i style={{ width: `${progress}%` }} /></div>
@@ -426,7 +553,13 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
               ) : (
                 snapshot.tasks.map((task) => (
                   <article className={`task ${task.status}`} key={task.id}>
-                    <span className={`task-check ${task.status === 'done' ? 'checked' : ''}`}>{task.status === 'done' ? '✓' : ''}</span>
+                    <button
+                      type="button"
+                      className={`task-check ${task.status === 'done' ? 'checked' : ''}`}
+                      disabled={snapshot.planStatus !== 'approved' || (!isLeader && task.owner_id !== user.id)}
+                      onClick={() => handleTaskStatus(task)}
+                      aria-label={task.status === 'done' ? `Mở lại ${task.title}` : `Hoàn thành ${task.title}`}
+                    >{task.status === 'done' ? '✓' : ''}</button>
                     <div className="task-main">
                       <div className="task-header-row">
                         <span className="task-tag">{task.category}</span>
@@ -447,25 +580,48 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
           <aside className="card submit-panel">
             <div className="ready-score"><div className="progress-ring">{progress}%</div><h2>Tiến độ nhóm</h2><p>{completed}/{snapshot.tasks.length} task hoàn thành</p></div>
             <div className="deliverable-list">
-              <h3>Deliverable trong fixture</h3>
+              <h3>Deliverable của kế hoạch</h3>
               {snapshot.tasks.length === 0 ? (
                 <p style={{ fontSize: '12px', color: '#94a3b8', fontStyle: 'italic', margin: '8px 0' }}>Chưa có deliverable nào.</p>
               ) : (
                 snapshot.tasks.map((task) => <label key={task.id}><input type="checkbox" checked={task.status === 'done'} readOnly /> {task.deliverable}</label>)
               )}
             </div>
-            <button className="danger-outline full" type="button">☝ Yêu cầu Coach hỗ trợ</button>
+            {(() => {
+              const pending = supportRequests.find((r) => r.status === 'pending');
+              const resolved = supportRequests.filter((r) => r.status === 'resolved').pop();
+              let label = '☝ Yêu cầu Coach hỗ trợ';
+              let btnClass = 'danger-outline full';
+              if (pending) {
+                label = '⏳ Đang chờ Coach hỗ trợ (1 yêu cầu)';
+                btnClass = 'danger-outline full pending-request';
+              } else if (resolved) {
+                label = '✓ Coach đã giải đáp · Gửi yêu cầu mới';
+                btnClass = 'secondary-button full resolved-request';
+              }
+              return (
+                <button
+                  id="requestCoach"
+                  className={btnClass}
+                  type="button"
+                  onClick={() => setCoachHelpOpen(true)}
+                >
+                  {label}
+                </button>
+              );
+            })()}
             <p className="privacy-note">Coach chỉ thấy tiến độ nhóm và yêu cầu hỗ trợ được gửi.</p>
           </aside>
         </div>
+        )}
       </main>
 
-      <PrivateProgressChat
-        snapshot={snapshot}
-        user={user}
-        labId={currentLabId}
-        isMock={snapshot.source === 'mock'}
-      />
+      {!isPendingMember && <PrivateProgressChat
+          snapshot={snapshot}
+          user={user}
+          labId={currentLabId}
+          isMock={snapshot.source === 'mock'}
+        />}
 
       {isLeader && (
         <LeaderGroupDialog
@@ -489,15 +645,39 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
         />
       )}
 
+      {isLeader && (
+        <GroupSettingsDialog
+          open={groupSettingsOpen}
+          group={snapshot.group}
+          members={snapshot.members}
+          onClose={() => setGroupSettingsOpen(false)}
+          onSave={handleGroupUpdated}
+          onDelete={handleGroupDeleted}
+          onRemoveMember={handleRemoveMember}
+        />
+      )}
+
       {editingMember && (
         <MemberSkillProfileDialog
           open={Boolean(editingMember)}
           member={editingMember}
           labTitle="K4–L3B–DAY05–06–MINI–HACKATHON"
           onClose={() => setEditingMember(null)}
-          onSave={handleSaveMemberSkills}
+          onSave={handleProfileSaved}
         />
       )}
+
+      <CoachHelpDialog
+        open={coachHelpOpen}
+        onClose={() => setCoachHelpOpen(false)}
+        group={snapshot?.group}
+        user={user}
+        supportRequests={supportRequests}
+        onCreated={(newReq) => {
+          setSupportRequests((prev) => [...prev, newReq]);
+        }}
+        apiClient={apiClient}
+      />
     </>
   );
 }

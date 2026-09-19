@@ -19,6 +19,8 @@ def create_app(
     settings = settings or get_settings()
     configure_logging(settings.app_log_level)
     engine = create_database_engine(settings)
+    if settings.database_auto_create:
+        Base.metadata.create_all(engine)
 
     @asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:

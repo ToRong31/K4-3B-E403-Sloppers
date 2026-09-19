@@ -171,9 +171,35 @@ export function createMockApiClient() {
       }
       return response.json();
     },
-    getGroupChatMessages: async () => {
+    getAiChatHistory: async ({ threadId, userId, groupId } = {}) => {
+      const params = new URLSearchParams();
+      if (threadId) params.set('thread_id', threadId);
+      if (userId) params.set('user_id', userId);
+      if (groupId) params.set('group_id', groupId);
+      const qs = params.toString();
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/groups/current/chat');
+        const response = await fetch(`http://127.0.0.1:8000/api/v1/chat/history${qs ? `?${qs}` : ''}`);
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait([]);
+    },
+    clearAiChatHistory: async ({ threadId, userId, groupId } = {}) => {
+      const params = new URLSearchParams();
+      if (threadId) params.set('thread_id', threadId);
+      if (userId) params.set('user_id', userId);
+      if (groupId) params.set('group_id', groupId);
+      const qs = params.toString();
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/v1/chat/history${qs ? `?${qs}` : ''}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) return await response.json();
+      } catch {}
+      return wait({ status: 'cleared', count: 0 });
+    },
+    getGroupChatMessages: async (groupId) => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/v1/groups/current/chat${groupId ? `?groupId=${encodeURIComponent(groupId)}` : ''}`);
         if (response.ok) return await response.json();
       } catch {}
       return wait([

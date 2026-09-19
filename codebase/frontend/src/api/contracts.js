@@ -17,6 +17,7 @@ export const realtimeEventTypes = Object.freeze([
   'help_request.replied',
   'help_request.resolved',
   'chat.message_sent',
+  'snapshot',
 ]);
 
 export function isRealtimeEnvelope(value) {
@@ -28,8 +29,7 @@ export function isRealtimeEnvelope(value) {
       typeof value.scope_id === 'string' &&
       Number.isInteger(value.version) &&
       typeof value.occurred_at === 'string' &&
-      value.payload &&
-      typeof value.payload === 'object',
+      ('payload' in value),
   );
 }
 

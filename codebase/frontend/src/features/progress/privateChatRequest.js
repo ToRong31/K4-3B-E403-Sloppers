@@ -1,4 +1,4 @@
-export function buildPrivateChatRequest({ question, user, snapshot, taskId, labId: explicitLabId }) {
+export function buildPrivateChatRequest({ question, user, snapshot, taskId, labId: explicitLabId, attachment }) {
   const groupId = snapshot?.group?.id || snapshot?.groupId || '';
   const userId = user?.shortName || user?.name || user?.accountId || '';
 
@@ -21,13 +21,18 @@ export function buildPrivateChatRequest({ question, user, snapshot, taskId, labI
     .replace(/\u2014/g, '-')
     .trim();
 
+  const msgText = question?.trim() || (attachment?.name ? `[Đính kèm: ${attachment.name}]` : 'Chào AI');
+
   return {
-    message: question,
+    message: msgText,
     user_id: userId,
     group_id: groupId,
     thread_id: `${groupId}:${user?.accountId || userId}`,
     lab_id: finalLabId,
     task_id: taskId || undefined,
+    attachment_name: attachment?.name,
+    attachment_type: attachment?.type,
+    attachment_url: attachment?.dataUrl,
     tasks: (snapshot?.tasks || []).map((task) => ({
       ...task,
       group_id: task.group_id || groupId,

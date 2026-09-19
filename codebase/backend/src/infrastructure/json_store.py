@@ -222,10 +222,14 @@ class JsonStore:
         return result
 
     # Group Chat Messages
-    def get_group_chat_messages(self, group_id: str = "group-sloppers") -> list[dict[str, Any]]:
+    def get_group_chat_messages(self, group_id: str | None = None) -> list[dict[str, Any]]:
         data = self.read_all()
         messages = data.get("group_chat_messages", [])
-        return [m for m in messages if m.get("groupId") == group_id or not m.get("groupId")]
+        if group_id:
+            filtered = [m for m in messages if m.get("groupId") == group_id]
+            if filtered:
+                return filtered
+        return messages
 
     def add_group_chat_message(self, message: dict[str, Any]) -> dict[str, Any]:
         data = self.read_all()
