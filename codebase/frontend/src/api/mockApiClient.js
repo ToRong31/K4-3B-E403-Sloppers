@@ -200,6 +200,7 @@ export function createMockApiClient({ baseUrl = 'http://127.0.0.1:8000/api/v1' }
     getGroupChatMessages: async (groupId) => {
       try {
         const response = await fetch(`${baseUrl}/groups/current/chat${groupId ? `?groupId=${encodeURIComponent(groupId)}` : ''}`);
+        const response = await fetch(`${baseUrl}/groups/current/chat${groupId ? `?groupId=${encodeURIComponent(groupId)}` : ''}`);
         if (response.ok) return await response.json();
       } catch {}
       return wait([
