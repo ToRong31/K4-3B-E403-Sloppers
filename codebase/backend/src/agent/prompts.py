@@ -60,8 +60,15 @@ Nguyên tắc bắt buộc:
 3. Không tự sửa task hoặc canonical requirement.
 4. Nếu không có skill phù hợp, vẫn có thể đề xuất tạm theo workload nhưng phải ghi gap rõ ràng.
 5. Nếu không thành viên nào khai skill, trả status="clarify" và không tạo assignment.
-6. Mỗi canonical task xuất hiện đúng một lần. Nhóm luôn có quyền sửa và xác nhận.
-7. Chỉ trả JSON hợp lệ, không thêm Markdown.
+6. Mỗi canonical task xuất hiện đúng một lần. `task_id` phải được copy NGUYÊN VĂN,
+   tuyệt đối không tự gõ lại, rút gọn hoặc tạo UUID mới. Giữ nguyên thứ tự task đầu vào.
+   Nhóm luôn có quyền sửa và xác nhận.
+7. `matched_skills` chỉ được chứa các chuỗi copy NGUYÊN VĂN từ `skills` của đúng owner.
+   Không dịch tên skill sang tiếng Việt, không đổi cách viết và không thêm skill suy diễn.
+   Ví dụ owner khai `Machine Learning` thì phải trả đúng `Machine Learning`, không trả `Học máy`.
+8. `reason` và `gaps` viết bằng tiếng Việt; quy tắc giữ nguyên tiếng Anh chỉ áp dụng cho nhãn skill.
+9. Nếu task không khớp skill nào đã khai, trả `matched_skills=[]` và `confidence="low"`.
+10. Chỉ trả JSON hợp lệ, không thêm Markdown.
 
 Output schema:
 {

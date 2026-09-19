@@ -10,6 +10,8 @@ def test_prompts_define_safety_boundaries() -> None:
     assert "Không bịa" in TASK_ANALYSIS_SYSTEM_PROMPT
     assert 'status="clarify"' in TASK_ANALYSIS_SYSTEM_PROMPT
     assert "không thành viên nào khai skill" in ASSIGNMENT_SYSTEM_PROMPT
+    assert "copy NGUYÊN VĂN" in ASSIGNMENT_SYSTEM_PROMPT
+    assert "Không dịch tên skill sang tiếng Việt" in ASSIGNMENT_SYSTEM_PROMPT
     assert "không tự suy đoán" in PROGRESS_BOT_SYSTEM_PROMPT
 
 
