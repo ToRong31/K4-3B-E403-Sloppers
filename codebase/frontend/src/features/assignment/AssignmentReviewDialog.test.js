@@ -24,4 +24,22 @@ describe('AI assignment review UI helpers', () => {
       { owner: 'Cả nhóm' },
     ])).toEqual({ Trọng: 1, Trang: 2, 'Cả nhóm': 1 });
   });
+
+  it('uses draft task metadata when the workspace has no plan tasks yet', () => {
+    const draft = buildDraftAssignments([], [{
+      task_id: 'canonical-1',
+      title: 'Chốt nhân sự và chọn track đề tài',
+      category: 'PREPARE',
+      owner_id: 'member-1',
+      reason: 'Khớp kỹ năng',
+      confidence: 'high',
+      reference_ids: ['lab://prepare/team-track'],
+    }], [{ id: 'member-1', name: 'Trọng' }]);
+
+    expect(draft[0]).toMatchObject({
+      title: 'Chốt nhân sự và chọn track đề tài',
+      category: 'PREPARE',
+      taskId: 'canonical-1',
+    });
+  });
 });

@@ -306,6 +306,8 @@ def test_three_sessions_persist_full_realtime_workflow():
                 f"/api/v1/groups/{ids['group_id']}/assignment-drafts"
             )
             assert first_draft.status_code == 201
+            assert first_draft.json()["assignments"][0]["title"] == "Canonical task"
+            assert first_draft.json()["assignments"][0]["category"] == "TEST"
             expect_all("assignment_draft.created")
 
             draft = leader_client.post(f"/api/v1/groups/{ids['group_id']}/assignment-drafts")

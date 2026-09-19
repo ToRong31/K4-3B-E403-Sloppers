@@ -143,7 +143,13 @@ export function AssignmentReviewDialog({ members, onApprove, onClose, onGenerate
   const workloadCounts = ownerChoices.map((name) => workload[name] ?? 0);
   const workloadGap = Math.max(...workloadCounts, 0) - Math.min(...workloadCounts, 0);
   const workloadImbalanced = workloadGap > 1;
-  const canApprove = !draftLoading && draftStatus === 'ready' && !draftError && assignments.length === tasks.length;
+  // A new group intentionally has no approved plan yet, so snapshot.tasks is
+  // empty. The draft still contains the canonical task assignments and is the
+  // source of truth for approval in that state.
+  const hasCompleteDraft = tasks.length === 0
+    ? assignments.length > 0
+    : assignments.length === tasks.length;
+  const canApprove = !draftLoading && draftStatus === 'ready' && !draftError && hasCompleteDraft;
 
   const closeDialog = () => {
     onClose();

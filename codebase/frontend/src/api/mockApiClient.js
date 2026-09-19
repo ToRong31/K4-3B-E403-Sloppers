@@ -26,6 +26,10 @@ function createAssignmentDraft({ members, tasks }) {
     hasGap ||= !matched;
     return {
       task_id: task.id,
+      title: task.title,
+      category: task.category,
+      deliverable: task.deliverable,
+      reference_ids: task.reference_ids ?? [],
       owner_id: winner.member.id,
       matched_skills: winner.matchedSkills,
       reason: matched ? `Kỹ năng tự khai phù hợp: ${winner.matchedSkills.join(', ')}.` : 'Chưa có skill khớp trực tiếp; tạm cân bằng số task trong nhóm.',

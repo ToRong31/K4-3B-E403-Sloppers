@@ -108,7 +108,7 @@ class AssignmentWorkflowService:
             )
         group.version += 1
         group.updated_by = actor.id
-        payload = self.serialize(draft, result)
+        payload = self.serialize(draft, result, group.lab.canonical_tasks)
         event = self.repository.create_event(
             event_type="assignment_draft.created",
             scope_type="group",
@@ -162,12 +162,31 @@ class AssignmentWorkflowService:
         return payload, event_envelope(event)
 
     @staticmethod
-    def serialize(draft: AssignmentDraftRecord, result: AssignmentDraftResponse) -> dict:
+    def serialize(
+        draft: AssignmentDraftRecord,
+        result: AssignmentDraftResponse,
+        tasks: list[Any] | None = None,
+    ) -> dict:
+        task_by_id = {str(task.id): task for task in (tasks or [])}
+        assignments = []
+        for item in result.assignments:
+            payload = item.model_dump(mode="json")
+            task = task_by_id.get(str(item.task_id))
+            if task is not None:
+                payload.update(
+                    {
+                        "title": task.title,
+                        "category": task.category,
+                        "deliverable": task.deliverable,
+                        "reference_ids": task.reference_ids,
+                    }
+                )
+            assignments.append(payload)
         return {
             "id": str(draft.id),
             "group_id": str(draft.group_id),
             "version": draft.version,
             "status": result.status.value,
-            "assignments": [item.model_dump(mode="json") for item in result.assignments],
+            "assignments": assignments,
             "gaps": result.gaps,
         }
