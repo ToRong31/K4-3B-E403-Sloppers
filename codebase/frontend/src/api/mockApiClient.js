@@ -35,7 +35,7 @@ function createAssignmentDraft({ members, tasks }) {
   return { status: 'ready', assignments, gaps: hasGap ? ['Có task chưa khớp skill; nhóm cần kiểm tra trước khi xác nhận.'] : [] };
 }
 
-export function createMockApiClient() {
+export function createMockApiClient({ baseUrl = 'http://127.0.0.1:8000/api/v1' } = {}) {
   return {
     source: 'mock',
     async login({ accountId, email }) {
@@ -58,14 +58,14 @@ export function createMockApiClient() {
     getDemoAccounts: () => wait(demoAccounts, 60),
     getLabs: async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/labs');
+        const response = await fetch(`${baseUrl}/labs`);
         if (response.ok) return await response.json();
       } catch {}
       return wait([labFixture]);
     },
     analyzeLab: async (payload) => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/labs/analyze', {
+        const response = await fetch(`${baseUrl}/labs/analyze`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -89,7 +89,7 @@ export function createMockApiClient() {
     getWorkspaceSnapshot: () => wait(workspaceFixture),
     getCoachSnapshot: async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/coach/groups');
+        const response = await fetch(`${baseUrl}/coach/groups`);
         if (response.ok) return await response.json();
       } catch {}
       return wait(coachFixture);
@@ -97,7 +97,7 @@ export function createMockApiClient() {
     assignTasks: (payload) => wait(createAssignmentDraft(payload), 420),
     updateTask: async (taskId, updates) => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/v1/groups/current/tasks/${taskId}`, {
+        const response = await fetch(`${baseUrl}/groups/current/tasks/${taskId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updates),
@@ -108,21 +108,21 @@ export function createMockApiClient() {
     },
     approvePlan: async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/groups/current/plan/approve', { method: 'POST' });
+        const response = await fetch(`${baseUrl}/groups/current/plan/approve`, { method: 'POST' });
         if (response.ok) return await response.json();
       } catch {}
       return wait({ status: 'approved' });
     },
     getSupportRequests: async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/coach/support-requests');
+        const response = await fetch(`${baseUrl}/coach/support-requests`);
         if (response.ok) return await response.json();
       } catch {}
       return wait([]);
     },
     createSupportRequest: async (payload) => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/coach/support-requests', {
+        const response = await fetch(`${baseUrl}/coach/support-requests`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -133,7 +133,7 @@ export function createMockApiClient() {
     },
     resolveSupportRequest: async (requestId, responseText) => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/v1/coach/support-requests/${requestId}/resolve`, {
+        const response = await fetch(`${baseUrl}/coach/support-requests/${requestId}/resolve`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ response: responseText }),
@@ -144,7 +144,7 @@ export function createMockApiClient() {
     },
     checkGithubSubmission: async (repoUrl) => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/submissions/check-github', {
+        const response = await fetch(`${baseUrl}/submissions/check-github`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ repo_url: repoUrl }),
@@ -156,7 +156,7 @@ export function createMockApiClient() {
     sendChatMessage: async (payload) => {
       let response;
       try {
-        response = await fetch('http://127.0.0.1:8000/api/v1/chat', {
+        response = await fetch(`${baseUrl}/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -209,7 +209,7 @@ export function createMockApiClient() {
     },
     sendGroupChatMessage: async (payload) => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/groups/current/chat', {
+        const response = await fetch(`${baseUrl}/groups/current/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
