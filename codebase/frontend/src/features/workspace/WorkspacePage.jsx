@@ -40,6 +40,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
   const [analyzeProgress, setAnalyzeProgress] = useState(0);
   const [analyzeLog, setAnalyzeLog] = useState('');
   const [latestDraftId, setLatestDraftId] = useState(null);
+  const latestDraftIdRef = useRef(null);
 
   useEffect(() => {
     if (data) setWorkspaceData(data);
@@ -306,12 +307,14 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
 
   const handlePlanApproved = async (assignments) => {
     if (apiClient.source === 'http') {
+      const draftId = latestDraftIdRef.current ?? latestDraftId;
+      if (!draftId) throw new Error('Không tìm thấy bản nháp cần phê duyệt. Hãy tạo lại bản nháp AI.');
       const memberByName = new Map(snapshot.members.map((member) => [member.name, member]));
       for (const assignment of assignments.filter((item) => item.owner !== item.proposedOwner)) {
         const owner = memberByName.get(assignment.owner);
-        if (owner) await apiClient.overrideAssignment(latestDraftId, assignment.taskId, owner.id);
+        if (owner) await apiClient.overrideAssignment(draftId, assignment.taskId, owner.id);
       }
-      await apiClient.approveAssignmentDraft(latestDraftId);
+      await apiClient.approveAssignmentDraft(draftId);
       setWorkspaceData(await apiClient.getWorkspaceSnapshot());
       return;
     }
@@ -326,6 +329,7 @@ export function WorkspacePage({ labId: propLabId, currentLabId: propCurrentLabId
   const generateAssignmentDraft = useCallback(() => {
     if (apiClient.source === 'http') {
       return apiClient.createGroupAssignmentDraft(snapshot.group.id).then((draft) => {
+        latestDraftIdRef.current = draft.id;
         setLatestDraftId(draft.id);
         return draft;
       });
