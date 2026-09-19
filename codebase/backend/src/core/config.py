@@ -23,6 +23,13 @@ class Settings(BaseSettings):
     database_echo: bool = False
     database_auto_create: bool = False
 
+    session_cookie_name: str = "vlearn_session"
+    session_ttl_hours: int = Field(default=24, ge=1, le=24 * 30)
+    session_cookie_secure: bool = False
+    session_cookie_samesite: str = "lax"
+    seed_demo_password: SecretStr | None = None
+    class_scope_id: str = "K4-E403"
+
     llm_provider: LLMProvider = LLMProvider.OPENAI
     llm_model: str = ""
     llm_temperature: float = Field(default=0, ge=0, le=2)

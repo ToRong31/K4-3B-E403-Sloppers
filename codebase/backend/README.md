@@ -184,6 +184,11 @@ làm mất dữ liệu. Không chạy `docker compose down -v` nếu muốn gi�
 Assignment draft tạo qua `POST /api/v1/assignments/draft` được lưu vào bảng
 `assignment_drafts`, gồm request, kết quả, trạng thái và thời điểm tạo.
 
+Auth/session, group, profile, approved plan, task progress, Coach support và
+realtime recovery đều dùng PostgreSQL. Xem
+[`docs/database-realtime-runbook.md`](docs/database-realtime-runbook.md) để
+migrate, seed, cấu hình cookie production và chạy acceptance test.
+
 Mở `psql` trong container:
 
 ```powershell

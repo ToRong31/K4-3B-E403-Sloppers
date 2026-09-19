@@ -5,9 +5,7 @@ import { createMockApiClient } from './mockApiClient';
 const httpApiClient = createHttpApiClient({ baseUrl: config.apiBaseUrl });
 const mockApiClient = createMockApiClient();
 
-// The workspace fixture is intentionally kept in mock mode until the group and
-// auth APIs exist. Task analysis and assignment generation are backed by FastAPI & LLM,
-// so they call the real backend endpoints.
+// Mock mode stays available for isolated UI work. HTTP is the deployment default.
 export const apiClient = config.isMock
   ? {
       ...mockApiClient,
